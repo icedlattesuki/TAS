@@ -20,5 +20,6 @@
     <br/>
     <input type="submit" value="更新" />
 </form>
+<a href="/password">修改密码</a>
 </body>
 </html>
