@@ -34,4 +34,17 @@ public class PasswordUpdateService {
             return false;
         }
     }
+
+    public int isIdAndEmailCorrect(String id, String email) {
+        return passwordUpdateDAO.identifyIdAndEmail(id, email);
+    }
+
+    public boolean resetPassword(User user) {
+        try {
+            passwordUpdateDAO.resetPassword(user);
+            return true;
+        } catch (DataAccessException excetion) {
+            return false;
+        }
+    }
 }

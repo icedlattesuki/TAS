@@ -2,6 +2,7 @@ package com.se.info.email.service;
 
 import com.se.domain.User;
 import com.se.info.email.dao.EmailDAO;
+import com.se.info.email.domain.EmailContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,14 @@ import org.springframework.stereotype.Service;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class EmailService {
     private static final Logger logger = LoggerFactory.getLogger("EmailService.class");
+    private static Map<String, User> uuidMap = new HashMap<String, User>();
+    private static final String host = "898592099@qq.com";
     private JavaMailSender sender;
     private EmailDAO emailDAO;
-    private static Map<String, User> uuidMap = new HashMap<String, User>();
 
     @Autowired
     public void setSender(JavaMailSender sender) { this.sender = sender; }
@@ -27,19 +28,21 @@ public class EmailService {
     @Autowired
     public void setEmailDAO(EmailDAO emailDAO) { this.emailDAO = emailDAO; }
 
-    public boolean sendEmail(User user, String email) {
+    public boolean sendEmail(User user, String email, EmailContext emailContext) {
         user.setEmail(email);
-        String uuid = UUID.randomUUID().toString();
-        uuidMap.put(uuid, user);
+        uuidMap.put(emailContext.getUuid(), user);
 
         MimeMessage message = sender.createMimeMessage();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("898592099@qq.com");
+            String subject = emailContext.getSubject();
+            String text = emailContext.getText();
+            boolean isHtml = emailContext.getIsHtml();
+            helper.setFrom(host);
             helper.setTo(email);
-            helper.setSubject("TAS邮箱验证");
-            helper.setText("<html><body><a href=\"http://localhost:8080/confirm?id=" + uuid + "\">点击该链接即可成功验证邮箱！</a></body></html>", true);
+            helper.setSubject(subject);
+            helper.setText(text, isHtml);
             sender.send(message);
             return true;
         } catch (Exception exception) {
@@ -48,7 +51,7 @@ public class EmailService {
         }
     }
 
-    public User confirmEmail(String uuid) {
+    public User bindEmail(String uuid) {
         User user = uuidMap.get(uuid);
 
         try {
@@ -58,5 +61,9 @@ public class EmailService {
             logger.error("confirmEmail failed! " + exception.getCause());
             return null;
         }
+    }
+
+    public User getUser(String uuid) {
+        return uuidMap.get(uuid);
     }
 }

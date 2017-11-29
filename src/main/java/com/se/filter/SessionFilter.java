@@ -23,6 +23,9 @@ public class SessionFilter implements Filter {
         patterns.add(Pattern.compile("/loginCheck"));
         patterns.add(Pattern.compile("/image/*"));
         patterns.add(Pattern.compile("/confirm"));
+        patterns.add(Pattern.compile("/passwordGetBack"));
+        patterns.add(Pattern.compile("/toGetBackPassword"));
+        patterns.add(Pattern.compile("/getBackPassword"));
     }
 
     @Override

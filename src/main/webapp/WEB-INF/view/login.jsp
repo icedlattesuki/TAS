@@ -16,5 +16,6 @@
     <input value="登录" type="submit" />
 </form>
 <a href="/passengerLogin">游客登录</a>
+<a href="/passwordGetBack">找回密码</a>
 </body>
 </html>
