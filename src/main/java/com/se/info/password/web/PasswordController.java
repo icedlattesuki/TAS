@@ -24,35 +24,26 @@ public class PasswordController {
         String email = user.getEmail();
 
         if (email == null || email.isEmpty())
-            return "set_email";
+            return "setEmail";
         else
-            return "password_update";
+            return "updatePassword";
     }
 
-    @RequestMapping("/setEmail")
-    public String setEmail(HttpSession session, @RequestParam("email") String email, Model model) {
+    @RequestMapping("/updatePassword")
+    public String updatePassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword1") String newPassword, Model model) {
         User user = (User)session.getAttribute("user");
 
-        if (passwordUpdateService.sendEmail(user, email)) {
-            model.addAttribute("email", email);
-            return "send_email_success";
-        } else {
-            model.addAttribute("error", "发送邮件失败！");
-            return "set_email";
+        if (!passwordUpdateService.isPasswordCorrect(user, oldPassword)) {
+            model.addAttribute("error", "密码错误!");
+            return "updatePassword";
         }
-    }
 
-    @RequestMapping("/confirm")
-    public String confirmEmail(HttpSession session, @RequestParam("id") String id, Model model) {
-        User user = passwordUpdateService.confirmEmail(id);
+        if (!passwordUpdateService.updatePassword(user, newPassword)) {
+            model.addAttribute("error", "更新密码出错！");
+            return "updatePassword";
+        }
 
-        session.setAttribute("user", user);
-
-        if (user != null)
-            model.addAttribute("info", "邮箱已验证！");
-        else
-            model.addAttribute("info", "邮箱验证失败！");
-
-        return "set_email_finish";
+        session.setAttribute("user", null);
+        return "updatePasswordSuccess";
     }
 }

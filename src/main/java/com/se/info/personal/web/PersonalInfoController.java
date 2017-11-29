@@ -25,9 +25,9 @@ public class PersonalInfoController {
         User user = (User)session.getAttribute("user");
 
         if (user.getType() == 1)
-            return "student_personal_info";
+            return "studentPersonalInfo";
         else
-            return "teacher_personal_info";
+            return "teacherPersonalInfo";
     }
 
     @RequestMapping("editPersonalInfo")
@@ -35,9 +35,9 @@ public class PersonalInfoController {
         User user = (User)session.getAttribute("user");
 
         if (user.getType() == 1)
-            return "student_personal_info_edit";
+            return "editStudentPersonalInfo";
         else
-            return "teacher_personal_info_edit";
+            return "editTeacherPersonalInfo";
     }
 
     @RequestMapping("updatePersonalInfo")

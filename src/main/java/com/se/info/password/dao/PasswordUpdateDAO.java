@@ -9,18 +9,18 @@ import com.se.domain.*;
 @Repository
 public class PasswordUpdateDAO {
     private JdbcTemplate jdbcTemplate;
-    static final String updateStudentEmailSQL = "update student set email = ? where id = ?";
-    static final String updateTeacherEmailSQL = "update teacher set email = ? where id = ?";
+    static final String updateStudentPasswordSQL = "update student set password = ? where id = ?";
+    static final String updateTeacherPasswordSQL = "update teacher set password = ? where id = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
 
-    public void updateEmail(User user) throws DataAccessException {
-        Object[] args = new Object[] {user.getEmail(), user.getId()};
+    public void updatePassword(User user, String password) throws DataAccessException {
+        Object[] args = new Object[] {password, user.getId()};
 
         if (user.getType() == 1)
-            jdbcTemplate.update(updateStudentEmailSQL, args);
+            jdbcTemplate.update(updateStudentPasswordSQL, args);
         else
-            jdbcTemplate.update(updateTeacherEmailSQL, args);
+            jdbcTemplate.update(updateTeacherPasswordSQL, args);
     }
 }

@@ -1,56 +1,37 @@
 package com.se.info.password.service;
 
 import com.se.info.password.dao.PasswordUpdateDAO;
+import com.se.login.service.LoginService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import com.se.domain.*;
-import java.util.*;
-import org.springframework.mail.javamail.*;
-import javax.mail.internet.MimeMessage;
 
 @Service
 public class PasswordUpdateService {
-    private JavaMailSender sender;
+    private static final Logger logger = LoggerFactory.getLogger("PasswordUpdateService.class");
     private PasswordUpdateDAO passwordUpdateDAO;
-    static Map<String, User> uuidMap = new HashMap<String, User>();
-
-    @Autowired
-    public void setSender(JavaMailSender sender) { this.sender = sender; }
+    private LoginService loginService;
 
     @Autowired
     public void setPasswordUpdateDAO(PasswordUpdateDAO passwordUpdateDAO) { this.passwordUpdateDAO = passwordUpdateDAO; }
 
-    public boolean sendEmail(User user, String email) {
-        user.setEmail(email);
-        String uuid = UUID.randomUUID().toString();
-        uuidMap.put(uuid, user);
+    @Autowired
+    public void setLoginService(LoginService loginService) { this.loginService = loginService; }
 
-        MimeMessage message = sender.createMimeMessage();
-
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("898592099@qq.com");
-            helper.setTo(email);
-            helper.setSubject("TAS邮箱验证");
-            helper.setText("<html><body><a href=\"http://localhost:8080/confirm?id=" + uuid + "\">点击该链接即可成功验证邮箱！</a></body></html>", true);
-            sender.send(message);
-        } catch (Exception exception) {
-            return false;
-        }
-
-        return true;
+    public boolean isPasswordCorrect(User user, String password) {
+        return loginService.isUserExist(user.getId(), password) > 0;
     }
 
-    public User confirmEmail(String uuid) {
-        User user = uuidMap.get(uuid);
-
+    public boolean updatePassword(User user, String password) {
         try {
-            passwordUpdateDAO.updateEmail(user);
+            passwordUpdateDAO.updatePassword(user, password);
+            return true;
         } catch (DataAccessException exception) {
-            return null;
+            logger.error("updatePassword failed! " + exception.getCause());
+            return false;
         }
-
-        return user;
     }
 }

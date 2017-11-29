@@ -54,9 +54,9 @@ public class LoginController {
         session.setAttribute("courseList", courseList);
 
         if (user.getType() == 1)
-            return "student_index";
+            return "studentIndex";
         else
-            return "teacher_index";
+            return "teacherIndex";
     }
 
     @RequestMapping("/passengerLogin")
@@ -66,7 +66,7 @@ public class LoginController {
         session.setAttribute("courseList", courseList);
         model.addAttribute("courseList", courseList);
 
-        return "passenger_index";
+        return "passengerIndex";
     }
 
     @RequestMapping("/logout")

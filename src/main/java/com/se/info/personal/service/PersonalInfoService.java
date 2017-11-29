@@ -26,12 +26,11 @@ public class PersonalInfoService {
 
         try {
             personalInfoDAO.personalInfoUpdate(user, personalInfoEditable);
+            return true;
         } catch (DataAccessException exception) {
-            logger.error("personalInfoUpdate failed!");
+            logger.error("personalInfoUpdate failed! " + exception.getCause());
             return false;
         }
-
-        return true;
     }
 
     private String storeImage(User user, MultipartFile image) {
@@ -45,11 +44,10 @@ public class PersonalInfoService {
 
         try {
             image.transferTo(file);
+            return imageLocation;
         } catch (IOException exception) {
-            logger.error("storeImage failed!");
+            logger.error("storeImage failed! " + exception.getCause());
             return user.getImageLocation();
         }
-
-        return imageLocation;
     }
 }
