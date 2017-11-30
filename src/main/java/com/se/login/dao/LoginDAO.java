@@ -1,35 +1,48 @@
 package com.se.login.dao;
 
-import org.slf4j.LoggerFactory;
+//import packages
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
-import com.se.domain.*;
-import org.slf4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import com.se.domain.User;
+import com.se.domain.Student;
+import com.se.domain.Teacher;
+import com.se.domain.CourseKey;
 
+/**
+ * @author Yusen
+ * @version 1.0
+ * @since 1.0
+ */
 @Repository
 public class LoginDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final Logger logger = LoggerFactory.getLogger("LoginDAO.class");
-    private static final String isStudentExistSQL = "select * from student where id = ? and password = ?";
-    private static final String isTeacherExistSQL = "select * from teacher where id = ? and password = ?";
-    private static final String getStudentSQL = "select * from student where id = ?";
-    private static final String getTeacherSQL = "select * from teacher where id = ?";
-    private static final String getStudentCourseKeySQL = "select * from take where student_id = ?";
-    private static final String getTeacherCourseKeySQL = "select * from teach where teacher_id = ?";
+    private static final String IS_STUDENT_EXIST_SQL = "select * from student where id = ? and password = ?";
+    private static final String IS_TEACHER_EXIST_SQL = "select * from teacher where id = ? and password = ?";
+    private static final String GET_STUDENT_SQL = "select * from student where id = ?";
+    private static final String GET_TEACHER_SQL = "select * from teacher where id = ?";
+    private static final String GET_STUDENT_COURSE_KEY_SQL = "select * from take where student_id = ?";
+    private static final String GET_TEACHER_COURSE_KEY_SQL = "select * from teach where teacher_id = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * 验证用户
+     *
+     * @param id       用户学号或工号
+     * @param password 用户密码
+     * @return 0表示用户不存在，1表示学生用户，2表示教师用户
+     */
     public int isUserExist(String id, String password) {
-        int flag = jdbcTemplate.query(isStudentExistSQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
+        int flag = jdbcTemplate.query(IS_STUDENT_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
             @Override
             public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 return resultSet.next() ? 1 : 0;
@@ -39,7 +52,7 @@ public class LoginDAO {
         if (flag > 0)
             return flag;
 
-        flag = jdbcTemplate.query(isTeacherExistSQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
+        flag = jdbcTemplate.query(IS_TEACHER_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
             @Override
             public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 return resultSet.next() ? 2 : 0;
@@ -49,64 +62,63 @@ public class LoginDAO {
         return flag;
     }
 
-    public User getUserById(String id, int type) {
+    /**
+     * 获取用户对象
+     *
+     * @param id   用户学号或工号
+     * @param type 用户类型，1表示学生用户，2表示教师用户
+     * @return User对象
+     * @throws SQLException        SQL查询出错
+     * @throws DataAccessException 数据库访问出错
+     */
+    public User getUser(String id, int type) throws SQLException, DataAccessException {
         if (type == 1) {
-            return jdbcTemplate.query(getStudentSQL, new Object[]{id}, new ResultSetExtractor<User>() {
+            return jdbcTemplate.query(GET_STUDENT_SQL, new Object[]{id}, new ResultSetExtractor<User>() {
                 @Override
                 public User extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                    try {
-                        resultSet.next();
+                    resultSet.next();
 
-                        Student student = new Student();
-                        student.setType(1);
-                        setUser(student, resultSet);
-                        student.setMajor(resultSet.getString(9));
-                        student.setGrade(resultSet.getInt(10));
-                        student.setClassNumber(resultSet.getString(11));
-                        student.setTakes(getStudentCourseKey(student.getId()));
+                    Student student = new Student();
+                    student.setType(1);
+                    setUser(student, resultSet);
+                    student.setMajor(resultSet.getString("major"));
+                    student.setGrade(resultSet.getInt("grade"));
+                    student.setClassNumber(resultSet.getString("class_number"));
+                    student.setTakes(getStudentCourseKey(student.getId()));
 
-                        return student;
-                    } catch (SQLException sqlException) {
-                        logger.error("getUserById failed!");
-                        return null;
-                    }
+                    return student;
                 }
             });
         } else {
-            return jdbcTemplate.query(getTeacherSQL, new Object[]{id}, new ResultSetExtractor<User>() {
+            return jdbcTemplate.query(GET_TEACHER_SQL, new Object[]{id}, new ResultSetExtractor<User>() {
                 @Override
                 public User extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                    try {
-                        resultSet.next();
+                    resultSet.next();
 
-                        Teacher teacher = new Teacher();
-                        teacher.setType(2);
-                        setUser(teacher, resultSet);
-                        teacher.setTitle(resultSet.getString(9));
-                        teacher.setTeaches(getTeacherCourseKey(teacher.getId()));
+                    Teacher teacher = new Teacher();
+                    teacher.setType(2);
+                    setUser(teacher, resultSet);
+                    teacher.setTitle(resultSet.getString("title"));
+                    teacher.setTeaches(getTeacherCourseKey(teacher.getId()));
 
-                        return teacher;
-                    } catch (SQLException sqlException) {
-                        logger.error("getUserById failed!");
-                        return null;
-                    }
+                    return teacher;
                 }
             });
         }
     }
 
     private void setUser(User user, ResultSet resultSet) throws SQLException {
-        user.setId(resultSet.getString(1));
-        user.setName(resultSet.getString(3));
-        user.setCollege(resultSet.getString(4));
-        user.setEmail(resultSet.getString(5));
-        user.setImageLocation(resultSet.getString(6));
-        user.setSignature(resultSet.getString(7));
-        user.setProfile(resultSet.getString(8));
+        user.setId(resultSet.getString("id"));
+        user.setName(resultSet.getString("name"));
+        user.setCollege(resultSet.getString("college"));
+        user.setEmail(resultSet.getString("email"));
+        user.setImageLocation(resultSet.getString("image_position"));
+        user.setSignature(resultSet.getString("signature"));
+        user.setProfile(resultSet.getString("profile"));
     }
 
-    private ArrayList<CourseKey> getStudentCourseKey(String id) {
-        return jdbcTemplate.query(getStudentCourseKeySQL, new Object[]{id}, new ResultSetExtractor<ArrayList<CourseKey>>() {
+    private ArrayList<CourseKey> getStudentCourseKey(String id) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_STUDENT_COURSE_KEY_SQL, new Object[]{id}, new ResultSetExtractor<ArrayList<CourseKey>>() {
             @Override
             public ArrayList<CourseKey> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 ArrayList<CourseKey> courseKeyList = new ArrayList<CourseKey>();
@@ -116,8 +128,8 @@ public class LoginDAO {
         });
     }
 
-    private ArrayList<CourseKey> getTeacherCourseKey(String id) {
-        return jdbcTemplate.query(getTeacherCourseKeySQL, new Object[]{id}, new ResultSetExtractor<ArrayList<CourseKey>>() {
+    private ArrayList<CourseKey> getTeacherCourseKey(String id) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_TEACHER_COURSE_KEY_SQL, new Object[]{id}, new ResultSetExtractor<ArrayList<CourseKey>>() {
             @Override
             public ArrayList<CourseKey> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 ArrayList<CourseKey> courseKeyList = new ArrayList<CourseKey>();
@@ -127,21 +139,16 @@ public class LoginDAO {
         });
     }
 
-    private void setCourseKeyList(ArrayList<CourseKey> courseKeyList, ResultSet resultSet) {
-        try {
-            while (resultSet.next()) {
-                CourseKey courseKey = new CourseKey();
+    private void setCourseKeyList(ArrayList<CourseKey> courseKeyList, ResultSet resultSet) throws SQLException {
+        while (resultSet.next()) {
+            CourseKey courseKey = new CourseKey();
 
-                courseKey.setId(resultSet.getString(2));
-                courseKey.setSemester(resultSet.getString(3));
-                courseKey.setTime(resultSet.getString(4));
-                courseKey.setPlace(resultSet.getString(5));
+            courseKey.setId(resultSet.getString("course_id"));
+            courseKey.setSemester(resultSet.getString("semester"));
+            courseKey.setTime(resultSet.getString("time"));
+            courseKey.setPlace(resultSet.getString("place"));
 
-                courseKeyList.add(courseKey);
-            }
-        } catch (SQLException sqlException) {
-            logger.error("setCourseKeyList failed!");
-            courseKeyList.clear();
+            courseKeyList.add(courseKey);
         }
     }
 }

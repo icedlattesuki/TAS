@@ -1,5 +1,12 @@
 package com.se.domain;
 
+/**
+ * 封装课程的主键
+ *
+ * @author Yusen
+ * @version 1.0
+ * @since 1.0
+ */
 public class CourseKey {
     private String id;
     private String time;

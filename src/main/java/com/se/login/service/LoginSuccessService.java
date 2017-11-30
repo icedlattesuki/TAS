@@ -1,11 +1,20 @@
 package com.se.login.service;
 
-import com.se.login.dao.LoginSuccessDAO;
+//import packages
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.se.domain.*;
 import java.util.ArrayList;
+import com.se.domain.User;
+import com.se.domain.Student;
+import com.se.domain.Teacher;
+import com.se.domain.Course;
+import com.se.login.dao.LoginSuccessDAO;
 
+/**
+ * @author Yusen
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 public class LoginSuccessService {
     private LoginSuccessDAO loginSuccessDAO;
@@ -13,17 +22,25 @@ public class LoginSuccessService {
     @Autowired
     public void setLoginSuccessDAO(LoginSuccessDAO loginSuccessDAO) { this.loginSuccessDAO = loginSuccessDAO; }
 
-    public ArrayList<Course> getUserCourseList(User user) {
-        if (user.getType() == 1) {
-            Student student = (Student)user;
-            return loginSuccessDAO.getCourseList(student.getTakes());
-        } else {
-            Teacher teacher = (Teacher)user;
-            return loginSuccessDAO.getCourseList(teacher.getTeaches());
+    /**
+     * 获取用户的课程列表
+     * @param user User对象
+     * @return 用户的课程列表
+     */
+    public ArrayList<Course> getCourseList(User user) {
+        try {
+            if (user == null) {
+                return loginSuccessDAO.getAllCourse();
+            }
+            else if (user.getType() == 1) {
+                Student student = (Student)user;
+                return loginSuccessDAO.getCourseList(student.getTakes());
+            } else {
+                Teacher teacher = (Teacher)user;
+                return loginSuccessDAO.getCourseList(teacher.getTeaches());
+            }
+        } catch (Exception exception) {
+            return new ArrayList<Course>();
         }
-    }
-
-    public ArrayList<Course> getAllCourse() {
-        return loginSuccessDAO.getAllCourse();
     }
 }

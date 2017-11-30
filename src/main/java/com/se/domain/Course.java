@@ -1,5 +1,12 @@
 package com.se.domain;
 
+/**
+ * 封装课程属性
+ *
+ * @author Yusen
+ * @version 1.0
+ * @since 1.0
+ */
 public class Course {
     private String id;
     private String name;

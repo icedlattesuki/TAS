@@ -1,5 +1,12 @@
 package com.se.domain;
 
+/**
+ * 封装用户共有的属性
+ *
+ * @author Yusen
+ * @version 1.0
+ * @since 1.0
+ */
 public class User {
     private String id;
     private String name;

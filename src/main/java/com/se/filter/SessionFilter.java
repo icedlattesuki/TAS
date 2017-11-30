@@ -2,7 +2,6 @@ package com.se.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -12,20 +11,28 @@ import java.io.IOException;
 import java.util.regex.*;
 import java.util.*;
 
+/**
+ * @author Yusen
+ * @version 1.0
+ * @since 1.0
+ */
 @WebFilter(filterName = "sessionFilter", urlPatterns = "/*")
 public class SessionFilter implements Filter {
     private static List<Pattern> patterns = new ArrayList<Pattern>();
     private static final Logger logger = LoggerFactory.getLogger("SessionFilter.class");
 
+     //注册不需要过滤的URL
     static {
         patterns.add(Pattern.compile("/"));
+        patterns.add(Pattern.compile("/index"));
         patterns.add(Pattern.compile("/login"));
-        patterns.add(Pattern.compile("/loginCheck"));
+        patterns.add(Pattern.compile("/login/check"));
         patterns.add(Pattern.compile("/image/*"));
-        patterns.add(Pattern.compile("/confirm"));
-        patterns.add(Pattern.compile("/passwordGetBack"));
-        patterns.add(Pattern.compile("/toGetBackPassword"));
-        patterns.add(Pattern.compile("/getBackPassword"));
+        patterns.add(Pattern.compile("/user/email/bind"));
+        patterns.add(Pattern.compile("/user/email/unbind"));
+        patterns.add(Pattern.compile("/user/password-reset/reset"));
+        patterns.add(Pattern.compile("/user/password-reset/to-reset"));
+        patterns.add(Pattern.compile("/user/password-reset"));
     }
 
     @Override

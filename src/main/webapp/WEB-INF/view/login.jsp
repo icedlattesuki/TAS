@@ -6,7 +6,7 @@
 <body>
 <h1>浙江大学教学辅助系统</h1>
 <h4>${error}</h4>
-<form method="post" action="/loginCheck">
+<form method="post" action="/login/check">
     学号:
     <input name="id" type="text"/>
     <br/>
@@ -15,7 +15,7 @@
     <br/>
     <input value="登录" type="submit" />
 </form>
-<a href="/passengerLogin">游客登录</a>
-<a href="/passwordGetBack">找回密码</a>
+<a href="/index">游客登录</a>
+<a href="/user/password-reset">重置密码</a>
 </body>
 </html>
