@@ -37,7 +37,7 @@ public class LoginController {
      * @return 登录界面逻辑视图名
      */
     @RequestMapping(value={"/", "/login"})
-    public String login() {
+    public String loginPage() {
         return "login";
     }
 
@@ -74,7 +74,7 @@ public class LoginController {
      * @return 对应的用户首页逻辑视图名
      */
     @RequestMapping("/index")
-    public String index(HttpSession session, Model model) {
+    public String indexPage(HttpSession session, Model model) {
         User user = (User)session.getAttribute("user");
         ArrayList<Course> courseList = loginSuccessService.getCourseList(user);
 

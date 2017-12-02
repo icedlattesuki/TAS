@@ -13,7 +13,7 @@
 <img src="${user.imageLocation}" />
 <ul>
     <c:forEach var="course" items="${courseList}" varStatus="status">
-        <li><a href="/course?currentId=${status.index}">${course.name}</a>,${course.credit},${course.semester},${course.time},${course.place}</li>
+        <li><a href="/course/index?courseIndex=${status.index}">${course.name}</a>,${course.credit},${course.courseKey.semester},${course.courseKey.time},${course.courseKey.place}</li>
     </c:forEach>
 </ul>
 <a href="/logout">登出</a>

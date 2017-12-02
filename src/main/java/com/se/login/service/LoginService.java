@@ -26,7 +26,7 @@ public class LoginService {
      * @return 0表示用户不存在，1表示学生用户，2表示教师用户
      */
     public int identifyUser(String id, String password) {
-        return loginDAO.isUserExist(id, password);
+        return loginDAO.identifyUser(id, password);
     }
 
     /**

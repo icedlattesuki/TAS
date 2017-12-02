@@ -41,7 +41,7 @@ public class LoginDAO {
      * @param password 用户密码
      * @return 0表示用户不存在，1表示学生用户，2表示教师用户
      */
-    public int isUserExist(String id, String password) {
+    public int identifyUser(String id, String password) {
         int flag = jdbcTemplate.query(IS_STUDENT_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
             @Override
             public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {

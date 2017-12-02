@@ -32,7 +32,7 @@ public class UserInfoController {
      * @return 个人信息界面逻辑视图名
      */
     @RequestMapping("/user/info")
-    public String info(HttpSession session) {
+    public String infoPage(HttpSession session) {
         User user = (User)session.getAttribute("user");
 
         if (user.getType() == 1) {
@@ -49,7 +49,7 @@ public class UserInfoController {
      * @return 个人信息编辑界面逻辑视图名
      */
     @RequestMapping("/user/info/edit")
-    public String editInfo(HttpSession session) {
+    public String editInfoPage(HttpSession session) {
         User user = (User)session.getAttribute("user");
 
         if (user.getType() == 1) {

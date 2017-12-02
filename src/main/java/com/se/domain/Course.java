@@ -8,18 +8,15 @@ package com.se.domain;
  * @since 1.0
  */
 public class Course {
-    private String id;
+    private CourseKey courseKey;
     private String name;
     private String introduction;
     private float credit;
     private String college;
-    private String time;
-    private String semester;
-    private String place;
     private int like;
 
-    public String getId() {
-        return id;
+    public CourseKey getCourseKey() {
+        return courseKey;
     }
 
     public String getName() {
@@ -38,24 +35,12 @@ public class Course {
         return college;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
     public int getLike() {
         return like;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCourseKey(CourseKey courseKey) {
+        this.courseKey = courseKey;
     }
 
     public void setName(String name) {
@@ -72,18 +57,6 @@ public class Course {
 
     public void setCollege(String college) {
         this.college = college;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
     }
 
     public void setLike(int like) { this.like = like; }

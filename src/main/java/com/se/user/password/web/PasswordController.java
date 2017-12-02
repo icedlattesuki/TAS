@@ -126,7 +126,7 @@ public class PasswordController {
      * @return 密码重置完成界面逻辑视图名
      */
     @RequestMapping("/user/password-reset/reset")
-    public String getBackPassword(@RequestParam("id") String uuid, Model model) {
+    public String resetPassword(@RequestParam("id") String uuid, Model model) {
         User user = emailService.getUser(uuid);
 
         if (user != null && passwordUpdateService.updatePassword(user, DEFAULT_PASSWORD)) {

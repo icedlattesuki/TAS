@@ -85,14 +85,16 @@ public class LoginSuccessDAO {
 
     private Course setCourse(ResultSet resultSet) throws SQLException {
         Course course = new Course();
+        CourseKey courseKey = new CourseKey();
 
-        course.setId(resultSet.getString("id"));
+        courseKey.setId(resultSet.getString("id"));
+        courseKey.setSemester(resultSet.getString("semester"));
+        courseKey.setTime(resultSet.getString("time"));
+        courseKey.setPlace(resultSet.getString("place"));
+        course.setCourseKey(courseKey);
         course.setName(resultSet.getString("name"));
         course.setCredit(resultSet.getFloat("credit"));
         course.setCollege(resultSet.getString("college"));
-        course.setSemester(resultSet.getString("semester"));
-        course.setTime(resultSet.getString("time"));
-        course.setPlace(resultSet.getString("place"));
         course.setIntroduction(resultSet.getString("introduction"));
         course.setLike(resultSet.getInt("like_number"));
 

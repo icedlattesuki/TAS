@@ -1,6 +1,8 @@
 package com.se.login.service;
 
 //import packages
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import com.se.login.dao.LoginSuccessDAO;
  */
 @Service
 public class LoginSuccessService {
+    private static final Logger logger = LoggerFactory.getLogger("LoginSuccessService.class");
     private LoginSuccessDAO loginSuccessDAO;
 
     @Autowired
@@ -40,6 +43,7 @@ public class LoginSuccessService {
                 return loginSuccessDAO.getCourseList(teacher.getTeaches());
             }
         } catch (Exception exception) {
+            logger.error("getCourseList failed! " + exception.getCause());
             return new ArrayList<Course>();
         }
     }

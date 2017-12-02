@@ -1,7 +1,9 @@
 package com.se.filter;
 
+//import packages
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +18,7 @@ import java.util.*;
  * @version 1.0
  * @since 1.0
  */
+ @Order(1)
 @WebFilter(filterName = "sessionFilter", urlPatterns = "/*")
 public class SessionFilter implements Filter {
     private static List<Pattern> patterns = new ArrayList<Pattern>();
@@ -45,6 +48,7 @@ public class SessionFilter implements Filter {
         logger.info("sessionFilter destroy!");
     }
 
+    //阻止未登录用户对所有未在list中注册的url进行访问
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
