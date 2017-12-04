@@ -1,6 +1,7 @@
 package com.se.course.resource.web;
 
 //import packages
+import com.se.course.resource.domain.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import com.se.domain.Course;
 import com.se.domain.CourseKey;
 import com.se.course.resource.service.ResourceService;
 
@@ -46,9 +45,9 @@ public class ResourceController {
      */
     @RequestMapping("/course/resource-upload/upload")
     public String uploadResource(HttpSession session, @RequestParam("file")MultipartFile file, Model model) {
-        CourseKey courseKey = getCourseKey(session);
+        CourseKey courseKey = ResourceService.getCourseKey(session);
 
-        if (!resourceService.uploadResource(courseKey, file)) {
+        if (!resourceService.uploadResource(courseKey, file, 0, new Resource())) {
             model.addAttribute("error", "上传文件出错!");
             return "course/resource/resource_upload";
         } else {
@@ -65,8 +64,8 @@ public class ResourceController {
      */
     @RequestMapping("/course/resource-download")
     public String resourceDownloadPage(HttpSession session, Model model) {
-        CourseKey courseKey = getCourseKey(session);
-        model.addAttribute("resourceList", resourceService.getResourceList(courseKey));
+        CourseKey courseKey = ResourceService.getCourseKey(session);
+        model.addAttribute("resourceList", resourceService.getResourceList(courseKey, 0));
         return "course/resource/resource_download";
     }
 
@@ -79,14 +78,7 @@ public class ResourceController {
      */
     @RequestMapping("/course/resource-download/download")
     public void downloadResource(HttpSession session, @RequestParam("file_name") String fileName, HttpServletResponse response) {
-        CourseKey courseKey = getCourseKey(session);
-        resourceService.downloadResource(courseKey, fileName, response);
-    }
-
-    //从会话中获取当前课程的CourseKey
-    private CourseKey getCourseKey(HttpSession session) {
-        ArrayList<Course> courseList = (ArrayList<Course>)session.getAttribute("courseList");
-        int courseIndex = (Integer)session.getAttribute("courseIndex");
-        return courseList.get(courseIndex).getCourseKey();
+        CourseKey courseKey = ResourceService.getCourseKey(session);
+        resourceService.downloadResource(courseKey, fileName, 0, response);
     }
 }

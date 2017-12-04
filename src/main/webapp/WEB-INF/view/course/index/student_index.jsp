@@ -12,5 +12,6 @@
 </head>
 <body>
 <a href="/course/resource-download">资料下载</a>
+<a href="/course/video/watch">视频观看</a>
 </body>
 </html>

@@ -8,11 +8,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import java.util.ArrayList;
+import java.util.Date;
+import com.se.domain.Course;
 import com.se.course.resource.dao.ResourceDAO;
 import com.se.domain.CourseKey;
 import com.se.course.resource.domain.Resource;
@@ -24,7 +27,7 @@ import com.se.course.resource.domain.Resource;
  */
 @Service
 public class ResourceService {
-    private static final Logger logger = LoggerFactory.getLogger("ResourceService.class");
+    private static final Logger logger = LoggerFactory.getLogger("CourseController.class");
     private ResourceDAO resourceDAO;
 
     @Autowired
@@ -35,12 +38,12 @@ public class ResourceService {
      *
      * @param courseKey 课程主键
      * @param file 文件
+     * @param type 0表示资料，1表示视频
+     * @param resource Resource对象
      * @return true表示上传成功，false表示上传失败
      */
-    public boolean uploadResource(CourseKey courseKey, MultipartFile file) {
-        Resource resource = storeResource(courseKey, file);
-
-        if (resource == null) {
+    public boolean uploadResource(CourseKey courseKey, MultipartFile file, int type, Resource resource) {
+        if (!storeResource(courseKey, file, type, resource)) {
             return false;
         }
 
@@ -61,11 +64,12 @@ public class ResourceService {
      * 获取资源列表
      *
      * @param courseKey 课程主键
+     * @param type 0表示资料，1表示视频
      * @return 资源列表
      */
-    public ArrayList<Resource> getResourceList(CourseKey courseKey) {
+    public ArrayList<Resource> getResourceList(CourseKey courseKey, int type) {
         try {
-            return resourceDAO.getResourceList(courseKey);
+            return resourceDAO.getResourceList(courseKey, type);
         } catch (Exception exception) {
             return new ArrayList<Resource>();
         }
@@ -76,10 +80,11 @@ public class ResourceService {
      *
      * @param courseKey 课程主键
      * @param fileName 文件名
+     * @param type 0表示资料，1表示视频
      * @param response 响应
      */
-    public void downloadResource(CourseKey courseKey, String fileName, HttpServletResponse response) {
-        String location = ResourceService.getDirectoryLocation(courseKey) + fileName;
+    public void downloadResource(CourseKey courseKey, String fileName, int type, HttpServletResponse response) {
+        String location = getDirectoryPath(courseKey, type) + fileName;
 
         try {
             File file = new File(location);
@@ -98,39 +103,64 @@ public class ResourceService {
      *
      * @param courseKey 课程主键
      * @param file 文件
+     * @param type 0表示资料，1表示视频
+     * @param resource Resource对象
      * @return 成功则返回Resource对象，否则返回null
      */
-    public static Resource storeResource(CourseKey courseKey, MultipartFile file) {
-        String realLocation = getDirectoryLocation(courseKey)+ file.getOriginalFilename();
+    private boolean storeResource(CourseKey courseKey, MultipartFile file, int type, Resource resource) {
+        String realLocation = getDirectoryPath(courseKey, type)+ file.getOriginalFilename();
 
         if (file.isEmpty()) {
-            return null;
+            return false;
         }
 
         try {
-            File file1 = new File(getDirectoryLocation(courseKey));
+            File file1 = new File(getDirectoryPath(courseKey, type));
 
             if (!file1.exists()) {
                 file1.mkdirs();
             }
 
             file.transferTo(new File(realLocation));
-            Resource resource = new Resource();
+            resource.setType(type);
             resource.setName(file.getOriginalFilename());
-            resource.setLocation(realLocation);
+            resource.setLocation(getFilePath(courseKey, type) + file.getOriginalFilename());
             resource.setCourseKey(courseKey);
             resource.setSize(file.getSize());
-            return resource;
+            resource.setDate(new Date());
+            return true;
         } catch (Exception exception) {
             logger.error("storeResource failed! " + exception.getCause());
-            return null;
+            return false;
         }
     }
 
-    //获取课程对应的目录路径
-    private static String getDirectoryLocation(CourseKey courseKey) {
+    /**
+     * 获取课程主键
+     *
+     * @param session 当前会话
+     * @return 课程主键
+     */
+    public static CourseKey getCourseKey(HttpSession session) {
+        ArrayList<Course> courseList = (ArrayList<Course>)session.getAttribute("courseList");
+        int courseIndex = (Integer)session.getAttribute("courseIndex");
+        return courseList.get(courseIndex).getCourseKey();
+    }
+
+    //
+    private static String getDirectoryPath(CourseKey courseKey, int type) {
+        String rootPath = System.getProperty("user.dir") + "/src/main/resources/static";
+        return rootPath + getFilePath(courseKey, type);
+    }
+
+    //
+    private static String getFilePath(CourseKey courseKey, int type) {
         String location = courseKey.getId() + File.separator + courseKey.getSemester() + File.separator + courseKey.getTime() + File.separator + courseKey.getPlace() + File.separator;
-        String rootPath = System.getProperty("user.dir") + "/src/main/resources/resource/";
-        return rootPath + location;
+
+        if (type == 0) {
+            return "/resource/" + location;
+        } else {
+            return "/video/" + location;
+        }
     }
 }

@@ -21,7 +21,7 @@ import com.se.course.resource.domain.Resource;
 @Repository
 public class ResourceDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String STORE_RESOURCE_SQL = "insert into resource(name,location,size,course_id,semester,time,place) values(?,?,?,?,?,?,?)";
+    private static final String STORE_RESOURCE_SQL = "insert into resource(type,name,location,size,date,course_id,semester,time,place,title,profile) values(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_RESOURCE_LIST_SQL = "select * from resource where course_id = ? and semester = ? and time = ? and place = ?";
     private static final String IS_RESOURCE_EXIST = "select * from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
     private static final String UPDATE_RESOURCE = "update resource set size = ? where course_id = ? and semester = ? and time = ? and place = ?";
@@ -37,7 +37,7 @@ public class ResourceDAO {
      */
     public void storeResource(Resource resource) throws DataAccessException {
         CourseKey courseKey = resource.getCourseKey();
-        Object[] args = new Object[] {resource.getName(), resource.getLocation(), resource.getSize(), courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
+        Object[] args = new Object[] {resource.getType(), resource.getName(), resource.getLocation(), resource.getSize(), resource.getDate(), courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), resource.getTitle(), resource.getProfile()};
         jdbcTemplate.update(STORE_RESOURCE_SQL, args);
     }
 
@@ -45,11 +45,12 @@ public class ResourceDAO {
      * 获取资源列表
      *
      * @param courseKey 课程主键
+     * @param type 0表示资料，1表示视频
      * @return 课程列表
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<Resource> getResourceList(final CourseKey courseKey) throws SQLException, DataAccessException {
+    public ArrayList<Resource> getResourceList(final CourseKey courseKey, final int type) throws SQLException, DataAccessException {
         Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
         return jdbcTemplate.query(GET_RESOURCE_LIST_SQL, args, new ResultSetExtractor<ArrayList<Resource>>() {
             @Override
@@ -57,10 +58,16 @@ public class ResourceDAO {
                 ArrayList<Resource> resourcesList = new ArrayList<Resource>();
 
                 while (resultSet.next()) {
+                    if (type != resultSet.getInt("type")) {
+                        continue;
+                    }
+
                     Resource resource = new Resource();
                     resource.setName(resultSet.getString("name"));
                     resource.setLocation(resultSet.getString("location"));
                     resource.setSize(resultSet.getLong("size"));
+                    resource.setTitle(resultSet.getString("title"));
+                    resource.setProfile(resultSet.getString("profile"));
                     resource.setCourseKey(courseKey);
                     resource.setSize1(convertSize(resource.getSize()));
                     resourcesList.add(resource);

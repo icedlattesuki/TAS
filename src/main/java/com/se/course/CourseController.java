@@ -13,7 +13,7 @@ import com.se.domain.User;
  * @since 1.0
  */
 @Controller
-public class IndexController {
+public class CourseController {
     /**
      * 显示课程功能界面
      *

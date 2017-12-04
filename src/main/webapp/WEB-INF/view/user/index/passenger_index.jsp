@@ -11,7 +11,7 @@
 <h1>欢迎使用浙江大学教学辅助系统</h1>
 <ul>
     <c:forEach var="course" items="${courseList}" varStatus="status">
-        <li><a href="/course?currentId=${status.index}">${course.name}</a>,${course.credit},${course.semester},${course.time},${course.place}</li>
+        <li><a href="/course?currentId=${status.index}">${course.name}</a>,${course.credit},${course.courseKey.semester},${course.courseKey.time},${course.courseKey.place}</li>
     </c:forEach>
 </ul>
 </body>
