@@ -30,7 +30,6 @@ public class SessionFilter implements Filter {
         patterns.add(Pattern.compile("/index"));
         patterns.add(Pattern.compile("/login"));
         patterns.add(Pattern.compile("/login/check"));
-        patterns.add(Pattern.compile("/image/*"));
         patterns.add(Pattern.compile("/user/email/bind"));
         patterns.add(Pattern.compile("/user/email/unbind"));
         patterns.add(Pattern.compile("/user/password-reset/reset"));

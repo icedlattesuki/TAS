@@ -154,7 +154,7 @@ public class ResourceService {
     }
 
     //
-    private static String getFilePath(CourseKey courseKey, int type) {
+    public static String getFilePath(CourseKey courseKey, int type) {
         String location = courseKey.getId() + File.separator + courseKey.getSemester() + File.separator + courseKey.getTime() + File.separator + courseKey.getPlace() + File.separator;
 
         if (type == 0) {

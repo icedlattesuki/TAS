@@ -16,7 +16,7 @@ import java.io.IOException;
  * @version 1.0
  * @since 1.0
  */
-@Order(2)
+@Order(3)
 @WebFilter(filterName = "courseFilter", urlPatterns = "/course/*")
 public class CourseFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger("CourseFilter.class");

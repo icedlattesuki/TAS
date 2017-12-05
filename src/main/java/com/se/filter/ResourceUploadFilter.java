@@ -17,8 +17,8 @@ import com.se.domain.User;
  * @version 1.0
  * @since 1.0
  */
-@Order(3)
-@WebFilter(filterName = "resourceUploadFilter", urlPatterns = "/course/resource-upload/*")
+@Order(4)
+@WebFilter(filterName = "resourceUploadFilter", urlPatterns = {"/course/resource-upload/*", "/course/video-upload/*"})
 public class ResourceUploadFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger("ResourceUploadFilter.class");
 
@@ -32,7 +32,7 @@ public class ResourceUploadFilter implements Filter {
         logger.info("ResourceUploadFilter destroy!");
     }
 
-    //阻止游客和学生上传资料
+    //阻止游客和学生上传资料及视频
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
