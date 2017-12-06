@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import com.se.domain.CourseKey;
 import com.se.course.resource.domain.Resource;
 
+import javax.xml.crypto.Data;
+
 /**
  * @author Yusen
  * @version 1.0
@@ -23,8 +25,9 @@ public class ResourceDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String STORE_RESOURCE_SQL = "insert into resource(type,name,location,size,date,course_id,semester,time,place,title,profile) values(?,?,?,?,?,?,?,?,?,?,?)";
     private static final String GET_RESOURCE_LIST_SQL = "select * from resource where course_id = ? and semester = ? and time = ? and place = ?";
-    private static final String IS_RESOURCE_EXIST = "select * from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
-    private static final String UPDATE_RESOURCE = "update resource set size = ? where course_id = ? and semester = ? and time = ? and place = ?";
+    private static final String IS_RESOURCE_EXIST_SQL = "select * from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
+    private static final String UPDATE_RESOURCE_SQL = "update resource set size = ? where course_id = ? and semester = ? and time = ? and place = ?";
+    private static final String DELETE_RESOURCE_SQL = "delete from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -87,7 +90,7 @@ public class ResourceDAO {
     public boolean isResourceExist(Resource resource) {
         CourseKey courseKey = resource.getCourseKey();
         Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), resource.getName()};
-        return jdbcTemplate.query(IS_RESOURCE_EXIST, args, new ResultSetExtractor<Boolean>() {
+        return jdbcTemplate.query(IS_RESOURCE_EXIST_SQL, args, new ResultSetExtractor<Boolean>() {
             @Override
             public Boolean extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 return resultSet.next();
@@ -104,7 +107,19 @@ public class ResourceDAO {
     public void updateResource(Resource resource) throws DataAccessException {
         CourseKey courseKey = resource.getCourseKey();
         Object[] args = new Object[] {resource.getSize(), courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        jdbcTemplate.update(UPDATE_RESOURCE, args);
+        jdbcTemplate.update(UPDATE_RESOURCE_SQL, args);
+    }
+
+    /**
+     * 删除资源
+     *
+     * @param courseKey 课程主键
+     * @param fileName 文件名
+     * @throws DataAccessException 数据库访问出错
+     */
+    public void deleteResource(CourseKey courseKey, String fileName) throws DataAccessException {
+        Object[] args = new Object[]{courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), fileName};
+        jdbcTemplate.update(DELETE_RESOURCE_SQL, args);
     }
 
     //将以B为单位的文件大小转为以B、KB、MB、GB为单位的文件大小

@@ -71,6 +71,7 @@ public class ResourceService {
         try {
             return resourceDAO.getResourceList(courseKey, type);
         } catch (Exception exception) {
+            logger.error("getResourceList failed! " + exception.getCause());
             return new ArrayList<Resource>();
         }
     }
@@ -95,6 +96,24 @@ public class ResourceService {
             response.flushBuffer();
         } catch (Exception exception) {
             logger.error("downloadResource failed! " + exception.getCause());
+        }
+    }
+
+    /**
+     * 删除资源
+     *
+     * @param courseKey 课程主键
+     * @param fileName 文件名
+     * @param type 0表示资料，1表示视频
+     * @return true表示删除成功，false表示删除失败
+     */
+    public boolean deleteResource(CourseKey courseKey, String fileName, int type) {
+        try {
+            resourceDAO.deleteResource(courseKey, fileName);
+            removeResource(courseKey, fileName, type);
+            return true;
+        } catch (DataAccessException exception) {
+            return false;
         }
     }
 
@@ -133,6 +152,19 @@ public class ResourceService {
             logger.error("storeResource failed! " + exception.getCause());
             return false;
         }
+    }
+
+    /**
+     * 移除资源
+     *
+     * @param courseKey 课程主键
+     * @param fileName 文件名
+     * @param type 0表示资料，1表示视频
+     */
+    private void removeResource(CourseKey courseKey, String fileName, int type) {
+        String realLocation = getDirectoryPath(courseKey, type) + fileName;
+        File file = new File(realLocation);
+        file.delete();
     }
 
     /**

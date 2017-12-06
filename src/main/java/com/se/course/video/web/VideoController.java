@@ -32,9 +32,9 @@ public class VideoController {
      *
      * @return 视频上传界面逻辑视图名
      */
-    @RequestMapping("/course/video-upload")
+    @RequestMapping("/course/resource/video/to-upload")
     public String videoUploadPage() {
-        return "course/video/video_upload";
+        return "course/resource/video/video_upload";
     }
 
     /**
@@ -47,15 +47,15 @@ public class VideoController {
      * @param model Model对象
      * @return 成功则重定向指视频观看界面，否则返回视频上传界面逻辑视图名
      */
-    @RequestMapping("/course/video-upload/upload")
+    @RequestMapping("/course/resource/video/upload")
     public String uploadVideo(HttpSession session, @RequestParam("file")MultipartFile file, @RequestParam("title") String title, @RequestParam("profile") String profile, Model model) {
         CourseKey courseKey = ResourceService.getCourseKey(session);
 
         if (videoService.uploadVideo(courseKey, file, title, profile)) {
-            return "redirect:/course/video/watch";
+            return "redirect:/course/resource/video/watch";
         } else {
             model.addAttribute("error", "上传视频失败！");
-            return "course/video/video_upload";
+            return "course/resource/video/video_upload";
         }
     }
 
@@ -66,12 +66,12 @@ public class VideoController {
      * @param model Model对象
      * @return 视频观看界面逻辑视图名
      */
-    @RequestMapping("/course/video/watch")
+    @RequestMapping("/course/resource/video/watch")
     public String videoWatchPage(HttpSession session, Model model) {
         CourseKey courseKey = ResourceService.getCourseKey(session);
         ArrayList<Resource> videoList = videoService.getVideoList(courseKey);
         model.addAttribute("videoList", videoList);
-        return "course/video/video_watch";
+        return "course/resource/video/video_watch";
     }
 
     /**
@@ -81,9 +81,30 @@ public class VideoController {
      * @param fileName 文件名
      * @param response 响应
      */
-    @RequestMapping("/course/video/download")
+    @RequestMapping("/course/resource/video/download")
     public void downloadVideo(HttpSession session, @RequestParam("file_name")String fileName, HttpServletResponse response) {
         CourseKey courseKey = ResourceService.getCourseKey(session);
         videoService.downloadVideo(courseKey, fileName, response);
+    }
+
+    /**
+     * 删除视频
+     *
+     * @param session 当前会话
+     * @param fileName 文件名
+     * @param model Model对象
+     * @return 视频观看界面逻辑视图名
+     */
+    @RequestMapping("/course/resource/video/delete")
+    public String deleteVideo(HttpSession session, @RequestParam("file_name") String fileName, Model model) {
+        CourseKey courseKey = ResourceService.getCourseKey(session);
+
+        if (videoService.deleteVideo(courseKey, fileName)) {
+            model.addAttribute("info", "删除成功！");
+        } else {
+            model.addAttribute("info", "删除失败！");
+        }
+
+        return "redirect:/course/resource/video/watch";
     }
 }

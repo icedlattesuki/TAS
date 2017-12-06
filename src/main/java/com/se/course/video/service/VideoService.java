@@ -58,4 +58,15 @@ public class VideoService {
     public void downloadVideo(CourseKey courseKey, String fileName, HttpServletResponse response) {
         resourceService.downloadResource(courseKey, fileName, 1, response);
     }
+
+    /**
+     * 删除视频
+     *
+     * @param courseKey 课程主键
+     * @param fileName 文件名
+     * @return true表示删除成功，false表示删除失败
+     */
+    public boolean deleteVideo(CourseKey courseKey, String fileName) {
+        return resourceService.deleteResource(courseKey, fileName, 1);
+    }
 }

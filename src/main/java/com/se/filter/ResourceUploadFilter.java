@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.se.domain.User;
 
 /**
@@ -18,9 +23,15 @@ import com.se.domain.User;
  * @since 1.0
  */
 @Order(4)
-@WebFilter(filterName = "resourceUploadFilter", urlPatterns = {"/course/resource-upload/*", "/course/video-upload/*"})
+@WebFilter(filterName = "resourceUploadFilter", urlPatterns = "/course/resource/*")
 public class ResourceUploadFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger("ResourceUploadFilter.class");
+    private static List<Pattern> patterns = new ArrayList<Pattern>();
+
+    static {
+        patterns.add(Pattern.compile("/course/resource/.+/.*upload"));
+        patterns.add(Pattern.compile("/course/resource/.+/delete"));
+    }
 
     @Override
     public void init(FilterConfig var1) throws ServletException {
@@ -39,12 +50,23 @@ public class ResourceUploadFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse)response;
         HttpSession session = httpServletRequest.getSession();
         User user = (User)session.getAttribute("user");
+        String url = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length());
 
-        if (user == null || user.getType() == 1) {
+        if (isInclude(url) && (user == null || user.getType() == 1)) {
             httpServletResponse.sendRedirect("/index");
             return;
         }
 
         chain.doFilter(request, response);
+    }
+
+    private boolean isInclude(String url) {
+        for (Pattern pattern : patterns) {
+            Matcher matcher = pattern.matcher(url);
+            if (matcher.matches())
+                return true;
+        }
+
+        return false;
     }
 }
