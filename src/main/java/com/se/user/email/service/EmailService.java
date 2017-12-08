@@ -60,7 +60,7 @@ public class EmailService {
             sender.send(message);
             return true;
         } catch (Exception exception) {
-            logger.error("sendEmail failed! " + exception.getCause());
+            logger.error("sendEmail fail! " + exception.getCause());
             return false;
         }
     }
@@ -78,7 +78,7 @@ public class EmailService {
             emailDAO.updateEmail(user, user.getEmail());
             return user;
         } catch (DataAccessException exception) {
-            logger.error("bindEmail failed! " + exception.getCause());
+            logger.error("bindEmail fail! " + exception.getCause());
             return null;
         }
     }
@@ -96,7 +96,7 @@ public class EmailService {
             emailDAO.updateEmail(user, "");
             return user;
         } catch (DataAccessException exception) {
-            logger.error("unbindEmail failed! " + exception.getCause());
+            logger.error("unbindEmail fail! " + exception.getCause());
             return null;
         }
     }

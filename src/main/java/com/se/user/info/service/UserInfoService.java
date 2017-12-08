@@ -41,7 +41,7 @@ public class UserInfoService {
             userInfoDAO.updateInfo(user, editableUserInfo);
             return true;
         } catch (DataAccessException exception) {
-            logger.error("personalInfoUpdate failed! " + exception.getCause());
+            logger.error("updateInfo fail! " + exception.getCause());
             return false;
         }
     }
@@ -59,7 +59,7 @@ public class UserInfoService {
             image.transferTo(file);
             return imageLocation;
         } catch (IOException exception) {
-            logger.error("storeImage failed! " + exception.getCause());
+            logger.error("storeImage fail! " + exception.getCause());
             return user.getImageLocation();
         }
     }

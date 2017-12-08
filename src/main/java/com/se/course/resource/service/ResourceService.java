@@ -27,8 +27,8 @@ import com.se.course.resource.domain.Resource;
  */
 @Service
 public class ResourceService {
-    private static final Logger logger = LoggerFactory.getLogger("CourseController.class");
     private ResourceDAO resourceDAO;
+    private static final Logger logger = LoggerFactory.getLogger("ResourceService.class");
 
     @Autowired
     public void setResourceDAO(ResourceDAO resourceDAO) { this.resourceDAO = resourceDAO; }
@@ -55,7 +55,7 @@ public class ResourceService {
             }
             return true;
         } catch (DataAccessException exception) {
-            logger.error("uploadResource failed! " + exception.getCause());
+            logger.error("uploadResource fail! " + exception.getCause());
             return false;
         }
     }
@@ -71,7 +71,7 @@ public class ResourceService {
         try {
             return resourceDAO.getResourceList(courseKey, type);
         } catch (Exception exception) {
-            logger.error("getResourceList failed! " + exception.getCause());
+            logger.error("getResourceList fail! " + exception.getCause());
             return new ArrayList<Resource>();
         }
     }
@@ -95,7 +95,7 @@ public class ResourceService {
             IOUtils.copy(inputStream, response.getOutputStream());
             response.flushBuffer();
         } catch (Exception exception) {
-            logger.error("downloadResource failed! " + exception.getCause());
+            logger.error("downloadResource fail! " + exception.getCause());
         }
     }
 
@@ -113,6 +113,7 @@ public class ResourceService {
             removeResource(courseKey, fileName, type);
             return true;
         } catch (DataAccessException exception) {
+            logger.error("deleteResource fail! " + exception.getCause());
             return false;
         }
     }
@@ -149,7 +150,7 @@ public class ResourceService {
             resource.setDate(new Date());
             return true;
         } catch (Exception exception) {
-            logger.error("storeResource failed! " + exception.getCause());
+            logger.error("storeResource fail! " + exception.getCause());
             return false;
         }
     }

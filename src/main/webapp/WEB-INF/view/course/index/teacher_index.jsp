@@ -11,9 +11,16 @@
     <title>Title</title>
 </head>
 <body>
+<div>
+    <h4>${announcement.title}</h4>
+    <h5>${announcement.content}</h5>
+    <h5>${announcement.date}</h5>
+    <a href="/course/resource/announcement/list">更多</a>
+</div>
 <a href="/course/resource/material/to-upload">资料上传</a>
 <a href="/course/resource/material/to-download">资料下载</a>
 <a href="/course/resource/video/to-upload">视频上传</a>
 <a href="/course/resource/video/watch">视频观看</a>
+<a href="/course/resource/announcement/to-upload">公告发布</a>
 </body>
 </html>

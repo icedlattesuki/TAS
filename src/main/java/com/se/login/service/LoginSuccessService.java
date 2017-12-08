@@ -19,8 +19,8 @@ import com.se.login.dao.LoginSuccessDAO;
  */
 @Service
 public class LoginSuccessService {
-    private static final Logger logger = LoggerFactory.getLogger("LoginSuccessService.class");
     private LoginSuccessDAO loginSuccessDAO;
+    private static final Logger logger = LoggerFactory.getLogger("LoginSuccessService.class");
 
     @Autowired
     public void setLoginSuccessDAO(LoginSuccessDAO loginSuccessDAO) { this.loginSuccessDAO = loginSuccessDAO; }
@@ -43,7 +43,7 @@ public class LoginSuccessService {
                 return loginSuccessDAO.getCourseList(teacher.getTeaches());
             }
         } catch (Exception exception) {
-            logger.error("getCourseList failed! " + exception.getCause());
+            logger.error("getCourseList fail! " + exception.getCause());
             return new ArrayList<Course>();
         }
     }

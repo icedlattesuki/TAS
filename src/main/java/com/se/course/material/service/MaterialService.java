@@ -1,14 +1,14 @@
 package com.se.course.material.service;
 
 //import packages
-import com.se.course.resource.domain.Resource;
-import com.se.course.resource.service.ResourceService;
-import com.se.domain.CourseKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import com.se.course.resource.domain.Resource;
+import com.se.course.resource.service.ResourceService;
+import com.se.domain.CourseKey;
 
 /**
  * @author Yusen

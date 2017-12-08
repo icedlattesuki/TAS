@@ -50,7 +50,7 @@ public class PasswordUpdateService {
             passwordUpdateDAO.updatePassword(user, password);
             return true;
         } catch (DataAccessException exception) {
-            logger.error("updatePassword failed! " + exception.getCause());
+            logger.error("updatePassword fail! " + exception.getCause());
             return false;
         }
     }

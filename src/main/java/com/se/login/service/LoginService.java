@@ -1,6 +1,8 @@
 package com.se.login.service;
 
 //import packages
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.se.domain.User;
@@ -14,6 +16,7 @@ import com.se.login.dao.LoginDAO;
 @Service
 public class LoginService {
     private LoginDAO loginDAO;
+    private static final Logger logger = LoggerFactory.getLogger("LoginService.class");
 
     @Autowired
     public void setLoginDAO(LoginDAO loginDAO) { this.loginDAO = loginDAO; }
@@ -40,6 +43,7 @@ public class LoginService {
         try {
             return loginDAO.getUser(id, type);
         } catch (Exception exception) {
+            logger.error("getUser fail! " + exception.getCause());
             return null;
         }
     }
