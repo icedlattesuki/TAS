@@ -7,12 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.se.course.material.service.MaterialService;
 import com.se.course.resource.domain.Resource;
-import com.se.course.resource.service.ResourceService;
-import com.se.domain.CourseKey;
+import com.se.notice.service.NoticeService;
 
 /**
  * @author Yusen
@@ -22,9 +22,13 @@ import com.se.domain.CourseKey;
 @Controller
 public class MaterialController {
     private MaterialService materialService;
+    private NoticeService noticeService;
 
     @Autowired
     public void setMaterialService(MaterialService materialService) { this.materialService = materialService; }
+
+    @Autowired
+    public void setNoticeService(NoticeService noticeService) { this.noticeService = noticeService; }
 
     /**
      * 显示资源上传界面
@@ -46,9 +50,7 @@ public class MaterialController {
      */
     @RequestMapping("/course/resource/material/upload")
     public String uploadMaterial(HttpSession session, @RequestParam("file")MultipartFile file, Model model) {
-        CourseKey courseKey = ResourceService.getCourseKey(session);
-
-        if (!materialService.uploadMaterial(courseKey, file, new Resource())) {
+        if (!materialService.uploadMaterial(session, file, new Resource())) {
             model.addAttribute("error", "上传文件出错!");
             return "course/resource/material/material_upload";
         } else {
@@ -60,13 +62,14 @@ public class MaterialController {
      * 显示资源下载界面
      *
      * @param session 当前会话
+     * @param request 请求
      * @param model Model对象
      * @return 资源下载界面逻辑视图名
      */
     @RequestMapping("/course/resource/material/to-download")
-    public String materialDownloadPage(HttpSession session, Model model) {
-        CourseKey courseKey = ResourceService.getCourseKey(session);
-        model.addAttribute("materialList", materialService.getMaterialList(courseKey));
+    public String materialDownloadPage(HttpSession session, HttpServletRequest request, Model model) {
+        noticeService.removeNotice(session, request);
+        model.addAttribute("materialList", materialService.getMaterialList(session));
         return "course/resource/material/material_download";
     }
 
@@ -79,8 +82,7 @@ public class MaterialController {
      */
     @RequestMapping("/course/resource/material/download")
     public void downloadMaterial(HttpSession session, @RequestParam("file_name") String fileName, HttpServletResponse response) {
-        CourseKey courseKey = ResourceService.getCourseKey(session);
-        materialService.downloadMaterial(courseKey, fileName, response);
+        materialService.downloadMaterial(session, fileName, response);
     }
 
     /**
@@ -93,9 +95,7 @@ public class MaterialController {
      */
     @RequestMapping("/course/resource/material/delete")
     public String deleteMaterial(HttpSession session, @RequestParam("file_name") String fileName, Model model) {
-        CourseKey courseKey = ResourceService.getCourseKey(session);
-
-        if (materialService.deleteMaterial(courseKey, fileName)) {
+        if (materialService.deleteMaterial(session, fileName)) {
             model.addAttribute("info", "删除成功！");
         } else {
             model.addAttribute("info", "删除失败！");

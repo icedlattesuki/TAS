@@ -1,13 +1,14 @@
 package com.se.user.password.web;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.user.email.domain.EmailContext;
 import com.se.user.email.service.EmailService;
 import com.se.user.password.service.PasswordUpdateService;
@@ -39,7 +40,7 @@ public class PasswordController {
      */
     @RequestMapping("/user/password-modify")
     public String passwordModifyPage(HttpSession session) {
-        User user = (User)session.getAttribute("user");
+        User user = SessionService.getUser(session);
         String email = user.getEmail();
 
         if (email == null || email.isEmpty()) {
@@ -60,19 +61,19 @@ public class PasswordController {
      */
     @RequestMapping("/user/password-modify/modify")
     public String modifyPassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword1") String newPassword, Model model) {
-        User user = (User)session.getAttribute("user");
+        User user = SessionService.getUser(session);
 
         if (!passwordUpdateService.identifyPassword(user.getId(), oldPassword)) {
             model.addAttribute("error", "密码错误!");
             return "user/password/password_modify";
         }
 
-        if (!passwordUpdateService.updatePassword(user, newPassword)) {
+        if (!passwordUpdateService.updatePassword(session, newPassword)) {
             model.addAttribute("error", "更新密码出错！");
             return "user/password/password_modify";
         }
 
-        session.removeAttribute("user");
+        SessionService.removeUser(session);
         return "user/password/password_modify_success";
     }
 
@@ -95,7 +96,7 @@ public class PasswordController {
      * @return 响应成功则返回邮件发送成功界面逻辑视图名，否则返回密码重置界面逻辑视图名
      */
     @RequestMapping("/user/password-reset/to-reset")
-    public String toResetPassword(@RequestParam("id") String id, @RequestParam("email") String email, Model model) {
+    public String toResetPassword(HttpSession session, @RequestParam("id") String id, @RequestParam("email") String email, Model model) {
         int type = passwordUpdateService.identifyEmail(id, email);
 
         if (type == 0) {
@@ -110,7 +111,7 @@ public class PasswordController {
         EmailContext emailContext = new EmailContext();
         emailContext.setText("<html><body><a href=\"http://localhost:8080/user/password-reset/reset?id=" + emailContext.getUuid() + "\">点击该链接即可成功重置密码！</a></body></html>");
 
-        if (emailService.sendEmail(user, email, emailContext)) {
+        if (emailService.sendEmail(session, email, emailContext)) {
             return "user/email/email_send_success";
         } else {
             model.addAttribute("error", "发送邮件失败!");
@@ -126,10 +127,10 @@ public class PasswordController {
      * @return 密码重置完成界面逻辑视图名
      */
     @RequestMapping("/user/password-reset/reset")
-    public String resetPassword(@RequestParam("id") String uuid, Model model) {
+    public String resetPassword(HttpSession session, @RequestParam("id") String uuid, Model model) {
         User user = emailService.getUser(uuid);
 
-        if (user != null && passwordUpdateService.updatePassword(user, DEFAULT_PASSWORD)) {
+        if (user != null && passwordUpdateService.updatePassword(session, DEFAULT_PASSWORD)) {
             model.addAttribute("info", "密码重置成功！");
         } else {
             model.addAttribute("info", "密码重置失败！");

@@ -1,6 +1,7 @@
 package com.se.user.email.service;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.user.email.dao.EmailDAO;
 import com.se.user.email.domain.EmailContext;
 
@@ -37,12 +39,13 @@ public class EmailService {
     /**
      * 发送邮件
      *
-     * @param user User对象
+     * @param session 当前会话
      * @param email 目标邮箱
      * @param emailContext 邮箱上下文，封装将要发送的邮件信息
      * @return true表示发送成功，false表示发送失败
      */
-    public boolean sendEmail(User user, String email, EmailContext emailContext) {
+    public boolean sendEmail(HttpSession session, String email, EmailContext emailContext) {
+        User user = SessionService.getUser(session);
         user.setEmail(email);
         uuidMap.put(emailContext.getUuid(), user);
 

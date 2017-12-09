@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.se.domain.User;
+import com.se.global.domain.User;
 
 /**
  * @author Yusen

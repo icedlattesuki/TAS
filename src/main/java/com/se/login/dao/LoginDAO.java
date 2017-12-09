@@ -1,6 +1,7 @@
 package com.se.login.dao;
 
 //import packages
+import com.se.global.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,10 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.se.domain.User;
-import com.se.domain.Student;
-import com.se.domain.Teacher;
-import com.se.domain.CourseKey;
 
 /**
  * @author Yusen
@@ -45,7 +42,7 @@ public class LoginDAO {
         int flag = jdbcTemplate.query(IS_STUDENT_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
             @Override
             public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                return resultSet.next() ? 1 : 0;
+                return resultSet.next() ? User.STUDENT_TYPE : 0;
             }
         });
 
@@ -55,7 +52,7 @@ public class LoginDAO {
         flag = jdbcTemplate.query(IS_TEACHER_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
             @Override
             public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                return resultSet.next() ? 2 : 0;
+                return resultSet.next() ? User.TEACHER_TYPE : 0;
             }
         });
 
@@ -72,18 +69,18 @@ public class LoginDAO {
      * @throws DataAccessException 数据库访问出错
      */
     public User getUser(String id, int type) throws SQLException, DataAccessException {
-        if (type == 1) {
+        if (type == User.STUDENT_TYPE) {
             return jdbcTemplate.query(GET_STUDENT_SQL, new Object[]{id}, new ResultSetExtractor<User>() {
                 @Override
                 public User extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                     resultSet.next();
 
                     Student student = new Student();
-                    student.setType(1);
+                    student.setType(User.STUDENT_TYPE);
                     setUser(student, resultSet);
-                    student.setMajor(resultSet.getString("major"));
-                    student.setGrade(resultSet.getInt("grade"));
-                    student.setClassNumber(resultSet.getString("class_number"));
+                    student.setMajor(resultSet.getString(Student.MAJOR));
+                    student.setGrade(resultSet.getInt(Student.GRADE));
+                    student.setClassNumber(resultSet.getString(Student.CLASS_NUMBER));
                     student.setTakes(getStudentCourseKey(student.getId()));
 
                     return student;
@@ -96,9 +93,9 @@ public class LoginDAO {
                     resultSet.next();
 
                     Teacher teacher = new Teacher();
-                    teacher.setType(2);
+                    teacher.setType(User.TEACHER_TYPE);
                     setUser(teacher, resultSet);
-                    teacher.setTitle(resultSet.getString("title"));
+                    teacher.setTitle(resultSet.getString(Teacher.TITLE));
                     teacher.setTeaches(getTeacherCourseKey(teacher.getId()));
 
                     return teacher;
@@ -108,13 +105,13 @@ public class LoginDAO {
     }
 
     private void setUser(User user, ResultSet resultSet) throws SQLException {
-        user.setId(resultSet.getString("id"));
-        user.setName(resultSet.getString("name"));
-        user.setCollege(resultSet.getString("college"));
-        user.setEmail(resultSet.getString("email"));
-        user.setImageLocation(resultSet.getString("image_position"));
-        user.setSignature(resultSet.getString("signature"));
-        user.setProfile(resultSet.getString("profile"));
+        user.setId(resultSet.getString(User.ID));
+        user.setName(resultSet.getString(User.NAME));
+        user.setCollege(resultSet.getString(User.COLLEGE));
+        user.setEmail(resultSet.getString(User.EMAIL));
+        user.setImageLocation(resultSet.getString(User.IMAGE_LOCATION));
+        user.setSignature(resultSet.getString(User.SIGNATURE));
+        user.setProfile(resultSet.getString(User.PROFILE));
     }
 
     private ArrayList<CourseKey> getStudentCourseKey(String id) throws SQLException, DataAccessException {
@@ -143,10 +140,10 @@ public class LoginDAO {
         while (resultSet.next()) {
             CourseKey courseKey = new CourseKey();
 
-            courseKey.setId(resultSet.getString("course_id"));
-            courseKey.setSemester(resultSet.getString("semester"));
-            courseKey.setTime(resultSet.getString("time"));
-            courseKey.setPlace(resultSet.getString("place"));
+            courseKey.setId(resultSet.getString(CourseKey.COURSE_ID));
+            courseKey.setSemester(resultSet.getString(CourseKey.SEMESTER));
+            courseKey.setTime(resultSet.getString(CourseKey.TIME));
+            courseKey.setPlace(resultSet.getString(CourseKey.PLACE));
 
             courseKeyList.add(courseKey);
         }

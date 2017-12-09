@@ -1,6 +1,9 @@
 package com.se.login.web;
 
 //import packages
+import com.se.global.service.SessionService;
+import com.se.notice.domain.Notice;
+import com.se.notice.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import com.se.domain.User;
-import com.se.domain.Course;
+import com.se.global.domain.User;
+import com.se.global.domain.Course;
 import com.se.login.service.LoginService;
 import com.se.login.service.LoginSuccessService;
 
@@ -22,6 +25,7 @@ import com.se.login.service.LoginSuccessService;
 public class LoginController {
     private LoginService loginService;
     private LoginSuccessService loginSuccessService;
+    private NoticeService noticeService;
 
     @Autowired
     public void setLoginService(LoginService loginService) {
@@ -30,6 +34,9 @@ public class LoginController {
 
     @Autowired
     public void setLoginSuccessService(LoginSuccessService loginSuccessService) { this.loginSuccessService = loginSuccessService; }
+
+    @Autowired
+    public void setNoticeService(NoticeService noticeService) { this.noticeService = noticeService; }
 
     /**
      * 显示登录界面
@@ -60,9 +67,8 @@ public class LoginController {
         }
 
         User user = loginService.getUser(id, type);
-        session.setAttribute("user", user);
+        SessionService.setUser(session, user);
         model.addAttribute("user", user);
-
         return "redirect:/index";
     }
 
@@ -75,16 +81,19 @@ public class LoginController {
      */
     @RequestMapping("/index")
     public String indexPage(HttpSession session, Model model) {
-        User user = (User)session.getAttribute("user");
-        ArrayList<Course> courseList = loginSuccessService.getCourseList(user);
+        User user = SessionService.getUser(session);
+        ArrayList<Course> courseList = loginSuccessService.getCourseList(session);
+        SessionService.setCourseList(session, courseList);
+        Notice notice = noticeService.getNotice(session);
+        SessionService.setNotice(session, notice);
 
-        session.setAttribute("courseList", courseList);
         model.addAttribute("courseList", courseList);
+        model.addAttribute("notice", notice);
 
         if (user == null) {
             return "user/index/passenger_index";
         }
-        else if (user.getType() == 1) {
+        else if (user.getType() == User.STUDENT_TYPE) {
             return "user/index/student_index";
         }
         else {
@@ -100,7 +109,7 @@ public class LoginController {
      */
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("user");
+        SessionService.removeUser(session);
         return "redirect:/login";
     }
 }

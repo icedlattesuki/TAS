@@ -1,4 +1,4 @@
-<%--@elvariable id="user" type="com.se.domain.Student"--%>
+<%--@elvariable id="user" type="com.se.global.domain.Student"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

@@ -1,13 +1,14 @@
 package com.se.user.email.web;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.user.email.domain.EmailContext;
 import com.se.user.email.service.EmailService;
 
@@ -33,11 +34,10 @@ public class EmailController {
      */
     @RequestMapping("/user/email/to-bind")
     public String toBindEmail(HttpSession session, @RequestParam("email") String email, Model model) {
-        User user = (User)session.getAttribute("user");
         EmailContext emailContext = new EmailContext();
         emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/bind?id=" + emailContext.getUuid() + "\">点击该链接即可成功绑定邮箱！</a></body></html>");
 
-        if (emailService.sendEmail(user, email, emailContext)) {
+        if (emailService.sendEmail(session, email, emailContext)) {
             model.addAttribute("email", email);
             return "user/email/email_send_success";
         } else {
@@ -87,12 +87,12 @@ public class EmailController {
         EmailContext emailContext = new EmailContext();
         emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/unbind?id=" + emailContext.getUuid() + "\">点击该链接即可成功绑定邮箱！</a></body></html>");
 
-        if (emailService.sendEmail(user, user.getEmail(), emailContext)) {
+        if (emailService.sendEmail(session, user.getEmail(), emailContext)) {
             model.addAttribute("email", user.getEmail());
             return "user/email/email_send_success";
         } else {
             model.addAttribute("info", "发送解绑邮件失败！");
-            if (user.getType() == 1) {
+            if (user.getType() == User.STUDENT_TYPE) {
                 return "user/info/student_info";
             } else {
                 return "user/info/teacher_info";
@@ -110,8 +110,7 @@ public class EmailController {
     @RequestMapping("/user/email/unbind")
     public String unbindEmail(HttpSession session, @RequestParam("id") String uuid) {
         User user = emailService.unbindEmail(uuid);
-
-        session.setAttribute("user", user);
+        SessionService.setUser(session, user);
 
         if (user != null) {
             user.setEmail("");

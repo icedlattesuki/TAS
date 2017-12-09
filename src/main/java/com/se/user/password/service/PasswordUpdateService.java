@@ -1,14 +1,17 @@
 package com.se.user.password.service;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.user.password.dao.PasswordUpdateDAO;
 import com.se.login.service.LoginService;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Yusen
@@ -41,11 +44,13 @@ public class PasswordUpdateService {
     /**
      * 更新密码
      *
-     * @param user User对象
+     * @param session 当前会话
      * @param password 新密码
      * @return true表示更新成功，false表示更新失败
      */
-    public boolean updatePassword(User user, String password) {
+    public boolean updatePassword(HttpSession session, String password) {
+        User user = SessionService.getUser(session);
+
         try {
             passwordUpdateDAO.updatePassword(user, password);
             return true;

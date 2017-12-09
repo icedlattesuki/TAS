@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import com.se.course.announcement.domain.Announcement;
-import com.se.domain.CourseKey;
+import com.se.global.domain.CourseKey;
 
 /**
  * @author Yusen
@@ -23,6 +23,9 @@ public class AnnouncementDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String UPLOAD_ANNOUNCEMENT_SQL = "insert into announcement(title,content,date,course_id,semester,time,place) values(?,?,?,?,?,?,?)";
     private static final String GET_LATEST_ANNOUNCEMENT_SQL = "select * from announcement where course_id = ? and semester = ? and time = ? and place = ? order by date desc";
+    private static final String TITLE = "title";
+    private static final String CONTENT = "content";
+    private static final String DATE = "date";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -56,9 +59,9 @@ public class AnnouncementDAO {
                 Announcement announcement = new Announcement();
 
                 if (resultSet.next()) {
-                    announcement.setTitle(resultSet.getString("title"));
-                    announcement.setContent(resultSet.getString("content"));
-                    announcement.setDate(resultSet.getDate("date"));
+                    announcement.setTitle(resultSet.getString(TITLE));
+                    announcement.setContent(resultSet.getString(CONTENT));
+                    announcement.setDate(resultSet.getDate(DATE));
                     announcement.setCourseKey(courseKey);
                 }
 
@@ -84,9 +87,9 @@ public class AnnouncementDAO {
 
                 while (resultSet.next()) {
                     Announcement announcement = new Announcement();
-                    announcement.setTitle((resultSet.getString("title")));
-                    announcement.setContent(resultSet.getString("content"));
-                    announcement.setDate(resultSet.getDate("date"));
+                    announcement.setTitle((resultSet.getString(TITLE)));
+                    announcement.setContent(resultSet.getString(CONTENT));
+                    announcement.setDate(resultSet.getDate(DATE));
                     announcement.setCourseKey(courseKey);
                     announcementList.add(announcement);
                 }

@@ -1,16 +1,19 @@
 package com.se.login.service;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
-import com.se.domain.User;
-import com.se.domain.Student;
-import com.se.domain.Teacher;
-import com.se.domain.Course;
+import com.se.global.domain.User;
+import com.se.global.domain.Student;
+import com.se.global.domain.Teacher;
+import com.se.global.domain.Course;
 import com.se.login.dao.LoginSuccessDAO;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Yusen
@@ -27,10 +30,13 @@ public class LoginSuccessService {
 
     /**
      * 获取用户的课程列表
-     * @param user User对象
+     *
+     * @param session 当前会话
      * @return 用户的课程列表
      */
-    public ArrayList<Course> getCourseList(User user) {
+    public ArrayList<Course> getCourseList(HttpSession session) {
+        User user = SessionService.getUser(session);
+
         try {
             if (user == null) {
                 return loginSuccessDAO.getAllCourse();

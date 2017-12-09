@@ -1,7 +1,7 @@
 package com.se.course.resource.domain;
 
 //import packages
-import com.se.domain.CourseKey;
+import com.se.global.domain.CourseKey;
 import java.util.Date;
 
 /**
@@ -27,56 +27,72 @@ public class Resource {
         profile = "";
     }
 
-    public int getType() { return type; }
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public long getSize() {
-        return size;
-    }
-
-    public Date getDate() { return date; }
-
-    public String getTitle() { return title; }
-
-    public String getProfile() { return profile; }
-
-    public CourseKey getCourseKey() {
-        return courseKey;
-    }
-
-    public String getSize1() {
-        return size1;
-    }
-
-    public void setType(int type) { this.type = type; }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public long getSize() {
+        return size;
     }
 
     public void setSize(long size) {
         this.size = size;
     }
 
-    public void setDate(Date date) { this.date = date; }
+    public Date getDate() {
+        return date;
+    }
 
-    public void setTitle(String title) { this.title = title; }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-    public void setProfile(String profile) { this.profile = profile; }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public CourseKey getCourseKey() {
+        return courseKey;
+    }
 
     public void setCourseKey(CourseKey courseKey) {
         this.courseKey = courseKey;
+    }
+
+    public String getSize1() {
+        return size1;
     }
 
     public void setSize1(String size1) {

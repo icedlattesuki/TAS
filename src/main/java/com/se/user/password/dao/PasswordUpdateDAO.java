@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.se.domain.User;
+import com.se.global.domain.User;
 
 /**
  * @author Yusen
@@ -36,7 +36,7 @@ public class PasswordUpdateDAO {
     public void updatePassword(User user, String password) throws DataAccessException {
         Object[] args = new Object[] {password, user.getId()};
 
-        if (user.getType() == 1) {
+        if (user.getType() == User.STUDENT_TYPE) {
             jdbcTemplate.update(UPDATE_STUDENT_PASSWORD_SQL, args);
         } else {
             jdbcTemplate.update(UPDATE_TEACHER_PASSWORD_SQL, args);
@@ -61,7 +61,7 @@ public class PasswordUpdateDAO {
         });
 
         if (flag)
-            return 1;
+            return User.STUDENT_TYPE;
 
         flag = jdbcTemplate.query(IDENTIFY_TEACHER_ID_AND_EMAIL_SQL, args, new ResultSetExtractor<Boolean>() {
             @Override
@@ -70,6 +70,6 @@ public class PasswordUpdateDAO {
             }
         });
 
-        return flag ? 2 : 0;
+        return flag ? User.TEACHER_TYPE : 0;
     }
 }

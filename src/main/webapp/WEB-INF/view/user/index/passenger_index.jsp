@@ -1,5 +1,5 @@
-<%--@elvariable id="user" type="com.se.domain.User"--%>
-<%--@elvariable id="course" type="com.se.domain.Course"--%>
+<%--@elvariable id="user" type="com.se.global.domain.User"--%>
+<%--@elvariable id="course" type="com.se.global.domain.Course"--%>
 <%--@elvariable id="courseList" type="java.util.ArrayList<Course>"--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

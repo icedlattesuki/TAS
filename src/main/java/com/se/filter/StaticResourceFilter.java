@@ -1,6 +1,7 @@
 package com.se.filter;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -12,9 +13,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.regex.Pattern;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.course.resource.service.ResourceService;
-import com.se.domain.CourseKey;
+import com.se.global.domain.CourseKey;
 
 /**
  * @author Yusen
@@ -51,7 +52,7 @@ public class StaticResourceFilter implements Filter {
             chain.doFilter(request, response);
             return;
         } else {
-            CourseKey courseKey = ResourceService.getCourseKey(session);
+            CourseKey courseKey = SessionService.getCourseKey(session);
 
             if (courseKey == null) {
                 httpServletResponse.sendRedirect("/index");

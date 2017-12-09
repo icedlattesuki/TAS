@@ -10,10 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import com.se.domain.CourseKey;
+import com.se.global.domain.CourseKey;
 import com.se.course.resource.domain.Resource;
-
-import javax.xml.crypto.Data;
 
 /**
  * @author Yusen
@@ -28,6 +26,12 @@ public class ResourceDAO {
     private static final String IS_RESOURCE_EXIST_SQL = "select * from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
     private static final String UPDATE_RESOURCE_SQL = "update resource set size = ? where course_id = ? and semester = ? and time = ? and place = ?";
     private static final String DELETE_RESOURCE_SQL = "delete from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
+    private static final String TYPE = "type";
+    private static final String NAME = "name";
+    private static final String LOCATION = "location";
+    private static final String SIZE = "size";
+    private static final String TITLE = "title";
+    private static final String PROFILE = "profile";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -61,16 +65,16 @@ public class ResourceDAO {
                 ArrayList<Resource> resourcesList = new ArrayList<Resource>();
 
                 while (resultSet.next()) {
-                    if (type != resultSet.getInt("type")) {
+                    if (type != resultSet.getInt(TYPE)) {
                         continue;
                     }
 
                     Resource resource = new Resource();
-                    resource.setName(resultSet.getString("name"));
-                    resource.setLocation(resultSet.getString("location"));
-                    resource.setSize(resultSet.getLong("size"));
-                    resource.setTitle(resultSet.getString("title"));
-                    resource.setProfile(resultSet.getString("profile"));
+                    resource.setName(resultSet.getString(NAME));
+                    resource.setLocation(resultSet.getString(LOCATION));
+                    resource.setSize(resultSet.getLong(SIZE));
+                    resource.setTitle(resultSet.getString(TITLE));
+                    resource.setProfile(resultSet.getString(PROFILE));
                     resource.setCourseKey(courseKey);
                     resource.setSize1(convertSize(resource.getSize()));
                     resourcesList.add(resource);

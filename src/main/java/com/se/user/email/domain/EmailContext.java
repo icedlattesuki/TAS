@@ -34,28 +34,28 @@ public class EmailContext {
         return subject;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public boolean getIsHtml() {
-        return isHtml;
-    }
-
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public void setText(String text) {
         this.text = text;
     }
 
+    public boolean getIsHtml() {
+        return isHtml;
+    }
+
     public void setIsHtml(boolean isHtml) {
         this.isHtml = isHtml;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {

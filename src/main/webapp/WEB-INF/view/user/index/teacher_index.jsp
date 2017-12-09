@@ -1,6 +1,7 @@
-<%--@elvariable id="user" type="com.se.domain.User"--%>
-<%--@elvariable id="course" type="com.se.domain.Course"--%>
+<%--@elvariable id="user" type="com.se.global.domain.User"--%>
+<%--@elvariable id="course" type="com.se.global.domain.Course"--%>
 <%--@elvariable id="courseList" type="java.util.ArrayList<Course>"--%>
+<%--@elvariable id="notice" type="com.se.notice.domain.Notice"--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -9,6 +10,7 @@
 </head>
 <body>
 <h1>${user.name}老师, 欢迎您！</h1>
+<h4>您有${notice.totalNumber}条未读消息,<a href="/notice">点击查看</a></h4>
 <a href="/user/info">查看个人资料</a>
 <img src="${user.imageLocation}" />
 <ul>

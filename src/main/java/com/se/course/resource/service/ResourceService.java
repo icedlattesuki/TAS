@@ -15,10 +15,10 @@ import java.io.InputStream;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import java.util.ArrayList;
 import java.util.Date;
-import com.se.domain.Course;
 import com.se.course.resource.dao.ResourceDAO;
-import com.se.domain.CourseKey;
+import com.se.global.domain.CourseKey;
 import com.se.course.resource.domain.Resource;
+import com.se.global.service.SessionService;
 
 /**
  * @author Yusen
@@ -29,6 +29,8 @@ import com.se.course.resource.domain.Resource;
 public class ResourceService {
     private ResourceDAO resourceDAO;
     private static final Logger logger = LoggerFactory.getLogger("ResourceService.class");
+    public static final int MATERIAL_TYPE = 0;
+    public static final int VIDEO_TYPE = 1;
 
     @Autowired
     public void setResourceDAO(ResourceDAO resourceDAO) { this.resourceDAO = resourceDAO; }
@@ -36,13 +38,15 @@ public class ResourceService {
     /**
      * 上传资源
      *
-     * @param courseKey 课程主键
+     * @param session 当前会话
      * @param file 文件
      * @param type 0表示资料，1表示视频
      * @param resource Resource对象
      * @return true表示上传成功，false表示上传失败
      */
-    public boolean uploadResource(CourseKey courseKey, MultipartFile file, int type, Resource resource) {
+    public boolean uploadResource(HttpSession session, MultipartFile file, int type, Resource resource) {
+        CourseKey courseKey = SessionService.getCourseKey(session);
+
         if (!storeResource(courseKey, file, type, resource)) {
             return false;
         }
@@ -53,6 +57,7 @@ public class ResourceService {
             } else {
                 resourceDAO.storeResource(resource);
             }
+
             return true;
         } catch (DataAccessException exception) {
             logger.error("uploadResource fail! " + exception.getCause());
@@ -63,11 +68,13 @@ public class ResourceService {
     /**
      * 获取资源列表
      *
-     * @param courseKey 课程主键
+     * @param session 当前会话
      * @param type 0表示资料，1表示视频
      * @return 资源列表
      */
-    public ArrayList<Resource> getResourceList(CourseKey courseKey, int type) {
+    public ArrayList<Resource> getResourceList(HttpSession session, int type) {
+        CourseKey courseKey = SessionService.getCourseKey(session);
+
         try {
             return resourceDAO.getResourceList(courseKey, type);
         } catch (Exception exception) {
@@ -79,12 +86,13 @@ public class ResourceService {
     /**
      * 下载资源
      *
-     * @param courseKey 课程主键
+     * @param session 当前会话
      * @param fileName 文件名
      * @param type 0表示资料，1表示视频
      * @param response 响应
      */
-    public void downloadResource(CourseKey courseKey, String fileName, int type, HttpServletResponse response) {
+    public void downloadResource(HttpSession session, String fileName, int type, HttpServletResponse response) {
+        CourseKey courseKey = SessionService.getCourseKey(session);
         String location = getDirectoryPath(courseKey, type) + fileName;
 
         try {
@@ -102,12 +110,14 @@ public class ResourceService {
     /**
      * 删除资源
      *
-     * @param courseKey 课程主键
+     * @param session 当前会话
      * @param fileName 文件名
      * @param type 0表示资料，1表示视频
      * @return true表示删除成功，false表示删除失败
      */
-    public boolean deleteResource(CourseKey courseKey, String fileName, int type) {
+    public boolean deleteResource(HttpSession session, String fileName, int type) {
+        CourseKey courseKey = SessionService.getCourseKey(session);
+
         try {
             resourceDAO.deleteResource(courseKey, fileName);
             removeResource(courseKey, fileName, type);
@@ -166,18 +176,6 @@ public class ResourceService {
         String realLocation = getDirectoryPath(courseKey, type) + fileName;
         File file = new File(realLocation);
         file.delete();
-    }
-
-    /**
-     * 获取课程主键
-     *
-     * @param session 当前会话
-     * @return 课程主键
-     */
-    public static CourseKey getCourseKey(HttpSession session) {
-        ArrayList<Course> courseList = (ArrayList<Course>)session.getAttribute("courseList");
-        int courseIndex = (Integer)session.getAttribute("courseIndex");
-        return courseList.get(courseIndex).getCourseKey();
     }
 
     //

@@ -1,6 +1,7 @@
 package com.se.user.info.web;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.user.info.domain.EditableUserInfo;
 import com.se.user.info.service.UserInfoService;
 
@@ -33,9 +34,9 @@ public class UserInfoController {
      */
     @RequestMapping("/user/info")
     public String infoPage(HttpSession session) {
-        User user = (User)session.getAttribute("user");
+        User user = SessionService.getUser(session);
 
-        if (user.getType() == 1) {
+        if (user.getType() == User.STUDENT_TYPE) {
             return "user/info/student_info";
         } else {
             return "user/info/teacher_info";
@@ -50,9 +51,9 @@ public class UserInfoController {
      */
     @RequestMapping("/user/info/edit")
     public String editInfoPage(HttpSession session) {
-        User user = (User)session.getAttribute("user");
+        User user = SessionService.getUser(session);
 
-        if (user.getType() == 1) {
+        if (user.getType() == User.STUDENT_TYPE) {
             return "user/info/student_info_edit";
         } else {
             return "user/info/teacher_info_edit";
@@ -70,13 +71,13 @@ public class UserInfoController {
      */
     @RequestMapping("/user/info/update")
     public String updateInfo(HttpServletRequest request, @RequestParam("image") MultipartFile image,  HttpSession session, Model model) {
-        User user = (User)session.getAttribute("user");
+        User user = SessionService.getUser(session);
         EditableUserInfo editableUserInfo = new EditableUserInfo();
         editableUserInfo.setSignature(request.getParameter("signature"));
         editableUserInfo.setProfile(request.getParameter("profile"));
         editableUserInfo.setImage(image);
 
-        if (userInfoService.updateInfo(user, editableUserInfo)) {
+        if (userInfoService.updateInfo(session, editableUserInfo)) {
             updateUser(user, editableUserInfo);
             model.addAttribute("info", "Success: 个人资料修改成功！");
         }

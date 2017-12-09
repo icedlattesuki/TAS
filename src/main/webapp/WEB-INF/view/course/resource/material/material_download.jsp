@@ -6,7 +6,7 @@
   Time: 下午2:28
   To change this template use File | Settings | File Templates.
 --%>
-<%--@elvariable id="user" type="com.se.domain.User"--%>
+<%--@elvariable id="user" type="com.se.global.domain.User"--%>
 <%--@elvariable id="material" type="com.se.course.resource.domain.Resource"--%>
 <%--@elvariable id="materialList" type="java.util.ArrayList<Resource>"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

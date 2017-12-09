@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.se.domain.CourseKey;
-import com.se.domain.Course;
+import com.se.global.domain.CourseKey;
+import com.se.global.domain.Course;
 
 /**
  * @author Yusen
@@ -87,16 +87,16 @@ public class LoginSuccessDAO {
         Course course = new Course();
         CourseKey courseKey = new CourseKey();
 
-        courseKey.setId(resultSet.getString("id"));
-        courseKey.setSemester(resultSet.getString("semester"));
-        courseKey.setTime(resultSet.getString("time"));
-        courseKey.setPlace(resultSet.getString("place"));
+        courseKey.setId(resultSet.getString(CourseKey.ID));
+        courseKey.setSemester(resultSet.getString(CourseKey.SEMESTER));
+        courseKey.setTime(resultSet.getString(CourseKey.TIME));
+        courseKey.setPlace(resultSet.getString(CourseKey.PLACE));
         course.setCourseKey(courseKey);
-        course.setName(resultSet.getString("name"));
-        course.setCredit(resultSet.getFloat("credit"));
-        course.setCollege(resultSet.getString("college"));
-        course.setIntroduction(resultSet.getString("introduction"));
-        course.setLike(resultSet.getInt("like_number"));
+        course.setName(resultSet.getString(Course.NAME));
+        course.setCredit(resultSet.getFloat(Course.CREDIT));
+        course.setCollege(resultSet.getString(Course.CREDIT));
+        course.setIntroduction(resultSet.getString(Course.INTRODUCTION));
+        course.setLike(resultSet.getInt(Course.LIKE_NUMBER));
 
         return course;
     }

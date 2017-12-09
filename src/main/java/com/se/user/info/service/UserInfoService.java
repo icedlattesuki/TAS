@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.user.info.dao.UserInfoDAO;
 import com.se.user.info.domain.EditableUserInfo;
+import com.se.global.service.SessionService;
 
 /**
  * @author Yusen
@@ -29,11 +31,12 @@ public class UserInfoService {
     /**
      * 更新用户个人信息
      *
-     * @param user User对象
+     * @param session 当前会话
      * @param editableUserInfo EditableUserInfo对象
      * @return true表示更新成功，false表示更新失败
      */
-    public boolean updateInfo(User user, EditableUserInfo editableUserInfo) {
+    public boolean updateInfo(HttpSession session, EditableUserInfo editableUserInfo) {
+        User user = SessionService.getUser(session);
         String imageLocation = storeImage(user, editableUserInfo.getImage());
         editableUserInfo.setImageLocation(imageLocation);
 

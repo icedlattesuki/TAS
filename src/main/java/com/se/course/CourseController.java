@@ -1,17 +1,16 @@
 package com.se.course;
 
 //import packages
+import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.course.announcement.domain.Announcement;
 import com.se.course.announcement.service.AnnouncementService;
-import com.se.course.resource.service.ResourceService;
-import com.se.domain.CourseKey;
 
 /**
  * @author Yusen
@@ -37,14 +36,13 @@ public class CourseController {
     public String indexPage(HttpSession session, HttpServletRequest request, Model model) {
         if (request.getParameter("courseIndex") != null) {
             int courseIndex = Integer.parseInt(request.getParameter("courseIndex"));
-            session.setAttribute("courseIndex", courseIndex);
+            SessionService.setCourseIndex(session, courseIndex);
         }
 
-        CourseKey courseKey = ResourceService.getCourseKey(session);
-        Announcement announcement = announcementService.getLatestAnnouncement(courseKey);
+        Announcement announcement = announcementService.getLatestAnnouncement(session);
         model.addAttribute("announcement", announcement);
 
-        User user = (User)session.getAttribute("user");
+        User user = SessionService.getUser(session);
 
         if (user.getType() == 1) {
             return "course/index/student_index";

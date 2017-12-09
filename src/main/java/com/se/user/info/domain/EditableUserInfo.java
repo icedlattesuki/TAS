@@ -12,24 +12,28 @@ public class EditableUserInfo {
         return image;
     }
 
-    public String getImageLocation() { return imageLocation; }
+    public void setImage(MultipartFile image) {
+        this.image = image;
+    }
+
+    public String getImageLocation() {
+        return imageLocation;
+    }
+
+    public void setImageLocation(String imageLocation) {
+        this.imageLocation = imageLocation;
+    }
 
     public String getSignature() {
         return signature;
     }
 
-    public String getProfile() {
-        return profile;
-    }
-
-    public void setImage(MultipartFile image) {
-        this.image = image;
-    }
-
-    public void setImageLocation(String imageLocation) { this.imageLocation = imageLocation; }
-
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public String getProfile() {
+        return profile;
     }
 
     public void setProfile(String profile) {

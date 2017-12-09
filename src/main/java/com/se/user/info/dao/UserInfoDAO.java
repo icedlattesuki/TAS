@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.se.domain.User;
+import com.se.global.domain.User;
 import com.se.user.info.domain.EditableUserInfo;
 
 /**

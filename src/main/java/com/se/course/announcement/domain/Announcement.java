@@ -2,7 +2,7 @@ package com.se.course.announcement.domain;
 
 //import packages
 import java.util.Date;
-import com.se.domain.CourseKey;
+import com.se.global.domain.CourseKey;
 
 /**
  * @author Yusen
@@ -19,28 +19,28 @@ public class Announcement {
         return title;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public CourseKey getCourseKey() {
-        return courseKey;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public void setContent(String content) {
         this.content = content;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public CourseKey getCourseKey() {
+        return courseKey;
     }
 
     public void setCourseKey(CourseKey courseKey) {
