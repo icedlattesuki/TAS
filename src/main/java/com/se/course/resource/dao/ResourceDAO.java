@@ -1,6 +1,7 @@
 package com.se.course.resource.dao;
 
 //import packages
+import com.se.global.service.SqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,17 +22,13 @@ import com.se.course.resource.domain.Resource;
 @Repository
 public class ResourceDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String STORE_RESOURCE_SQL = "insert into resource(type,name,location,size,date,course_id,semester,time,place,title,profile) values(?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String GET_RESOURCE_LIST_SQL = "select * from resource where course_id = ? and semester = ? and time = ? and place = ?";
-    private static final String IS_RESOURCE_EXIST_SQL = "select * from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
-    private static final String UPDATE_RESOURCE_SQL = "update resource set size = ? where course_id = ? and semester = ? and time = ? and place = ?";
-    private static final String DELETE_RESOURCE_SQL = "delete from resource where course_id = ? and semester = ? and time = ? and place = ? and name = ?";
-    private static final String TYPE = "type";
-    private static final String NAME = "name";
-    private static final String LOCATION = "location";
-    private static final String SIZE = "size";
-    private static final String TITLE = "title";
-    private static final String PROFILE = "profile";
+    private static final String STORE_RESOURCE_SQL = "INSERT INTO resource(" + Resource.TYPE + "," + Resource.NAME + "," +
+            Resource.LOCATION + "," + Resource.SIZE + "," + Resource.DATE + "," + SqlService.courseKeyInColumn() + "," +
+            Resource.TITLE + "," + Resource.PROFILE + ") VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String GET_RESOURCE_LIST_SQL = "SELECT * FROM resource WHERE " + SqlService.courseKeyInWhereClause();
+    private static final String IS_RESOURCE_EXIST_SQL = "SELECT * FROM resource WHERE " + SqlService.courseKeyInWhereClause() + " and name = ?";
+    private static final String UPDATE_RESOURCE_SQL = "UPDATE resource SET " + Resource.SIZE + " = ? WHERE " + SqlService.courseKeyInWhereClause();
+    private static final String DELETE_RESOURCE_SQL = "DELETE FROM resource WHERE " + SqlService.courseKeyInWhereClause() + " and name = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -65,16 +62,16 @@ public class ResourceDAO {
                 ArrayList<Resource> resourcesList = new ArrayList<Resource>();
 
                 while (resultSet.next()) {
-                    if (type != resultSet.getInt(TYPE)) {
+                    if (type != resultSet.getInt(Resource.TYPE)) {
                         continue;
                     }
 
                     Resource resource = new Resource();
-                    resource.setName(resultSet.getString(NAME));
-                    resource.setLocation(resultSet.getString(LOCATION));
-                    resource.setSize(resultSet.getLong(SIZE));
-                    resource.setTitle(resultSet.getString(TITLE));
-                    resource.setProfile(resultSet.getString(PROFILE));
+                    resource.setName(resultSet.getString(Resource.NAME));
+                    resource.setLocation(resultSet.getString(Resource.LOCATION));
+                    resource.setSize(resultSet.getLong(Resource.SIZE));
+                    resource.setTitle(resultSet.getString(Resource.TITLE));
+                    resource.setProfile(resultSet.getString(Resource.PROFILE));
                     resource.setCourseKey(courseKey);
                     resource.setSize1(convertSize(resource.getSize()));
                     resourcesList.add(resource);

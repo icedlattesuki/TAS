@@ -1,6 +1,7 @@
 package com.se.login.dao;
 
 //import packages
+import com.se.global.service.SqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,8 +21,8 @@ import com.se.global.domain.Course;
 @Repository
 public class LoginSuccessDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String GET_COURSE_LIST_SQL = "select * from course where id = ? and semester = ? and time = ? and place = ?";
-    private static final String GET_ALL_COURSE_SQL = "select * from course";
+    private static final String GET_COURSE_LIST_SQL = "SELECT * FROM course WHERE " + SqlService.courseKeyInWhereClause1();
+    private static final String GET_ALL_COURSE_SQL = "SELECT * FROM course";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

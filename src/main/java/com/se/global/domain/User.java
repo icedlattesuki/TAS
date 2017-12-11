@@ -21,6 +21,7 @@ public class User {
     public static final String STUDENT_ID = "student_id";
     public static final String TEACHER_ID = "teacher_id";
     public static final String ID = "id";
+    public static final String PASSWORD = "password";
     public static final String NAME = "name";
     public static final String COLLEGE = "college";
     public static final String EMAIL = "email";

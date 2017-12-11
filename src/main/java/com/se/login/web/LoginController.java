@@ -1,6 +1,7 @@
 package com.se.login.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import com.se.notice.domain.Notice;
 import com.se.notice.service.NoticeService;
@@ -62,13 +63,13 @@ public class LoginController {
         int type = loginService.identifyUser(id, password);
 
         if (type == 0) {
-            model.addAttribute("error", "学号或密码错误");
+            ModelService.setError(model, "学号或密码错误!");
             return "login";
         }
 
         User user = loginService.getUser(id, type);
         SessionService.setUser(session, user);
-        model.addAttribute("user", user);
+        ModelService.setUser(model, user);
         return "redirect:/index";
     }
 
@@ -87,8 +88,8 @@ public class LoginController {
         Notice notice = noticeService.getNotice(session);
         SessionService.setNotice(session, notice);
 
-        model.addAttribute("courseList", courseList);
-        model.addAttribute("notice", notice);
+        ModelService.setCourseList(model, courseList);
+        ModelService.setNotice(model, notice);
 
         if (user == null) {
             return "user/index/passenger_index";

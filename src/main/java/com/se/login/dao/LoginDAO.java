@@ -19,12 +19,12 @@ import java.util.ArrayList;
 @Repository
 public class LoginDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String IS_STUDENT_EXIST_SQL = "select * from student where id = ? and password = ?";
-    private static final String IS_TEACHER_EXIST_SQL = "select * from teacher where id = ? and password = ?";
-    private static final String GET_STUDENT_SQL = "select * from student where id = ?";
-    private static final String GET_TEACHER_SQL = "select * from teacher where id = ?";
-    private static final String GET_STUDENT_COURSE_KEY_SQL = "select * from take where student_id = ?";
-    private static final String GET_TEACHER_COURSE_KEY_SQL = "select * from teach where teacher_id = ?";
+    private static final String IS_STUDENT_EXIST_SQL = "SELECT * FROM student WHERE " + User.ID + " = ? and " + User.PASSWORD + " = ?";
+    private static final String IS_TEACHER_EXIST_SQL = "SELECT * FROM teacher where " + User.ID + " = ? and " + User.PASSWORD + " = ?";
+    private static final String GET_STUDENT_SQL = "SELECT * FROM student WHERE " + User.ID + " = ?";
+    private static final String GET_TEACHER_SQL = "SELECT * FROM teacher WHERE " + User.ID + " = ?";
+    private static final String GET_STUDENT_COURSE_KEY_SQL = "SELECT * FROM take WHERE " + User.STUDENT_ID + " = ?";
+    private static final String GET_TEACHER_COURSE_KEY_SQL = "SELECT * FROM teach WHERE " + User.TEACHER_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

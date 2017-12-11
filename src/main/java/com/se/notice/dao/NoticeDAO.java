@@ -2,6 +2,7 @@ package com.se.notice.dao;
 
 import com.se.global.domain.CourseKey;
 import com.se.global.domain.User;
+import com.se.global.service.SqlService;
 import com.se.notice.domain.DetailNotice;
 import com.se.notice.domain.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,11 @@ import java.util.Date;
 @Repository
 public class NoticeDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String GET_TEACHER_ID_SQL = "select * from teach where course_id = ? and semester = ? and time = ? and place = ?";
-    private static final String GET_STUDENT_ID_LIST_SQL = "select * from take where course_id = ? and semester = ? and time = ? and place = ?";
-    private static final String ADD_NOTICE_SQL = "insert into notice(user_id,course_id,semester,time,place,message,type,date) values(?,?,?,?,?,?,?,?)";
-    private static final String GET_DETAIL_NOTICE_SQL = "select * from notice where user_id = ? and course_id = ? and semester = ? and time = ? and place = ? and type = ?";
-    private static final String REMOVE_NOTICE_SQL = "delete from notice where message_id = ?";
+    private static final String GET_TEACHER_ID_SQL = "SELECT * FROM teach WHERE " + SqlService.courseKeyInWhereClause();
+    private static final String GET_STUDENT_ID_LIST_SQL = "SELECT * FROM take WHERE " + SqlService.courseKeyInWhereClause();
+    private static final String ADD_NOTICE_SQL = "INSERT INTO notice(" + Notice.USER_ID + "," + SqlService.courseKeyInColumn() + "," + Notice.MESSAGE + "," + Notice.TYPE + "," + Notice.DATE + ") VALUES(?,?,?,?,?,?,?,?)";
+    private static final String GET_DETAIL_NOTICE_SQL = "SELECT * FROM notice WHERE " + Notice.USER_ID +" = ? and " + SqlService.courseKeyInWhereClause() +" and " + Notice.TYPE +" = ?";
+    private static final String REMOVE_NOTICE_SQL = "DELETE FROM notice WHERE " + Notice.MESSAGE_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

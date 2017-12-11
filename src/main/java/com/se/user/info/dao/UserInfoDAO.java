@@ -16,8 +16,8 @@ import com.se.user.info.domain.EditableUserInfo;
 @Repository
 public class UserInfoDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String STUDENT_SQL = "update student set signature = ?, profile = ?, image_position = ? where id = ?";
-    private static final String TEACHER_SQL = "update teacher set signature = ?, profile = ?, image_position = ? where id = ?";
+    private static final String STUDENT_SQL = "UPDATE student SET " + User.SIGNATURE + " = ?, " + User.PROFILE + " = ?, " + User.IMAGE_LOCATION + " = ? WHERE " + User.ID + " = ?";
+    private static final String TEACHER_SQL = "UPDATE teacher SET " + User.SIGNATURE + " = ?, " + User.PROFILE + " = ?, " + User.IMAGE_LOCATION + " = ? WHERE " + User.ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

@@ -1,6 +1,7 @@
 package com.se.course.video.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +57,7 @@ public class VideoController {
         if (videoService.uploadVideo(session, file, title, profile)) {
             return "redirect:/course/resource/video/watch";
         } else {
-            model.addAttribute("error", "上传视频失败！");
+            ModelService.setError(model, "上传视频失败!");
             return "course/resource/video/video_upload";
         }
     }
@@ -73,7 +74,7 @@ public class VideoController {
     public String videoWatchPage(HttpSession session, HttpServletRequest request, Model model) {
         noticeService.removeNotice(session, request);
         ArrayList<Resource> videoList = videoService.getVideoList(session);
-        model.addAttribute("videoList", videoList);
+        ModelService.setVideoList(model, videoList);
         return "course/resource/video/video_watch";
     }
 

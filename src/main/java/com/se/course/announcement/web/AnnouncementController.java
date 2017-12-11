@@ -1,6 +1,7 @@
 package com.se.course.announcement.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +54,7 @@ public class AnnouncementController {
         if (announcementService.uploadAnnouncement(session, title, content)) {
             return "redirect:/course/index";
         } else {
-            model.addAttribute("error", "发布失败！");
+            ModelService.setError(model, "发布失败!");
             return "/course/resource/announcement/announcement_upload";
         }
     }
@@ -70,7 +71,7 @@ public class AnnouncementController {
     public String announcementListPage(HttpSession session, HttpServletRequest request, Model model) {
         noticeService.removeNotice(session, request);
         ArrayList<Announcement> announcementList =  announcementService.getAnnouncementList(session);
-        model.addAttribute("announcementList", announcementList);
+        ModelService.setAnnouncementList(model, announcementList);
         return "course/resource/announcement/announcement_list";
     }
 }

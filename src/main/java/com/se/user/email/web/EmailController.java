@@ -1,6 +1,7 @@
 package com.se.user.email.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,10 +39,10 @@ public class EmailController {
         emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/bind?id=" + emailContext.getUuid() + "\">点击该链接即可成功绑定邮箱！</a></body></html>");
 
         if (emailService.sendEmail(session, email, emailContext)) {
-            model.addAttribute("email", email);
+            ModelService.setEmail(model, email);
             return "user/email/email_send_success";
         } else {
-            model.addAttribute("error", "发送邮件失败！");
+            ModelService.setError(model, "发送邮件失败!");
             return "user/email/email_bind";
         }
     }
@@ -61,9 +62,9 @@ public class EmailController {
         session.setAttribute("user", user);
 
         if (user != null) {
-            model.addAttribute("info", "邮箱绑定成功！");
+            ModelService.setInfo(model, "邮箱绑定成功!");
         } else {
-            model.addAttribute("info", "邮箱绑定失败！");
+            ModelService.setInfo(model, "邮箱绑定失败!");
         }
 
         return "user/email/email_bind_finish";
@@ -88,10 +89,10 @@ public class EmailController {
         emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/unbind?id=" + emailContext.getUuid() + "\">点击该链接即可成功绑定邮箱！</a></body></html>");
 
         if (emailService.sendEmail(session, user.getEmail(), emailContext)) {
-            model.addAttribute("email", user.getEmail());
+            ModelService.setEmail(model, user.getEmail());
             return "user/email/email_send_success";
         } else {
-            model.addAttribute("info", "发送解绑邮件失败！");
+            ModelService.setInfo(model, "发送解绑邮件失败!");
             if (user.getType() == User.STUDENT_TYPE) {
                 return "user/info/student_info";
             } else {

@@ -1,6 +1,7 @@
 package com.se.course.material.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,7 +52,7 @@ public class MaterialController {
     @RequestMapping("/course/resource/material/upload")
     public String uploadMaterial(HttpSession session, @RequestParam("file")MultipartFile file, Model model) {
         if (!materialService.uploadMaterial(session, file, new Resource())) {
-            model.addAttribute("error", "上传文件出错!");
+            ModelService.setError(model, "上传文件出错!");
             return "course/resource/material/material_upload";
         } else {
             return "redirect:/course/resource/material/to-download";
@@ -69,7 +70,7 @@ public class MaterialController {
     @RequestMapping("/course/resource/material/to-download")
     public String materialDownloadPage(HttpSession session, HttpServletRequest request, Model model) {
         noticeService.removeNotice(session, request);
-        model.addAttribute("materialList", materialService.getMaterialList(session));
+        ModelService.setMaterialList(model, materialService.getMaterialList(session));
         return "course/resource/material/material_download";
     }
 
@@ -96,9 +97,9 @@ public class MaterialController {
     @RequestMapping("/course/resource/material/delete")
     public String deleteMaterial(HttpSession session, @RequestParam("file_name") String fileName, Model model) {
         if (materialService.deleteMaterial(session, fileName)) {
-            model.addAttribute("info", "删除成功！");
+            ModelService.setInfo(model, "删除成功!");
         } else {
-            model.addAttribute("info", "删除失败！");
+            ModelService.setInfo(model, "删除失败!");
         }
 
         return "redirect:/course/resource/material/to-download";

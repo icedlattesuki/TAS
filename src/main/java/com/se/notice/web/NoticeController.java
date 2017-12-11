@@ -1,6 +1,7 @@
 package com.se.notice.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +31,7 @@ public class NoticeController {
     public String noticePage(HttpSession session, Model model) {
         Notice notice = (Notice)session.getAttribute("notice");
 
-        model.addAttribute("courseNoticeList", notice.getCourseNoticeList());
+        ModelService.setCourseNoticeList(model, notice.getCourseNoticeList());
         return "notice/notice_index";
     }
 
@@ -50,8 +51,8 @@ public class NoticeController {
         SessionService.setCourseNoticeIndex(session, courseNoticeIndex);
         SessionService.setCourseKey(session, courseNotice.getCourse().getCourseKey());
 
-        model.addAttribute("detailNoticeList", courseNotice.getDetailNoticeList());
-        model.addAttribute("noticeType", NoticeService.DETAIL_NOTICE_TYPE);
+        ModelService.setDetailNoticeList(model, courseNotice.getDetailNoticeList());
+        ModelService.setDetailNoticeType(model);
         return "notice/course_notice_index";
     }
 
@@ -72,9 +73,9 @@ public class NoticeController {
         CourseNotice courseNotice = notice.getCourseNoticeList().get(courseNoticeIndex);
         DetailNotice detailNotice = courseNotice.getDetailNoticeList().get(detailNoticeType);
 
-        model.addAttribute("messageList", detailNotice.getMessageList());
-        model.addAttribute("messageDateList", detailNotice.getMessageDateList());
-        model.addAttribute("messageURL", NoticeService.MESSAGE_URL_LIST[detailNoticeType]);
+        ModelService.setMessageList(model, detailNotice.getMessageList());
+        ModelService.setMessageDateList(model, detailNotice.getMessageDateList());
+        ModelService.setMessageURL(model, NoticeService.MESSAGE_URL_LIST[detailNoticeType]);
         return "notice/detail_notice_index";
     }
 }

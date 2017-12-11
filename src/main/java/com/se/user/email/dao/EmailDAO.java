@@ -1,6 +1,7 @@
 package com.se.user.email.dao;
 
 //import packages
+import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,8 +16,8 @@ import com.se.global.domain.User;
 @Repository
 public class EmailDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String UPDATE_STUDENT_EMAIL_SQL = "update student set email = ? where id = ?";
-    private static final String UPDATE_TEACHER_EMAIL_SQL = "update teacher set email = ? where id = ?";
+    private static final String UPDATE_STUDENT_EMAIL_SQL = "UPDATE student SET " + User.EMAIL + " = ? WHERE " + User.ID + " = ?";
+    private static final String UPDATE_TEACHER_EMAIL_SQL = "update teacher set " + User.EMAIL + " = ? WHERE " + User.ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }

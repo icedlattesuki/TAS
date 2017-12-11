@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import com.se.course.resource.dao.ResourceDAO;
@@ -98,7 +100,7 @@ public class ResourceService {
         try {
             File file = new File(location);
             InputStream inputStream = new FileInputStream(file);
-            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
             response.setHeader("Content-length", String.valueOf(file.length()));
             IOUtils.copy(inputStream, response.getOutputStream());
             response.flushBuffer();

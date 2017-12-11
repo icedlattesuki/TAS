@@ -18,10 +18,10 @@ import com.se.global.domain.User;
 @Repository
 public class PasswordUpdateDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String UPDATE_STUDENT_PASSWORD_SQL = "update student set password = ? where id = ?";
-    private static final String UPDATE_TEACHER_PASSWORD_SQL = "update teacher set password = ? where id = ?";
-    private static final String IDENTIFY_STUDENT_ID_AND_EMAIL_SQL = "select * from student where id = ? and email = ?";
-    private static final String IDENTIFY_TEACHER_ID_AND_EMAIL_SQL = "select * from teacher where id = ? and email = ?";
+    private static final String UPDATE_STUDENT_PASSWORD_SQL = "UPDATE student SET " + User.PASSWORD + " = ? WHERE " + User.ID + " = ?";
+    private static final String UPDATE_TEACHER_PASSWORD_SQL = "UPDATE teacher SET " + User.PASSWORD + " = ? WHERE " + User.ID + " = ?";
+    private static final String IDENTIFY_STUDENT_ID_AND_EMAIL_SQL = "SELECT * FROM student WHERE " + User.ID + " = ? and " + User.EMAIL + " = ?";
+    private static final String IDENTIFY_TEACHER_ID_AND_EMAIL_SQL = "SELECT * FROM teacher WHERE " + User.ID + " = ? and " + User.EMAIL + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }

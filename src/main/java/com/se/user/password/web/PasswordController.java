@@ -1,6 +1,7 @@
 package com.se.user.password.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,12 +65,12 @@ public class PasswordController {
         User user = SessionService.getUser(session);
 
         if (!passwordUpdateService.identifyPassword(user.getId(), oldPassword)) {
-            model.addAttribute("error", "密码错误!");
+            ModelService.setError(model, "密码错误!");
             return "user/password/password_modify";
         }
 
         if (!passwordUpdateService.updatePassword(session, newPassword)) {
-            model.addAttribute("error", "更新密码出错！");
+            ModelService.setError(model, "更新密码出错!");
             return "user/password/password_modify";
         }
 
@@ -100,7 +101,7 @@ public class PasswordController {
         int type = passwordUpdateService.identifyEmail(id, email);
 
         if (type == 0) {
-            model.addAttribute("error", "学号或邮箱不正确!");
+            ModelService.setError(model, "学号或邮箱不正确!");
             return "/user/password/password_reset";
         }
 
@@ -114,7 +115,7 @@ public class PasswordController {
         if (emailService.sendEmail(session, email, emailContext)) {
             return "user/email/email_send_success";
         } else {
-            model.addAttribute("error", "发送邮件失败!");
+            ModelService.setError(model, "发送邮件失败!");
             return "user/password/password_reset";
         }
     }
@@ -131,9 +132,9 @@ public class PasswordController {
         User user = emailService.getUser(uuid);
 
         if (user != null && passwordUpdateService.updatePassword(session, DEFAULT_PASSWORD)) {
-            model.addAttribute("info", "密码重置成功！");
+            ModelService.setInfo(model, "密码重置成功!");
         } else {
-            model.addAttribute("info", "密码重置失败！");
+            ModelService.setInfo(model, "密码重置失败!");
         }
 
         return "/user/password/password_reset_finish";

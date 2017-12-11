@@ -1,6 +1,7 @@
 package com.se.user.info.web;
 
 //import packages
+import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,10 +80,10 @@ public class UserInfoController {
 
         if (userInfoService.updateInfo(session, editableUserInfo)) {
             updateUser(user, editableUserInfo);
-            model.addAttribute("info", "Success: 个人资料修改成功！");
+            ModelService.setInfo(model, "Success: 个人资料修改成功!");
         }
         else {
-            model.addAttribute("info", "ERROR: 个人资料修改失败！");
+            ModelService.setInfo(model, "ERROR: 个人资料修改失败!");
         }
 
         return "redirect:/user/info";

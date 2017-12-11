@@ -14,6 +14,9 @@ public class Announcement {
     private String content;
     private Date date;
     private CourseKey courseKey;
+    public static final String TITLE = "title";
+    public static final String CONTENT = "content";
+    public static final String DATE = "date";
 
     public String getTitle() {
         return title;

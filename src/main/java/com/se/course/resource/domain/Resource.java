@@ -21,6 +21,13 @@ public class Resource {
     private CourseKey courseKey;
     //以B、KB、MB、GB为单位的字符串类型的文件大小表示，在数据库中没有对应字段
     private String size1;
+    public static final String TYPE = "type";
+    public static final String NAME = "name";
+    public static final String LOCATION = "location";
+    public static final String SIZE = "size";
+    public static final String DATE = "date";
+    public static final String TITLE = "title";
+    public static final String PROFILE = "profile";
 
     public Resource() {
         title = "";
