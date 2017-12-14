@@ -88,8 +88,21 @@ create table notice(
     semester varchar(15),
     time varchar(15),
     place varchar(20),
-    message varchar(300),
+    message varchar(300),c
     type int(1),
+    date datetime,
+    foreign key (course_id, semester, time, place) references course(id, semester, time, place)
+);
+create table comment(
+    comment_id int(10) primary key auto_increment,
+    user_id varchar(10),
+    user_name varchar(15),
+    user_image_position varchar(60),
+    course_id varchar(10),
+    semester varchar(15),
+    time varchar(15),
+    place varchar(20),
+    content varchar(300),
     date datetime,
     foreign key (course_id, semester, time, place) references course(id, semester, time, place)
 );
