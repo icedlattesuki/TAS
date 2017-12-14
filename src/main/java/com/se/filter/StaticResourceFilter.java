@@ -23,7 +23,7 @@ import com.se.global.domain.CourseKey;
  * @since 1.0
  */
 @Order(2)
-@WebFilter(filterName = "staticResourceFilter", urlPatterns = {"/image/*", "/resource/*", "/video/*"})
+@WebFilter(filterName = "staticResourceFilter", urlPatterns = {"/resource/*", "/video/*"})
 public class StaticResourceFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger("StaticResourceFilter.class");
 
@@ -45,28 +45,21 @@ public class StaticResourceFilter implements Filter {
         HttpSession session = httpServletRequest.getSession();
         //对URL中的中文进行解码
         String url = URLDecoder.decode(httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length()), "UTF-8");
-        User user = (User)session.getAttribute("user");
 
-        //图片资源
-        if (Pattern.compile("/image/" + user.getId() + ".jpg").matcher(url).matches()) {
+        CourseKey courseKey = SessionService.getCourseKey(session);
+
+        if (courseKey == null) {
+            httpServletResponse.sendRedirect("/index");
+            return;
+        }
+
+        //资料及视频
+        if (Pattern.compile(ResourceService.getFilePath(courseKey, 0) + ".+").matcher(url).matches()) {
             chain.doFilter(request, response);
             return;
-        } else {
-            CourseKey courseKey = SessionService.getCourseKey(session);
-
-            if (courseKey == null) {
-                httpServletResponse.sendRedirect("/index");
-                return;
-            }
-
-            //资料及视频
-            if (Pattern.compile(ResourceService.getFilePath(courseKey, 0) + ".+").matcher(url).matches()) {
-                    chain.doFilter(request, response);
-                    return;
-            } else if (Pattern.compile(ResourceService.getFilePath(courseKey, 1) + ".+").matcher(url).matches()) {
-                    chain.doFilter(request, response);
-                    return;
-            }
+        } else if (Pattern.compile(ResourceService.getFilePath(courseKey, 1) + ".+").matcher(url).matches()) {
+            chain.doFilter(request, response);
+            return;
         }
 
         httpServletResponse.sendRedirect("/index");

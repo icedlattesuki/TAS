@@ -23,14 +23,15 @@ import com.se.global.domain.User;
  * @since 1.0
  */
 @Order(4)
-@WebFilter(filterName = "resourceUploadFilter", urlPatterns = "/course/resource/*")
-public class ResourceUploadFilter implements Filter {
+@WebFilter(filterName = "teacherFilter", urlPatterns = {"/course/resource/*", "/course/comment/remove"})
+public class TeacherFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger("ResourceUploadFilter.class");
     private static List<Pattern> patterns = new ArrayList<Pattern>();
 
     static {
         patterns.add(Pattern.compile("/course/resource/.+/.*upload"));
         patterns.add(Pattern.compile("/course/resource/.+/delete"));
+        patterns.add(Pattern.compile("/course/comment/remove"));
     }
 
     @Override

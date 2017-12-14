@@ -47,18 +47,11 @@ public class UserInfoController {
     /**
      * 显示用户个人信息编辑界面
      *
-     * @param session 当前会话
      * @return 个人信息编辑界面逻辑视图名
      */
     @RequestMapping("/user/info/edit")
-    public String editInfoPage(HttpSession session) {
-        User user = SessionService.getUser(session);
-
-        if (user.getType() == User.STUDENT_TYPE) {
-            return "user/info/student_info_edit";
-        } else {
-            return "user/info/teacher_info_edit";
-        }
+    public String editInfoPage() {
+        return "user/info/user_info_edit";
     }
 
     /**

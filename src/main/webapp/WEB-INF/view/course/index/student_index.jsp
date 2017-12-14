@@ -20,5 +20,6 @@
 </div>
 <a href="/course/resource/material/to-download">资料下载</a>
 <a href="/course/resource/video/watch">视频观看</a>
+<a href="/course/comment">留言</a>
 </body>
 </html>

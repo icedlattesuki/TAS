@@ -1,6 +1,7 @@
 package com.se.global.service;
 
 //import packages
+import com.se.comment.domain.Comment;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ModelService {
     public static void setUser(Model model, User user) {
         model.addAttribute("user", user);
     }
+
     public static void setError(Model model, String error) {
         model.addAttribute("error", error);
     }
@@ -79,4 +81,6 @@ public class ModelService {
     public static void setMessageURL(Model model, String messageURL) {
         model.addAttribute("messageURL", messageURL);
     }
+
+    public static void setCommentList(Model model, ArrayList<Comment> commentList) { model.addAttribute("commentList", commentList); }
 }

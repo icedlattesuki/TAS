@@ -1,6 +1,7 @@
 package com.se.global.service;
 
 //import packages
+import com.se.comment.domain.Comment;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -21,13 +22,16 @@ public class SessionService {
     }
 
     public static CourseKey getCourseKey(HttpSession session) {
-        if (session.getAttribute("courseKey") != null) {
+        ArrayList<Course> courseList = getCourseList(session);
+        Object object = session.getAttribute("courseIndex");
+
+        if (object != null) {
+            return courseList.get((Integer)object).getCourseKey();
+        } else if (session.getAttribute("courseKey") != null) {
             return (CourseKey)session.getAttribute("courseKey");
         }
 
-        ArrayList<Course> courseList = getCourseList(session);
-        int courseIndex = (Integer)session.getAttribute("courseIndex");
-        return courseList.get(courseIndex).getCourseKey();
+        return null;
     }
 
     public static ArrayList<Course> getCourseList(HttpSession session) {
@@ -44,6 +48,10 @@ public class SessionService {
 
     public static int getDetailNoticeType(HttpSession session) {
         return (Integer)session.getAttribute("detailNoticeType");
+    }
+
+    public static ArrayList<Comment> getCommentList(HttpSession session) {
+        return (ArrayList<Comment>)session.getAttribute("commentList");
     }
 
     public static void setUser(HttpSession session, User user) {
@@ -74,7 +82,12 @@ public class SessionService {
         session.setAttribute("courseNoticeIndex", courseNoticeIndex);
     }
 
+    public static void setCommentList(HttpSession session, ArrayList<Comment> commentList) {
+        session.setAttribute("commentList", commentList);
+    }
+
     public static void removeUser(HttpSession session) {
         session.removeAttribute("user");
     }
+
 }

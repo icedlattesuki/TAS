@@ -34,7 +34,7 @@ public class NoticeService {
     public static final int HOMEWORK_NOTICE_INDEX = 3;
     public static final int COMMENT_NOTICE_INDEX = 4;
     public static final String[] DETAIL_NOTICE_TYPE = new String[] {"资料","视频","公告","作业","留言"};
-    public static final String[] MESSAGE_URL_LIST = new String[] {"/course/resource/material/to-download","/course/resource/video/watch","/course/resource/announcement/list","",""};
+    public static final String[] MESSAGE_URL_LIST = new String[] {"/course/resource/material/to-download","/course/resource/video/watch","/course/resource/announcement/list","","/course/comment"};
 
     @Autowired
     public void setNoticeDAO(NoticeDAO noticeDAO) { this.noticeDAO = noticeDAO; }

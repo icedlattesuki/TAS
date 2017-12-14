@@ -85,16 +85,17 @@ public class LoginController {
         User user = SessionService.getUser(session);
         ArrayList<Course> courseList = loginSuccessService.getCourseList(session);
         SessionService.setCourseList(session, courseList);
-        Notice notice = noticeService.getNotice(session);
-        SessionService.setNotice(session, notice);
-
         ModelService.setCourseList(model, courseList);
-        ModelService.setNotice(model, notice);
 
         if (user == null) {
             return "user/index/passenger_index";
         }
-        else if (user.getType() == User.STUDENT_TYPE) {
+
+        Notice notice = noticeService.getNotice(session);
+        SessionService.setNotice(session, notice);
+        ModelService.setNotice(model, notice);
+
+        if (user.getType() == User.STUDENT_TYPE) {
             return "user/index/student_index";
         }
         else {

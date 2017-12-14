@@ -57,7 +57,7 @@ public class SessionFilter implements Filter {
         if (!isInclude(url)) {
             HttpSession session = httpServletRequest.getSession();
             if (session.getAttribute("user") == null) {
-                httpServletResponse.sendRedirect("/");
+                httpServletResponse.sendRedirect("/login");
                 return;
             }
         }
