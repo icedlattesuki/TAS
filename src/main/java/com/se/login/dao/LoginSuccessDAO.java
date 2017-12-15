@@ -95,7 +95,7 @@ public class LoginSuccessDAO {
         course.setCourseKey(courseKey);
         course.setName(resultSet.getString(Course.NAME));
         course.setCredit(resultSet.getFloat(Course.CREDIT));
-        course.setCollege(resultSet.getString(Course.CREDIT));
+        course.setCollege(resultSet.getString(Course.COLLEGE));
         course.setIntroduction(resultSet.getString(Course.INTRODUCTION));
         course.setLike(resultSet.getInt(Course.LIKE_NUMBER));
 
