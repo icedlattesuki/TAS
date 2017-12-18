@@ -1,6 +1,7 @@
 package com.se.course.video.web;
 
 //import packages
+import com.se.course.video.domain.Video;
 import com.se.global.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import com.se.course.resource.domain.Resource;
 import com.se.course.video.service.VideoService;
 import com.se.notice.service.NoticeService;
 
@@ -38,7 +38,7 @@ public class VideoController {
      * @return 视频上传界面逻辑视图名
      */
     @RequestMapping("/course/resource/video/to-upload")
-    public String videoUploadPage() {
+    public String uploadPage() {
         return "course/resource/video/video_upload";
     }
 
@@ -53,8 +53,8 @@ public class VideoController {
      * @return 成功则重定向指视频观看界面，否则返回视频上传界面逻辑视图名
      */
     @RequestMapping("/course/resource/video/upload")
-    public String uploadVideo(HttpSession session, @RequestParam("file")MultipartFile file, @RequestParam("title") String title, @RequestParam("profile") String profile, Model model) {
-        if (videoService.uploadVideo(session, file, title, profile)) {
+    public String upload(HttpSession session, @RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("profile") String profile, Model model) {
+        if (videoService.upload(session, file, title, profile)) {
             return "redirect:/course/resource/video/watch";
         } else {
             ModelService.setError(model, "上传视频失败!");
@@ -71,10 +71,10 @@ public class VideoController {
      * @return 视频观看界面逻辑视图名
      */
     @RequestMapping("/course/resource/video/watch")
-    public String videoWatchPage(HttpSession session, HttpServletRequest request, Model model) {
+    public String watchPage(HttpSession session, HttpServletRequest request, Model model) {
         noticeService.removeNotice(session, request);
-        ArrayList<Resource> videoList = videoService.getVideoList(session);
-        ModelService.setVideoList(model, videoList);
+        ArrayList<Video> videos = videoService.getVideos(session);
+        ModelService.setVideos(model, videos);
         return "course/resource/video/video_watch";
     }
 
@@ -82,25 +82,25 @@ public class VideoController {
      * 下载视频
      *
      * @param session 当前会话
-     * @param fileName 文件名
+     * @param fileId 文件id
      * @param response 响应
      */
     @RequestMapping("/course/resource/video/download")
-    public void downloadVideo(HttpSession session, @RequestParam("file_name")String fileName, HttpServletResponse response) {
-        videoService.downloadVideo(session, fileName, response);
+    public void download(HttpSession session, @RequestParam("file_id")int fileId, HttpServletResponse response) {
+        videoService.download(session, fileId, response);
     }
 
     /**
      * 删除视频
      *
      * @param session 当前会话
-     * @param fileName 文件名
+     * @param fileId 文件id
      * @param model Model对象
      * @return 视频观看界面逻辑视图名
      */
     @RequestMapping("/course/resource/video/delete")
-    public String deleteVideo(HttpSession session, @RequestParam("file_name") String fileName, Model model) {
-        if (videoService.deleteVideo(session, fileName)) {
+    public String remove(HttpSession session, @RequestParam("file_id")int fileId, Model model) {
+        if (videoService.remove(session, fileId)) {
             model.addAttribute("info", "删除成功！");
         } else {
             model.addAttribute("info", "删除失败！");

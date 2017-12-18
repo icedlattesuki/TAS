@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.se.course.material.service.MaterialService;
-import com.se.course.resource.domain.Resource;
 import com.se.notice.service.NoticeService;
 
 /**
@@ -37,7 +36,7 @@ public class MaterialController {
      * @return 资源上传界面逻辑视图名
      */
     @RequestMapping("/course/resource/material/to-upload")
-    public String materialUploadPage() {
+    public String uploadPage() {
         return "course/resource/material/material_upload";
     }
 
@@ -50,8 +49,8 @@ public class MaterialController {
      * @return 上传成功则返回资源下载界面逻辑视图名，否则返回资源上传界面逻辑视图名
      */
     @RequestMapping("/course/resource/material/upload")
-    public String uploadMaterial(HttpSession session, @RequestParam("file")MultipartFile file, Model model) {
-        if (!materialService.uploadMaterial(session, file, new Resource())) {
+    public String upload(HttpSession session, @RequestParam("file")MultipartFile file, Model model) {
+        if (!materialService.upload(session, file)) {
             ModelService.setError(model, "上传文件出错!");
             return "course/resource/material/material_upload";
         } else {
@@ -68,35 +67,35 @@ public class MaterialController {
      * @return 资源下载界面逻辑视图名
      */
     @RequestMapping("/course/resource/material/to-download")
-    public String materialDownloadPage(HttpSession session, HttpServletRequest request, Model model) {
+    public String downloadPage(HttpSession session, HttpServletRequest request, Model model) {
         noticeService.removeNotice(session, request);
-        ModelService.setMaterialList(model, materialService.getMaterialList(session));
+        ModelService.setMaterials(model, materialService.getMaterials(session));
         return "course/resource/material/material_download";
     }
 
     /**
-     * 下载资源
+     * 下载资料
      *
      * @param session 当前会话
-     * @param fileName 文件名
+     * @param fileId 文件id
      * @param response 响应
      */
     @RequestMapping("/course/resource/material/download")
-    public void downloadMaterial(HttpSession session, @RequestParam("file_name") String fileName, HttpServletResponse response) {
-        materialService.downloadMaterial(session, fileName, response);
+    public void download(HttpSession session, @RequestParam("file_id") int fileId, HttpServletResponse response) {
+        materialService.download(session, fileId, response);
     }
 
     /**
      * 删除资料
      *
      * @param session 当前会话
-     * @param fileName 文件名
+     * @param fileId 文件id
      * @param model Model对象
      * @return 资料下载界面逻辑视图名
      */
     @RequestMapping("/course/resource/material/delete")
-    public String deleteMaterial(HttpSession session, @RequestParam("file_name") String fileName, Model model) {
-        if (materialService.deleteMaterial(session, fileName)) {
+    public String remove(HttpSession session, @RequestParam("file_id") int fileId, Model model) {
+        if (materialService.remove(session, fileId)) {
             ModelService.setInfo(model, "删除成功!");
         } else {
             ModelService.setInfo(model, "删除失败!");

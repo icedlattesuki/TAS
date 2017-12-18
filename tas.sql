@@ -57,8 +57,8 @@ create table teach(
     foreign key (teacher_id) references teacher(id),
     foreign key (course_id, semester, time, place) references course(id, semester, time, place)
 );
-create table resource(
-    type int(1),
+create table file(
+    id int(10), primary key, auto_increment,
     name varchar(100),
     location varchar(200),
     size int(10),
@@ -67,9 +67,18 @@ create table resource(
     semester varchar(15),
     time varchar(15),
     place varchar(20),
+    user_id varchar(10),
+    foreign key (course_id, semester, time, place) references course(id, semester, time, place)
+);
+create table material (
+    file_id int(10),
+    foreign key (file_id) references file(id)
+);
+create table video (
+    file_id int(10),
     title varchar(50),
     profile varchar(300),
-    foreign key (course_id, semester, time, place) references course(id, semester, time, place)
+    foreign key (file_id) references file(id)
 );
 create table announcement(
     title varchar(30),

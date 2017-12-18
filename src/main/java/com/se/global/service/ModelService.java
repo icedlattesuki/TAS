@@ -2,12 +2,13 @@ package com.se.global.service;
 
 //import packages
 import com.se.comment.domain.Comment;
+import com.se.course.material.domain.Material;
+import com.se.course.video.domain.Video;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import java.util.ArrayList;
 import java.util.Date;
 import com.se.course.announcement.domain.Announcement;
-import com.se.course.resource.domain.Resource;
 import com.se.global.domain.User;
 import com.se.global.domain.Course;
 import com.se.notice.domain.CourseNotice;
@@ -42,12 +43,12 @@ public class ModelService {
         model.addAttribute("announcementList", announcementList);
     }
 
-    public static void setMaterialList(Model model, ArrayList<Resource> materialList) {
-        model.addAttribute("materialList", materialList);
+    public static void setMaterials(Model model, ArrayList<Material> materials) {
+        model.addAttribute("materials", materials);
     }
 
-    public static void setVideoList(Model model, ArrayList<Resource> videoList) {
-        model.addAttribute("videoList", videoList);
+    public static void setVideos(Model model, ArrayList<Video> videos) {
+        model.addAttribute("videos", videos);
     }
 
     public static void setCourseList(Model model, ArrayList<Course> courseList) {
