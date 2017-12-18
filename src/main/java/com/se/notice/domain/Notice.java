@@ -6,11 +6,6 @@ public class Notice {
     private String userId;
     private int totalNumber;
     private ArrayList<CourseNotice> courseNoticeList;
-    public static final String MESSAGE_ID = "message_id";
-    public static final String USER_ID = "user_id";
-    public static final String TYPE = "type";
-    public static final String DATE = "date";
-    public static final String MESSAGE = "message";
 
     public Notice() {
         totalNumber = 0;

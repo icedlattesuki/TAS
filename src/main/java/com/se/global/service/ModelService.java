@@ -2,8 +2,8 @@ package com.se.global.service;
 
 //import packages
 import com.se.comment.domain.Comment;
-import com.se.course.material.domain.Material;
-import com.se.course.video.domain.Video;
+import com.se.course.resource.material.domain.Material;
+import com.se.course.resource.video.domain.Video;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import java.util.ArrayList;

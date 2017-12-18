@@ -1,4 +1,4 @@
-package com.se.course.video.domain;
+package com.se.course.resource.video.domain;
 
 import com.se.global.domain.File;
 

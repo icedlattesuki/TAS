@@ -22,10 +22,10 @@ import com.se.global.domain.CourseKey;
 @Repository
 public class AnnouncementDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String UPLOAD_ANNOUNCEMENT_SQL = "INSERT INTO announcement(" + Announcement.TITLE + "," +
-            Announcement.CONTENT + "," + Announcement.DATE + "," + SqlService.courseKeyInColumn() + ") VALUES(?,?,?,?,?,?,?)";
+    private static final String UPLOAD_ANNOUNCEMENT_SQL = "INSERT INTO announcement(" + SqlService.ANNOUNCEMENT_TITLE + "," +
+            SqlService.ANNOUNCEMENT_CONTENT + "," + SqlService.ANNOUNCEMENT_DATE + "," + SqlService.courseKeyInColumn() + ") VALUES(?,?,?,?,?,?,?)";
     private static final String GET_LATEST_ANNOUNCEMENT_SQL = "SELECT * FROM announcement WHERE " + SqlService.courseKeyInWhereClause() +
-            " ORDER BY " + Announcement.DATE + " DESC";
+            " ORDER BY " + SqlService.ANNOUNCEMENT_DATE + " DESC";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -59,9 +59,9 @@ public class AnnouncementDAO {
                 Announcement announcement = new Announcement();
 
                 if (resultSet.next()) {
-                    announcement.setTitle(resultSet.getString(Announcement.TITLE));
-                    announcement.setContent(resultSet.getString(Announcement.CONTENT));
-                    announcement.setDate(resultSet.getDate(Announcement.DATE));
+                    announcement.setTitle(resultSet.getString(SqlService.ANNOUNCEMENT_TITLE));
+                    announcement.setContent(resultSet.getString(SqlService.ANNOUNCEMENT_CONTENT));
+                    announcement.setDate(resultSet.getDate(SqlService.ANNOUNCEMENT_DATE));
                     announcement.setCourseKey(courseKey);
                 }
 
@@ -87,9 +87,9 @@ public class AnnouncementDAO {
 
                 while (resultSet.next()) {
                     Announcement announcement = new Announcement();
-                    announcement.setTitle((resultSet.getString(Announcement.TITLE)));
-                    announcement.setContent(resultSet.getString(Announcement.CONTENT));
-                    announcement.setDate(resultSet.getDate(Announcement.DATE));
+                    announcement.setTitle((resultSet.getString(SqlService.ANNOUNCEMENT_TITLE)));
+                    announcement.setContent(resultSet.getString(SqlService.ANNOUNCEMENT_CONTENT));
+                    announcement.setDate(resultSet.getDate(SqlService.ANNOUNCEMENT_DATE));
                     announcement.setCourseKey(courseKey);
                     announcementList.add(announcement);
                 }

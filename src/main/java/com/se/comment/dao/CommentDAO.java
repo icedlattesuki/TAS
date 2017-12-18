@@ -22,11 +22,11 @@ import com.se.global.service.SqlService;
 @Repository
 public class CommentDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String SUBMIT_COMMENT_SQL = "INSERT INTO comment(" + Comment.USER_ID + "," + Comment.USER_NAME + "," + Comment.USER_IMAGE_POSITION +
-            "," + CourseKey.COURSE_ID + "," + CourseKey.SEMESTER + "," + CourseKey.TIME + "," + CourseKey.PLACE + "," + Comment.CONTENT + "," + Comment.DATE +
+    private static final String SUBMIT_COMMENT_SQL = "INSERT INTO comment(" + SqlService.COMMENT_USER_ID + "," + SqlService.COMMENT_USER_NAME + "," + SqlService.COMMENT_USER_IMAGE_POSITION +
+            "," + SqlService.courseKeyInColumn() + "," + SqlService.COMMENT_CONTENT + "," + SqlService.COMMENT_DATE +
             ") VALUES(?,?,?,?,?,?,?,?,?)";
     private static final String GET_COMMENT_LIST_SQL = "SELECT * FROM comment WHERE " + SqlService.courseKeyInWhereClause() + " ORDER BY date ASC";
-    private static final String REMOVE_COMMENT_SQL = "DELETE FROM comment WHERE " + Comment.COMMENT_ID + " = ?";
+    private static final String REMOVE_COMMENT_SQL = "DELETE FROM comment WHERE " + SqlService.COMMENT_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -41,6 +41,7 @@ public class CommentDAO {
         CourseKey courseKey = comment.getCourseKey();
         User user = comment.getUser();
         Object[] args = new Object[] {user.getId(), user.getName(), user.getImageLocation(), courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), comment.getContent(), comment.getDate()};
+        System.out.println(GET_COMMENT_LIST_SQL);
         jdbcTemplate.update(SUBMIT_COMMENT_SQL, args);
     }
 
@@ -60,15 +61,15 @@ public class CommentDAO {
 
                 while (resultSet.next()) {
                     Comment comment = new Comment();
-                    comment.setCommentId(resultSet.getInt(Comment.COMMENT_ID));
-                    comment.setContent(resultSet.getString(Comment.CONTENT));
-                    comment.setDate(resultSet.getDate(Comment.DATE));
+                    comment.setCommentId(resultSet.getInt(SqlService.COMMENT_ID));
+                    comment.setContent(resultSet.getString(SqlService.COMMENT_CONTENT));
+                    comment.setDate(resultSet.getDate(SqlService.COMMENT_DATE));
                     comment.setCourseKey(courseKey);
 
                     User user = new User();
-                    user.setId(resultSet.getString(Comment.USER_ID));
-                    user.setName(resultSet.getString(Comment.USER_NAME));
-                    user.setImageLocation(resultSet.getString(Comment.USER_IMAGE_POSITION));
+                    user.setId(resultSet.getString(SqlService.COMMENT_USER_ID));
+                    user.setName(resultSet.getString(SqlService.COMMENT_USER_NAME));
+                    user.setImageLocation(resultSet.getString(SqlService.COMMENT_USER_IMAGE_POSITION));
                     comment.setUser(user);
 
                     commentList.add(comment);

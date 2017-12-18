@@ -1,6 +1,7 @@
 package com.se.user.info.dao;
 
 //import packages
+import com.se.global.service.SqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,8 +17,8 @@ import com.se.user.info.domain.EditableUserInfo;
 @Repository
 public class UserInfoDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String STUDENT_SQL = "UPDATE student SET " + User.SIGNATURE + " = ?, " + User.PROFILE + " = ?, " + User.IMAGE_LOCATION + " = ? WHERE " + User.ID + " = ?";
-    private static final String TEACHER_SQL = "UPDATE teacher SET " + User.SIGNATURE + " = ?, " + User.PROFILE + " = ?, " + User.IMAGE_LOCATION + " = ? WHERE " + User.ID + " = ?";
+    private static final String STUDENT_SQL = "UPDATE student SET " + SqlService.STUDENT_SIGNATURE + " = ?, " + SqlService.STUDENT_PROFILE + " = ?, " + SqlService.STUDENT_IMAGE_LOCATION + " = ? WHERE " + SqlService.STUDENT_ID + " = ?";
+    private static final String TEACHER_SQL = "UPDATE teacher SET " + SqlService.TEACHER_SIGNATURE + " = ?, " + SqlService.TEACHER_PROFILE + " = ?, " + SqlService.TEACHER_IMAGE_LOCATION + " = ? WHERE " + SqlService.TEACHER_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {

@@ -12,11 +12,6 @@ public class CourseKey {
     private String time;
     private String semester;
     private String place;
-    public static final String COURSE_ID = "course_id";
-    public static final String ID = "id";
-    public static final String SEMESTER = "semester";
-    public static final String TIME = "time";
-    public static final String PLACE = "place";
 
     public String getId() {
         return id;

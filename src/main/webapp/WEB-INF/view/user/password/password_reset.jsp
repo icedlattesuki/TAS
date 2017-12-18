@@ -12,7 +12,7 @@
 </head>
 <body>
 <h4>${error}</h4>
-<form action="/user/password/password-reset" method="post">
+<form action="/user/password-reset/to-reset" method="post">
     学号：
     <input type="text" name="id" />
     <br />

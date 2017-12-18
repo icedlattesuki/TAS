@@ -25,9 +25,9 @@ public class NoticeDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String GET_TEACHER_ID_SQL = "SELECT * FROM teach WHERE " + SqlService.courseKeyInWhereClause();
     private static final String GET_STUDENT_ID_LIST_SQL = "SELECT * FROM take WHERE " + SqlService.courseKeyInWhereClause();
-    private static final String ADD_NOTICE_SQL = "INSERT INTO notice(" + Notice.USER_ID + "," + SqlService.courseKeyInColumn() + "," + Notice.MESSAGE + "," + Notice.TYPE + "," + Notice.DATE + ") VALUES(?,?,?,?,?,?,?,?)";
-    private static final String GET_DETAIL_NOTICE_SQL = "SELECT * FROM notice WHERE " + Notice.USER_ID +" = ? and " + SqlService.courseKeyInWhereClause() +" and " + Notice.TYPE +" = ?";
-    private static final String REMOVE_NOTICE_SQL = "DELETE FROM notice WHERE " + Notice.MESSAGE_ID + " = ?";
+    private static final String ADD_NOTICE_SQL = "INSERT INTO notice(" + SqlService.NOTICE_USER_ID + "," + SqlService.courseKeyInColumn() + "," + SqlService.NOTICE_MESSAGE + "," + SqlService.NOTICE_TYPE + "," + SqlService.NOTICE_DATE + ") VALUES(?,?,?,?,?,?,?,?)";
+    private static final String GET_DETAIL_NOTICE_SQL = "SELECT * FROM notice WHERE " + SqlService.NOTICE_USER_ID +" = ? and " + SqlService.courseKeyInWhereClause() +" and " + SqlService.NOTICE_TYPE +" = ?";
+    private static final String REMOVE_NOTICE_SQL = "DELETE FROM notice WHERE " + SqlService.NOTICE_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -62,7 +62,7 @@ public class NoticeDAO {
             @Override
             public String extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 resultSet.next();
-                return resultSet.getString(User.TEACHER_ID);
+                return resultSet.getString(SqlService.TEACH_TEACHER_ID);
             }
         });
     }
@@ -83,7 +83,7 @@ public class NoticeDAO {
                 ArrayList<String> studentIdList = new ArrayList<String>();
 
                 while (resultSet.next()) {
-                    studentIdList.add(resultSet.getString(User.STUDENT_ID));
+                    studentIdList.add(resultSet.getString(SqlService.TAKE_STUDENT_ID));
                 }
 
                 return studentIdList;
@@ -107,9 +107,9 @@ public class NoticeDAO {
                 DetailNotice detailNotice = new DetailNotice();
 
                 while (resultSet.next()) {
-                    detailNotice.getMessageList().add(resultSet.getString(Notice.MESSAGE));
-                    detailNotice.getMessageIdList().add(resultSet.getInt(Notice.MESSAGE_ID));
-                    detailNotice.getMessageDateList().add(resultSet.getDate(Notice.DATE));
+                    detailNotice.getMessageList().add(resultSet.getString(SqlService.NOTICE_MESSAGE));
+                    detailNotice.getMessageIdList().add(resultSet.getInt(SqlService.NOTICE_ID));
+                    detailNotice.getMessageDateList().add(resultSet.getDate(SqlService.NOTICE_DATE));
                     detailNotice.setTotalNumber(detailNotice.getTotalNumber() + 1);
                 }
 

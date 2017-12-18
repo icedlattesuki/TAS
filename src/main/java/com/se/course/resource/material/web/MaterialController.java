@@ -1,4 +1,4 @@
-package com.se.course.material.web;
+package com.se.course.resource.material.web;
 
 //import packages
 import com.se.global.service.ModelService;
@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.se.course.material.service.MaterialService;
+import com.se.course.resource.material.service.MaterialService;
 import com.se.notice.service.NoticeService;
 
 /**

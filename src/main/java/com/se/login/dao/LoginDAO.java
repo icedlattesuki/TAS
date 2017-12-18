@@ -2,6 +2,7 @@ package com.se.login.dao;
 
 //import packages
 import com.se.global.domain.*;
+import com.se.global.service.SqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,12 +20,12 @@ import java.util.ArrayList;
 @Repository
 public class LoginDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String IS_STUDENT_EXIST_SQL = "SELECT * FROM student WHERE " + User.ID + " = ? and " + User.PASSWORD + " = ?";
-    private static final String IS_TEACHER_EXIST_SQL = "SELECT * FROM teacher where " + User.ID + " = ? and " + User.PASSWORD + " = ?";
-    private static final String GET_STUDENT_SQL = "SELECT * FROM student WHERE " + User.ID + " = ?";
-    private static final String GET_TEACHER_SQL = "SELECT * FROM teacher WHERE " + User.ID + " = ?";
-    private static final String GET_STUDENT_COURSE_KEY_SQL = "SELECT * FROM take WHERE " + User.STUDENT_ID + " = ?";
-    private static final String GET_TEACHER_COURSE_KEY_SQL = "SELECT * FROM teach WHERE " + User.TEACHER_ID + " = ?";
+    private static final String IS_STUDENT_EXIST_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ? and " + SqlService.STUDENT_PASSWORD + " = ?";
+    private static final String IS_TEACHER_EXIST_SQL = "SELECT * FROM teacher where " + SqlService.TEACHER_ID + " = ? and " + SqlService.TEACHER_PASSWORD + " = ?";
+    private static final String GET_STUDENT_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ?";
+    private static final String GET_TEACHER_SQL = "SELECT * FROM teacher WHERE " + SqlService.TEACHER_ID + " = ?";
+    private static final String GET_STUDENT_COURSE_KEY_SQL = "SELECT * FROM take WHERE " + SqlService.TAKE_STUDENT_ID + " = ?";
+    private static final String GET_TEACHER_COURSE_KEY_SQL = "SELECT * FROM teach WHERE " + SqlService.TEACH_TEACHER_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -78,9 +79,9 @@ public class LoginDAO {
                     Student student = new Student();
                     student.setType(User.STUDENT_TYPE);
                     setUser(student, resultSet);
-                    student.setMajor(resultSet.getString(Student.MAJOR));
-                    student.setGrade(resultSet.getInt(Student.GRADE));
-                    student.setClassNumber(resultSet.getString(Student.CLASS_NUMBER));
+                    student.setMajor(resultSet.getString(SqlService.STUDENT_MAJOR));
+                    student.setGrade(resultSet.getInt(SqlService.STUDENT_GRADE));
+                    student.setClassNumber(resultSet.getString(SqlService.STUDENT_CLASS_NUMBER));
                     student.setTakes(getStudentCourseKey(student.getId()));
 
                     return student;
@@ -95,7 +96,7 @@ public class LoginDAO {
                     Teacher teacher = new Teacher();
                     teacher.setType(User.TEACHER_TYPE);
                     setUser(teacher, resultSet);
-                    teacher.setTitle(resultSet.getString(Teacher.TITLE));
+                    teacher.setTitle(resultSet.getString(SqlService.TEACHER_TITLE));
                     teacher.setTeaches(getTeacherCourseKey(teacher.getId()));
 
                     return teacher;
@@ -105,13 +106,13 @@ public class LoginDAO {
     }
 
     private void setUser(User user, ResultSet resultSet) throws SQLException {
-        user.setId(resultSet.getString(User.ID));
-        user.setName(resultSet.getString(User.NAME));
-        user.setCollege(resultSet.getString(User.COLLEGE));
-        user.setEmail(resultSet.getString(User.EMAIL));
-        user.setImageLocation(resultSet.getString(User.IMAGE_LOCATION));
-        user.setSignature(resultSet.getString(User.SIGNATURE));
-        user.setProfile(resultSet.getString(User.PROFILE));
+        user.setId(resultSet.getString(SqlService.STUDENT_ID));
+        user.setName(resultSet.getString(SqlService.STUDENT_NAME));
+        user.setCollege(resultSet.getString(SqlService.STUDENT_COLLEGE));
+        user.setEmail(resultSet.getString(SqlService.STUDENT_EMAIL));
+        user.setImageLocation(resultSet.getString(SqlService.STUDENT_IMAGE_LOCATION));
+        user.setSignature(resultSet.getString(SqlService.STUDENT_SIGNATURE));
+        user.setProfile(resultSet.getString(SqlService.STUDENT_PROFILE));
     }
 
     private ArrayList<CourseKey> getStudentCourseKey(String id) throws SQLException, DataAccessException {
@@ -140,10 +141,10 @@ public class LoginDAO {
         while (resultSet.next()) {
             CourseKey courseKey = new CourseKey();
 
-            courseKey.setId(resultSet.getString(CourseKey.COURSE_ID));
-            courseKey.setSemester(resultSet.getString(CourseKey.SEMESTER));
-            courseKey.setTime(resultSet.getString(CourseKey.TIME));
-            courseKey.setPlace(resultSet.getString(CourseKey.PLACE));
+            courseKey.setId(resultSet.getString(SqlService.TAKE_COURSE_ID));
+            courseKey.setSemester(resultSet.getString(SqlService.TAKE_SEMESTER));
+            courseKey.setTime(resultSet.getString(SqlService.TAKE_TIME));
+            courseKey.setPlace(resultSet.getString(SqlService.TAKE_PLACE));
 
             courseKeyList.add(courseKey);
         }

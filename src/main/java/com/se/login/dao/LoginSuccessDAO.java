@@ -88,16 +88,16 @@ public class LoginSuccessDAO {
         Course course = new Course();
         CourseKey courseKey = new CourseKey();
 
-        courseKey.setId(resultSet.getString(CourseKey.ID));
-        courseKey.setSemester(resultSet.getString(CourseKey.SEMESTER));
-        courseKey.setTime(resultSet.getString(CourseKey.TIME));
-        courseKey.setPlace(resultSet.getString(CourseKey.PLACE));
+        courseKey.setId(resultSet.getString(SqlService.COURSE_ID));
+        courseKey.setSemester(resultSet.getString(SqlService.COURSE_SEMESTER));
+        courseKey.setTime(resultSet.getString(SqlService.COURSE_TIME));
+        courseKey.setPlace(resultSet.getString(SqlService.COURSE_PLACE));
         course.setCourseKey(courseKey);
-        course.setName(resultSet.getString(Course.NAME));
-        course.setCredit(resultSet.getFloat(Course.CREDIT));
-        course.setCollege(resultSet.getString(Course.COLLEGE));
-        course.setIntroduction(resultSet.getString(Course.INTRODUCTION));
-        course.setLike(resultSet.getInt(Course.LIKE_NUMBER));
+        course.setName(resultSet.getString(SqlService.COURSE_NAME));
+        course.setCredit(resultSet.getFloat(SqlService.COURSE_CREDIT));
+        course.setCollege(resultSet.getString(SqlService.COURSE_COLLEGE));
+        course.setIntroduction(resultSet.getString(SqlService.COURSE_NTRODUCTION));
+        course.setLike(resultSet.getInt(SqlService.COURSE_LIKE_NUMBER));
 
         return course;
     }

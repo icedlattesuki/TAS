@@ -37,7 +37,7 @@ public class AnnouncementController {
      */
     @RequestMapping("/course/resource/announcement/to-upload")
     public String announcementUploadPage() {
-        return "course/resource/announcement/announcement_upload";
+        return "course/announcement/announcement_upload";
     }
 
     /**
@@ -55,7 +55,7 @@ public class AnnouncementController {
             return "redirect:/course/index";
         } else {
             ModelService.setError(model, "发布失败!");
-            return "/course/resource/announcement/announcement_upload";
+            return "/course/announcement/announcement_upload";
         }
     }
 
@@ -72,6 +72,6 @@ public class AnnouncementController {
         noticeService.removeNotice(session, request);
         ArrayList<Announcement> announcementList =  announcementService.getAnnouncementList(session);
         ModelService.setAnnouncementList(model, announcementList);
-        return "course/resource/announcement/announcement_list";
+        return "course/announcement/announcement_list";
     }
 }

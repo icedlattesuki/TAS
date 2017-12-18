@@ -1,4 +1,4 @@
-package com.se.course.material.domain;
+package com.se.course.resource.material.domain;
 
 import com.se.global.domain.File;
 

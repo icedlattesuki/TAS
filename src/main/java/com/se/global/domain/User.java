@@ -18,16 +18,6 @@ public class User {
     private int type;
     public static final int STUDENT_TYPE = 1;
     public static final int TEACHER_TYPE = 2;
-    public static final String STUDENT_ID = "student_id";
-    public static final String TEACHER_ID = "teacher_id";
-    public static final String ID = "id";
-    public static final String PASSWORD = "password";
-    public static final String NAME = "name";
-    public static final String COLLEGE = "college";
-    public static final String EMAIL = "email";
-    public static final String IMAGE_LOCATION = "image_position";
-    public static final String SIGNATURE = "signature";
-    public static final String PROFILE = "profile";
 
     public String getId() {
         return id;

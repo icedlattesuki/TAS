@@ -1,7 +1,7 @@
-package com.se.course.video.web;
+package com.se.course.resource.video.web;
 
 //import packages
-import com.se.course.video.domain.Video;
+import com.se.course.resource.video.domain.Video;
 import com.se.global.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import com.se.course.video.service.VideoService;
+import com.se.course.resource.video.service.VideoService;
 import com.se.notice.service.NoticeService;
 
 /**

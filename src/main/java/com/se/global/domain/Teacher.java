@@ -12,7 +12,6 @@ import java.util.ArrayList;
 public class Teacher extends User {
     private String title;
     private ArrayList<CourseKey> teaches;
-    public static final String TITLE = "title";
 
     public String getTitle() {
         return title;

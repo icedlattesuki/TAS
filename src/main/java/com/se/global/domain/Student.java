@@ -14,9 +14,6 @@ public class Student extends User {
     private String classNumber;
     private int grade;
     private ArrayList<CourseKey> takes;
-    public static final String MAJOR = "major";
-    public static final String GRADE = "grade";
-    public static final String CLASS_NUMBER = "class_number";
 
     public String getMajor() {
         return major;

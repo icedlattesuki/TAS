@@ -23,7 +23,8 @@ create table teacher(
     image_position varchar(60),
     signature varchar(30),
     profile varchar(100),
-    title varchar(10)
+    title varchar(10),
+    phone_number varchar(15)
 );
 create table course(
     id varchar(10),
@@ -58,7 +59,7 @@ create table teach(
     foreign key (course_id, semester, time, place) references course(id, semester, time, place)
 );
 create table file(
-    id int(10), primary key, auto_increment,
+    id int(10) primary key auto_increment,
     name varchar(100),
     location varchar(200),
     size int(10),
@@ -91,7 +92,7 @@ create table announcement(
     foreign key (course_id, semester, time, place) references course(id, semester, time, place)
 );
 create table notice(
-    message_id int(10) primary key auto_increment,
+    id int(10) primary key auto_increment,
     user_id varchar(10),
     course_id varchar(10),
     semester varchar(15),
@@ -103,7 +104,7 @@ create table notice(
     foreign key (course_id, semester, time, place) references course(id, semester, time, place)
 );
 create table comment(
-    comment_id int(10) primary key auto_increment,
+    id int(10) primary key auto_increment,
     user_id varchar(10),
     user_name varchar(15),
     user_image_position varchar(60),

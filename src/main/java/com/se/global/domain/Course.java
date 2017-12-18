@@ -14,11 +14,6 @@ public class Course {
     private float credit;
     private String college;
     private int like;
-    public static final String NAME = "name";
-    public static final String CREDIT = "credit";
-    public static final String COLLEGE = "college";
-    public static final String INTRODUCTION = "introduction";
-    public static final String LIKE_NUMBER = "like_number";
 
     public CourseKey getCourseKey() {
         return courseKey;

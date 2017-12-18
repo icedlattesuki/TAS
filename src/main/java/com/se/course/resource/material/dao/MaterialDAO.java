@@ -1,4 +1,4 @@
-package com.se.course.video.dao;
+package com.se.course.resource.material.dao;
 
 //import packages
 import org.springframework.dao.DataAccessException;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.se.course.video.domain.Video;
+import com.se.course.resource.material.domain.Material;
 import com.se.global.dao.FileDAO;
 import com.se.global.domain.CourseKey;
 import com.se.global.service.SqlService;
@@ -18,26 +18,25 @@ import com.se.global.service.SqlService;
  * @since 1.0
  */
 @Repository
-public class VideoDAO extends FileDAO {
-    private final String UPLOAD_SQL = "INSERT INTO video(" + SqlService.VIDEO_FILE_ID + "," + SqlService.VIDEO_TITLE + "," +
-            SqlService.VIDEO_PROFILE + ") VALUES(?,?,?)";
-    private final String REMOVE_SQL = "DELETE FROM video WHERE " + SqlService.VIDEO_FILE_ID + " = ?";
-    private final String GET_VIDEOS_SQL = "SELECT * FROM video,file WHERE video." + SqlService.MATERIAL_FILE_ID + " = file." +
+public class MaterialDAO extends FileDAO {
+    private final String UPLOAD_SQL = "INSERT INTO material(" + SqlService.MATERIAL_FILE_ID + ") VALUES(?)";
+    private final String REMOVE_SQL = "DELETE FROM material WHERE " + SqlService.MATERIAL_FILE_ID + " = ?";
+    private final String GET_MATERIALS_SQL = "SELECT * FROM material,file WHERE material." + SqlService.MATERIAL_FILE_ID + " = file." +
             SqlService.FILE_ID + " and " + SqlService.courseKeyInWhereClause();
 
     /**
-     * 上传视频
+     * 上传资料
      *
-     * @param video Video对象
+     * @param material Material对象
      * @throws DataAccessException 数据库访问出错
      */
-    public void upload(Video video) throws DataAccessException {
-        int fileId = store(video);
-        jdbcTemplate.update(UPLOAD_SQL, fileId, video.getTitle(), video.getProfile());
+    public void upload(Material material) throws DataAccessException {
+        int fileId = store(material);
+        jdbcTemplate.update(UPLOAD_SQL, fileId);
     }
 
     /**
-     * 删除视频
+     * 删除资料
      *
      * @param fileId 文件id
      * @param userId 用户id
@@ -52,7 +51,7 @@ public class VideoDAO extends FileDAO {
     }
 
     /**
-     * 获取视频列表
+     * 获取资料列表
      *
      * @param courseKey 课程主键
      * @return 以Object的形式返回，之后需要进行类型转换
@@ -61,19 +60,17 @@ public class VideoDAO extends FileDAO {
     @Override
     public Object getFiles(CourseKey courseKey) throws DataAccessException {
         Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        return jdbcTemplate.query(GET_VIDEOS_SQL, args, new ResultSetExtractor<ArrayList<Video>>() {
+        return jdbcTemplate.query(GET_MATERIALS_SQL, args, new ResultSetExtractor<ArrayList<Material>>() {
             @Override
-            public ArrayList<Video> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                ArrayList<Video> videos = new ArrayList<Video>();
+            public ArrayList<Material> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                ArrayList<Material> materials = new ArrayList<Material>();
 
                 while (resultSet.next()) {
-                    Video video = new Video(setFile(resultSet));
-                    video.setTitle(resultSet.getString(SqlService.VIDEO_TITLE));
-                    video.setProfile(resultSet.getString(SqlService.VIDEO_PROFILE));
-                    videos.add(video);
+                    Material material = new Material(setFile(resultSet));
+                    materials.add(material);
                 }
 
-                return videos;
+                return materials;
             }
         });
     }

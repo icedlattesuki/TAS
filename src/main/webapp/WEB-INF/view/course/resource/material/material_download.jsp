@@ -7,8 +7,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%--@elvariable id="user" type="com.se.global.domain.User"--%>
-<%--@elvariable id="material" type="com.se.course.resource.domain.Resource"--%>
-<%--@elvariable id="materialList" type="java.util.ArrayList<Resource>"--%>
+<%--@elvariable id="material" type="com.se.course.resource.material.domain.Material"--%>
+<%--@elvariable id="materials" type="java.util.ArrayList<com.se.course.resource.material.domain.Material>"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,12 +17,12 @@
 <body>
 <h4>${info}</h4>
 <ul>
-    <c:forEach var="material" items="${materialList}">
+    <c:forEach var="material" items="${materials}">
         <li>
-            <a href="/course/resource/material/download?file_name=${material.name}">${material.name}</a>, ${material.size1}
+            <a href="/course/resource/material/download?file_id=${material.id}">${material.name}</a>, ${material.size1}
             <br/>
             <c:if test="${user.type == 2}">
-                <a href="/course/resource/material/delete?file_name=${material.name}">删除</a>
+                <a href="/course/resource/material/delete?file_id=${material.id}">删除</a>
             </c:if>
         </li>
     </c:forEach>

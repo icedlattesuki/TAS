@@ -16,12 +16,6 @@ public class Comment {
     private User user;
     private Date date;
     private String content;
-    public static final String COMMENT_ID = "comment_id";
-    public static final String USER_ID = "user_id";
-    public static final String USER_NAME = "user_name";
-    public static final String USER_IMAGE_POSITION = "user_image_position";
-    public static final String DATE = "date";
-    public static final String CONTENT = "content";
 
     public int getCommentId() {
         return commentId;
