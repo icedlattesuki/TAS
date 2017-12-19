@@ -98,7 +98,7 @@ create table notice(
     semester varchar(15),
     time varchar(15),
     place varchar(20),
-    message varchar(300),c
+    message varchar(300),
     type int(1),
     date datetime,
     foreign key (course_id, semester, time, place) references course(id, semester, time, place)
@@ -115,6 +115,21 @@ create table comment(
     content varchar(300),
     date datetime,
     foreign key (course_id, semester, time, place) references course(id, semester, time, place)
+);
+
+CREATE TABLE homework(
+  id INT AUTO_INCREMENT PRIMARY KEY ,
+  title VARCHAR(50) NOT NULL ,
+  content VARCHAR(500),
+  create_date DATE,
+  ddl_date DATE,
+  score INT(11),
+  attachment VARCHAR(10),
+  course_id VARCHAR(10),
+  semester VARCHAR(15),
+  time VARCHAR(15),
+  place VARCHAR(20),
+  FOREIGN KEY (course_id, semester, time, place) REFERENCES course(id, semester, time, place)
 );
 
 insert into student values("3150102100", "123456", "黄雨生", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1501", "");
