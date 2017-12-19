@@ -5,13 +5,14 @@
   Time: 下午6:37
   To change this template use File | Settings | File Templates.
 --%>
+<%--@elvariable id="courseId" type="int"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
-<form action="/course/resource/video/upload" method="post" enctype="multipart/form-data">
+<form action="/course/${courseId}/resource/video/upload" method="post" enctype="multipart/form-data">
     标题：
     <input type="text" name="title">
     <br/>

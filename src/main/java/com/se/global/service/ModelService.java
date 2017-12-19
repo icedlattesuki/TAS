@@ -11,14 +11,12 @@ import java.util.Date;
 import com.se.course.announcement.domain.Announcement;
 import com.se.global.domain.User;
 import com.se.global.domain.Course;
-import com.se.notice.domain.CourseNotice;
-import com.se.notice.domain.DetailNotice;
 import com.se.notice.domain.Notice;
 import com.se.notice.service.NoticeService;
 
 /**
  * @author Yusen
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 @Service
@@ -39,8 +37,8 @@ public class ModelService {
         model.addAttribute("email", email);
     }
 
-    public static void setAnnouncementList(Model model, ArrayList<Announcement> announcementList) {
-        model.addAttribute("announcementList", announcementList);
+    public static void setAnnouncements(Model model, ArrayList<Announcement> announcements) {
+        model.addAttribute("announcements", announcements);
     }
 
     public static void setMaterials(Model model, ArrayList<Material> materials) {
@@ -51,37 +49,23 @@ public class ModelService {
         model.addAttribute("videos", videos);
     }
 
-    public static void setCourseList(Model model, ArrayList<Course> courseList) {
-        model.addAttribute("courseList", courseList);
+    public static void setCourses(Model model, ArrayList<Course> courses) {
+        model.addAttribute("courses", courses);
     }
 
-    public static void setNotice(Model model, Notice notice) {
-        model.addAttribute("notice", notice);
-    }
+    public static void setComments(Model model, ArrayList<Comment> comments) { model.addAttribute("comments", comments); }
 
-    public static void setCourseNoticeList(Model model, ArrayList<CourseNotice> courseNoticeList) {
-        model.addAttribute("courseNoticeList", courseNoticeList);
-    }
+    public static void setNotices(Model model, ArrayList<Notice> notices) { model.addAttribute("notices", notices); }
 
-    public static void setDetailNoticeList(Model model, ArrayList<DetailNotice> detailNoticeList) {
-        model.addAttribute("detailNoticeList", detailNoticeList);
-    }
+    public static void setNoticeTotalNum(Model model, int num) { model.addAttribute("noticeTotalNum", num); }
 
-    public static void setDetailNoticeType(Model model) {
-        model.addAttribute("noticeType", NoticeService.DETAIL_NOTICE_TYPE);
-    }
+    public static void setNoticeCourseNum(Model model, ArrayList<Integer> nums) { model.addAttribute("noticeCourseNum", nums); }
 
-    public static void setMessageList(Model model, ArrayList<String> messageList) {
-        model.addAttribute("messageList", messageList);
-    }
+    public static void setNoticeDetailNum(Model model, ArrayList<Integer> nums) { model.addAttribute("noticeDetailNum", nums); }
 
-    public static void setMessageDateList(Model model, ArrayList<Date> messageDateList) {
-        model.addAttribute("messageDateList", messageDateList);
-    }
+    public static void setNoticeType(Model model, String[] noticeType) { model.addAttribute("noticeType", noticeType); }
 
-    public static void setMessageURL(Model model, String messageURL) {
-        model.addAttribute("messageURL", messageURL);
-    }
+    public static void setNoticeURL(Model model, String url) { model.addAttribute("noticeURL", url); }
 
-    public static void setCommentList(Model model, ArrayList<Comment> commentList) { model.addAttribute("commentList", commentList); }
+    public static void setCourseId(Model model, int courseId) { model.addAttribute("courseId", courseId); }
 }

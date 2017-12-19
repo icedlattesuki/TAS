@@ -14,7 +14,7 @@ public class File {
     private long size;
     private String size1;
     private Date date;
-    private CourseKey courseKey;
+    private int courseId;
     private String userId;
 
     public File() {
@@ -28,13 +28,17 @@ public class File {
         this.size = file.size;
         this.size1 = file.size1;
         this.date = file.date;
-        this.courseKey = file.courseKey;
+        this.courseId = file.courseId;
         this.userId = file.userId;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -76,15 +80,19 @@ public class File {
         this.date = date;
     }
 
-    public CourseKey getCourseKey() {
-        return courseKey;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseKey(CourseKey courseKey) {
-        this.courseKey = courseKey;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
-    public String getUserId() { return userId; }
+    public String getUserId() {
+        return userId;
+    }
 
-    public void setUserId(String userId) { this.userId = userId; }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

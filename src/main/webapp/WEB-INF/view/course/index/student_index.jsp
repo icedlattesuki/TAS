@@ -1,4 +1,6 @@
 <%--@elvariable id="announcement" type="com.se.course.announcement.domain.Announcement"--%>
+<%--@elvariable id="courseId" type="int"--%>
+<%--@elvariable id="noticeTotalNum" type="int"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -32,7 +34,7 @@
                             <i class="material-icons">
                                 notifications
                                 <small class="notification-badge">
-                                    ${notice.totalNumber}
+                                    ${noticeTotalNum}
                                 </small>
                             </i>
                         </a>
@@ -73,7 +75,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/course/resource/material/to-download">
+                    <a href="/course/${courseId}/resource/material/to-download">
                         <i class="material-icons left">
                             folder_open
                         </i>
@@ -84,7 +86,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/course/resource/video/watch">
+                    <a href="/course/${courseId}/resource/video/watch">
                         <i class="material-icons left">
                             video_library
                         </i>
@@ -95,7 +97,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/course/comment">
+                    <a href="/course/${courseId}/comment">
                         <i class="material-icons left">
                             comment
                         </i>
@@ -117,7 +119,7 @@
                         <p>${announcement.date}</p>
                     </div>
                     <div class="card-action">
-                        <a href="/course/resource/announcement/list" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan box-shadow">
+                        <a href="/course/${courseId}/resource/announcement/list" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan box-shadow">
                             <i class="material-icons right">
                                 more_horiz
                             </i>

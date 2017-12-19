@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import com.se.course.resource.material.domain.Material;
 import com.se.global.dao.FileDAO;
-import com.se.global.domain.CourseKey;
 import com.se.global.service.SqlService;
 
 /**
@@ -22,7 +21,7 @@ public class MaterialDAO extends FileDAO {
     private final String UPLOAD_SQL = "INSERT INTO material(" + SqlService.MATERIAL_FILE_ID + ") VALUES(?)";
     private final String REMOVE_SQL = "DELETE FROM material WHERE " + SqlService.MATERIAL_FILE_ID + " = ?";
     private final String GET_MATERIALS_SQL = "SELECT * FROM material,file WHERE material." + SqlService.MATERIAL_FILE_ID + " = file." +
-            SqlService.FILE_ID + " and " + SqlService.courseKeyInWhereClause();
+            SqlService.FILE_ID + " and " + SqlService.FILE_COURSE_ID + " = ?";
 
     /**
      * 上传资料
@@ -53,14 +52,13 @@ public class MaterialDAO extends FileDAO {
     /**
      * 获取资料列表
      *
-     * @param courseKey 课程主键
+     * @param courseId 课程id
      * @return 以Object的形式返回，之后需要进行类型转换
      * @throws DataAccessException 数据库访问出错
      */
     @Override
-    public Object getFiles(CourseKey courseKey) throws DataAccessException {
-        Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        return jdbcTemplate.query(GET_MATERIALS_SQL, args, new ResultSetExtractor<ArrayList<Material>>() {
+    public Object getFiles(int courseId) throws DataAccessException {
+        return jdbcTemplate.query(GET_MATERIALS_SQL, new Object[] {courseId}, new ResultSetExtractor<ArrayList<Material>>() {
             @Override
             public ArrayList<Material> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 ArrayList<Material> materials = new ArrayList<Material>();

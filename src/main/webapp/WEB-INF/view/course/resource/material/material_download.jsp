@@ -9,6 +9,7 @@
 <%--@elvariable id="user" type="com.se.global.domain.User"--%>
 <%--@elvariable id="material" type="com.se.course.resource.material.domain.Material"--%>
 <%--@elvariable id="materials" type="java.util.ArrayList<com.se.course.resource.material.domain.Material>"--%>
+<%--@elvariable id="courseId" type="int"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -19,10 +20,10 @@
 <ul>
     <c:forEach var="material" items="${materials}">
         <li>
-            <a href="/course/resource/material/download?file_id=${material.id}">${material.name}</a>, ${material.size1}
+            <a href="/course/${courseId}/resource/material/download?file_id=${material.id}">${material.name}</a>, ${material.size1}
             <br/>
             <c:if test="${user.type == 2}">
-                <a href="/course/resource/material/delete?file_id=${material.id}">删除</a>
+                <a href="/course/${courseId}/resource/material/delete?file_id=${material.id}">删除</a>
             </c:if>
         </li>
     </c:forEach>

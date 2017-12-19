@@ -40,9 +40,9 @@ public class LoginDAO {
      * @return 0表示用户不存在，1表示学生用户，2表示教师用户
      */
     public int identifyUser(String id, String password) {
-        int flag = jdbcTemplate.query(IS_STUDENT_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
+        int flag = jdbcTemplate.query(IS_STUDENT_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<java.lang.Integer>() {
             @Override
-            public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+            public java.lang.Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 return resultSet.next() ? User.STUDENT_TYPE : 0;
             }
         });
@@ -50,9 +50,9 @@ public class LoginDAO {
         if (flag > 0)
             return flag;
 
-        flag = jdbcTemplate.query(IS_TEACHER_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
+        flag = jdbcTemplate.query(IS_TEACHER_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<java.lang.Integer>() {
             @Override
-            public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+            public java.lang.Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 return resultSet.next() ? User.TEACHER_TYPE : 0;
             }
         });
@@ -82,7 +82,7 @@ public class LoginDAO {
                     student.setMajor(resultSet.getString(SqlService.STUDENT_MAJOR));
                     student.setGrade(resultSet.getInt(SqlService.STUDENT_GRADE));
                     student.setClassNumber(resultSet.getString(SqlService.STUDENT_CLASS_NUMBER));
-                    student.setTakes(getStudentCourseKey(student.getId()));
+                    student.setTakes(getStudentCourses(student.getId()));
 
                     return student;
                 }
@@ -97,7 +97,7 @@ public class LoginDAO {
                     teacher.setType(User.TEACHER_TYPE);
                     setUser(teacher, resultSet);
                     teacher.setTitle(resultSet.getString(SqlService.TEACHER_TITLE));
-                    teacher.setTeaches(getTeacherCourseKey(teacher.getId()));
+                    teacher.setTeaches(getTeacherCourses(teacher.getId()));
 
                     return teacher;
                 }
@@ -115,38 +115,29 @@ public class LoginDAO {
         user.setProfile(resultSet.getString(SqlService.STUDENT_PROFILE));
     }
 
-    private ArrayList<CourseKey> getStudentCourseKey(String id) throws SQLException, DataAccessException {
-        return jdbcTemplate.query(GET_STUDENT_COURSE_KEY_SQL, new Object[]{id}, new ResultSetExtractor<ArrayList<CourseKey>>() {
+    private ArrayList<Integer> getStudentCourses(String id) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_STUDENT_COURSE_KEY_SQL, new Object[]{id}, new ResultSetExtractor<ArrayList<Integer>>() {
             @Override
-            public ArrayList<CourseKey> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                ArrayList<CourseKey> courseKeyList = new ArrayList<CourseKey>();
-                setCourseKeyList(courseKeyList, resultSet);
-                return courseKeyList;
+            public ArrayList<Integer> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                return getCourses(resultSet);
             }
         });
     }
 
-    private ArrayList<CourseKey> getTeacherCourseKey(String id) throws SQLException, DataAccessException {
-        return jdbcTemplate.query(GET_TEACHER_COURSE_KEY_SQL, new Object[]{id}, new ResultSetExtractor<ArrayList<CourseKey>>() {
+    private ArrayList<Integer> getTeacherCourses(String id) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_TEACHER_COURSE_KEY_SQL, new Object[]{id}, new ResultSetExtractor<ArrayList<Integer>>() {
             @Override
-            public ArrayList<CourseKey> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                ArrayList<CourseKey> courseKeyList = new ArrayList<CourseKey>();
-                setCourseKeyList(courseKeyList, resultSet);
-                return courseKeyList;
+            public ArrayList<Integer> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                return getCourses(resultSet);
             }
         });
     }
 
-    private void setCourseKeyList(ArrayList<CourseKey> courseKeyList, ResultSet resultSet) throws SQLException {
+    private ArrayList<Integer> getCourses(ResultSet resultSet) throws SQLException, DataAccessException {
+        ArrayList<Integer> courses = new ArrayList<Integer>();
         while (resultSet.next()) {
-            CourseKey courseKey = new CourseKey();
-
-            courseKey.setId(resultSet.getString(SqlService.TAKE_COURSE_ID));
-            courseKey.setSemester(resultSet.getString(SqlService.TAKE_SEMESTER));
-            courseKey.setTime(resultSet.getString(SqlService.TAKE_TIME));
-            courseKey.setPlace(resultSet.getString(SqlService.TAKE_PLACE));
-
-            courseKeyList.add(courseKey);
+            courses.add(resultSet.getInt(SqlService.TAKE_COURSE_ID));
         }
+        return courses;
     }
 }

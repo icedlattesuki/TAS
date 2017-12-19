@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
-import com.se.global.domain.CourseKey;
 import com.se.global.service.SqlService;
 import com.se.global.domain.File;
 
@@ -24,8 +23,7 @@ import com.se.global.domain.File;
 public class FileDAO {
     protected JdbcTemplate jdbcTemplate;
     private final String STORE_SQL = "INSERT INTO file(" + SqlService.FILE_NAME + "," + SqlService.FILE_LOCATION + "," +
-            SqlService.FILE_SIZE + "," + SqlService.FILE_DATE + "," + SqlService.FILE_COURSE_ID + "," + SqlService.FILE_SEMESTER + "," +
-            SqlService.FILE_TIME + "," + SqlService.FILE_PLACE + "," + SqlService.FILE_USER_ID + ") VALUES(?,?,?,?,?,?,?,?,?)";
+            SqlService.FILE_SIZE + "," + SqlService.FILE_DATE + "," + SqlService.FILE_COURSE_ID + "," + SqlService.FILE_USER_ID + ") VALUES(?,?,?,?,?,?)";
     private final String REMOVE_SQL = "DELETE FROM file WHERE " + SqlService.FILE_ID + " = ?";
     private final String GET_MAX_FILE_ID_SQL = "SELECT MAX(" + SqlService.FILE_ID + ") AS " + SqlService.FILE_ID + " FROM file";
     private final String GET_FILE_NAME_SQL = "SELECT * FROM file WHERE " + SqlService.FILE_ID + " = ?";
@@ -50,10 +48,10 @@ public class FileDAO {
     /**
      * 获取文件列表
      *
-     * @param courseKey 课程主键
+     * @param courseId 课程id
      * @return 以Object形式返回，之后需要进行类型转换
      */
-    public Object getFiles(CourseKey courseKey) {
+    public Object getFiles(int courseId) {
         return null;
     }
 
@@ -136,8 +134,7 @@ public class FileDAO {
      * @throws DataAccessException 数据库访问出错
      */
     protected int store(File file) throws DataAccessException {
-        CourseKey courseKey = file.getCourseKey();
-        jdbcTemplate.update(STORE_SQL, file.getName(), file.getLocation(), file.getSize(), file.getDate(), courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), file.getUserId());
+        jdbcTemplate.update(STORE_SQL, file.getName(), file.getLocation(), file.getSize(), file.getDate(), file.getCourseId(), file.getUserId());
         return jdbcTemplate.query(GET_MAX_FILE_ID_SQL, new ResultSetExtractor<Integer>() {
             @Override
             public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
