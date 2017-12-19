@@ -92,6 +92,14 @@ public class SqlService {
     public static final String COMMENT_DATE = "date";
     public static final String COMMENT_CONTENT = "content";
 
+
+    public static final String TITLE = "title";
+    public static final String CONTENT = "content";
+    public static final String DDL_DATE = "ddl_date";
+    public static final String DATE = "create_date";
+    public static final String ATTACHMENT = "attachment";
+    public static final String SCORE = "score";
+
     public static String courseKeyInColumn() {
         return " " + TAKE_COURSE_ID + "," + COURSE_SEMESTER + "," + COURSE_TIME + "," + COURSE_PLACE + " ";
     }
