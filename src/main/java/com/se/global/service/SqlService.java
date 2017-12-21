@@ -93,12 +93,16 @@ public class SqlService {
     public static final String COMMENT_CONTENT = "content";
 
 
-    public static final String TITLE = "title";
-    public static final String CONTENT = "content";
-    public static final String DDL_DATE = "ddl_date";
-    public static final String DATE = "create_date";
-    public static final String ATTACHMENT = "attachment";
-    public static final String SCORE = "score";
+    public static final String HOMEWORK_TITLE = "title";
+    public static final String HOMEWORK_CONTENT = "content";
+    public static final String HOMEWORK_DDL_DATE = "ddl_date";
+    public static final String HOMEWORK_DATE = "create_date";
+    public static final String HOMEWORK_ATTACHMENT = "attachment";
+    public static final String HOMEWORK_SCORE = "score";
+    public static final String HOMEWORK_ID = "id";
+
+    public static final String ATTACHMENT_FILE_ID = "file_id";
+    public static final String ATTACHMENT_HOMEWORK_ID = "homework_id";
 
     public static String courseKeyInColumn() {
         return " " + TAKE_COURSE_ID + "," + COURSE_SEMESTER + "," + COURSE_TIME + "," + COURSE_PLACE + " ";

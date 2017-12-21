@@ -14,7 +14,7 @@
 <body>
 <c:forEach var="homework" items="${homeworkList}">
     <div>
-        <h4>${homework.title}</h4>
+        <<a href="/course/homework/${homework.id}">${homework.title}</a>
     </div>
 </c:forEach>
 </body>

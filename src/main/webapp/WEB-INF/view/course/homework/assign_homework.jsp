@@ -11,7 +11,7 @@
     <title>布置作业</title>
 </head>
 <body>
-<form id="homeworkForm" action="/course/homework/assign">
+<form id="homeworkForm" action="/course/homework/assign" enctype="multipart/form-data" method="post">
     <label for="homeworkTitle">名称</label>
     <input type="text" name="title" id="homeworkTitle"><br>
     <label for="homeworkDDL">截止日期</label>
@@ -20,8 +20,8 @@
     <input type="number" name="score" id="homeworkScore" min="0" max="100"><br>
     <label for="homeworkContent">作业内容</label>
     <textarea name="content" id="homeworkContent"></textarea><br>
-    <label for="homeworkAttachment">附件上传</label>
-    <input type="file" name="attachment" id="homeworkAttachment"><br>
+    <label for="homeworkFile">附件上传</label>
+    <input type="file" name="file" id="homeworkFile"><br>
     <label for="homeworkSubmit">提交</label>
     <input type="submit" name="submit" id="homeworkSubmit"><br>
 </form>

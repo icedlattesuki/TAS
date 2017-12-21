@@ -15,6 +15,7 @@
 <p>${homework.content}</p>
 <p>${homework.ddl_date}</p>
 <p>${homework.score}</p>
+<a href="/course/homework/download?file_id=${attachment.file_id}">${attachment.name}</a>
 <%--文件列表待定--%>
 </body>
 </html>

@@ -29,6 +29,9 @@ public class HomeworkDAO {
             " =?, " + Homework.SCORE + " =?, " + Homework.CONTENT + " =?, " + Homework.ATTACHMENT + " =? " +
             "where id = ?";
     private static final String GET_HOMEWORK_SQL = "select * from homework where id = ?";
+    private static final String GET_MAX_ID_SQL = "select max(" + SqlService.HOMEWORK_ID + ") from homework";
+    private static final String UPDATE_ATTACHMENT_SQL = "update homework set " + SqlService.HOMEWORK_ATTACHMENT + " =? where " +
+            SqlService.HOMEWORK_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -71,6 +74,11 @@ public class HomeworkDAO {
         }
     }
 
+    public int getNextHomeworkId() {
+        int id = jdbcTemplate.queryForObject(GET_MAX_ID_SQL, Integer.class);
+        return id+1;
+    }
+
     public ArrayList<Homework> getHomeworkList(final CourseKey courseKey) {
         Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
         return jdbcTemplate.query(GET_HOMEWORK_LIST_SQL, args, new ResultSetExtractor<ArrayList<Homework>>() {
@@ -93,5 +101,10 @@ public class HomeworkDAO {
                 return homeworkArrayList;
             }
         });
+    }
+
+    public void updateHomeworkAttachment(int homework_id, String attachment) {
+        Object[] args = new Object[] {homework_id, attachment};
+        jdbcTemplate.update(UPDATE_ATTACHMENT_SQL, args);
     }
 }
