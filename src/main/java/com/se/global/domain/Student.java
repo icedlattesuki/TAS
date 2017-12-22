@@ -13,7 +13,7 @@ public class Student extends User {
     private String major;
     private String classNumber;
     private int grade;
-    private ArrayList<CourseKey> takes;
+    private ArrayList<Integer> takes;
 
     public String getMajor() {
         return major;
@@ -39,11 +39,11 @@ public class Student extends User {
         this.grade = grade;
     }
 
-    public ArrayList<CourseKey> getTakes() {
+    public ArrayList<Integer> getTakes() {
         return takes;
     }
 
-    public void setTakes(ArrayList<CourseKey> takes) {
+    public void setTakes(ArrayList<Integer> takes) {
         this.takes = takes;
     }
 }

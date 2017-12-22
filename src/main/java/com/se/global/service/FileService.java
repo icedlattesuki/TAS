@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import com.se.global.dao.FileDAO;
-import com.se.global.domain.CourseKey;
 
 /**
  * @author Yusen
@@ -96,13 +95,13 @@ public class FileService {
     /**
      * 获取文件列表
      *
-     * @param courseKey 课程主键
+     * @param courseId 课程id
      * @param fileDAO FileDAO对象
      * @return 以Object的形式返回，之后需要进行类型转换
      */
-    protected Object getFiles(CourseKey courseKey, FileDAO fileDAO) {
+    protected Object getFiles(int courseId, FileDAO fileDAO) {
         try {
-            return fileDAO.getFiles(courseKey);
+            return fileDAO.getFiles(courseId);
         } catch (Exception exception) {
             logger.error("getVideos fail! " + exception.getCause());
             return null;

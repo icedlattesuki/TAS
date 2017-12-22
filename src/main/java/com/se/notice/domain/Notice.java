@@ -1,15 +1,26 @@
 package com.se.notice.domain;
 
-import java.util.ArrayList;
+import java.util.Date;
 
+/**
+ * @author Yusen
+ * @version 1.1
+ * @since 1.0
+ */
 public class Notice {
+    private int id;
     private String userId;
-    private int totalNumber;
-    private ArrayList<CourseNotice> courseNoticeList;
+    private int courseId;
+    private String message;
+    private int type;
+    private Date date;
 
-    public Notice() {
-        totalNumber = 0;
-        courseNoticeList = new ArrayList<CourseNotice>();
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUserId() {
@@ -20,19 +31,35 @@ public class Notice {
         this.userId = userId;
     }
 
-    public int getTotalNumber() {
-        return totalNumber;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setTotalNumber(int totalNumber) {
-        this.totalNumber = totalNumber;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
-    public ArrayList<CourseNotice> getCourseNoticeList() {
-        return courseNoticeList;
+    public String getMessage() {
+        return message;
     }
 
-    public void setCourseNoticeList(ArrayList<CourseNotice> courseNoticeList) {
-        this.courseNoticeList = courseNoticeList;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

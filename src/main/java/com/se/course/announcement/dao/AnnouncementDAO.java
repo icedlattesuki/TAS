@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import com.se.course.announcement.domain.Announcement;
-import com.se.global.domain.CourseKey;
 
 /**
  * @author Yusen
@@ -23,8 +22,8 @@ import com.se.global.domain.CourseKey;
 public class AnnouncementDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String UPLOAD_ANNOUNCEMENT_SQL = "INSERT INTO announcement(" + SqlService.ANNOUNCEMENT_TITLE + "," +
-            SqlService.ANNOUNCEMENT_CONTENT + "," + SqlService.ANNOUNCEMENT_DATE + "," + SqlService.courseKeyInColumn() + ") VALUES(?,?,?,?,?,?,?)";
-    private static final String GET_LATEST_ANNOUNCEMENT_SQL = "SELECT * FROM announcement WHERE " + SqlService.courseKeyInWhereClause() +
+            SqlService.ANNOUNCEMENT_CONTENT + "," + SqlService.ANNOUNCEMENT_DATE + "," + SqlService.ANNOUNCEMENT_COURSE_ID + ") VALUES(?,?,?,?)";
+    private static final String GET_LATEST_ANNOUNCEMENT_SQL = "SELECT * FROM announcement WHERE " + SqlService.ANNOUNCEMENT_COURSE_ID + " = ? " +
             " ORDER BY " + SqlService.ANNOUNCEMENT_DATE + " DESC";
 
     @Autowired
@@ -33,27 +32,26 @@ public class AnnouncementDAO {
     /**
      * 上传公告
      *
-     * @param courseKey 当前课程的主键
+     * @param courseId 课程id
      * @param title 公告标题
      * @param content 公告内容
      * @throws DataAccessException 数据库访问出错
      */
-    public void uploadAnnouncement(CourseKey courseKey, String title, String content) throws DataAccessException {
-        Object[] args = new Object[] {title, content, new Date(), courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
+    public void uploadAnnouncement(int courseId, String title, String content) throws DataAccessException {
+        Object[] args = new Object[] {title, content, new Date(), courseId};
         jdbcTemplate.update(UPLOAD_ANNOUNCEMENT_SQL, args);
     }
 
     /**
      * 获取最新公告
      *
-     * @param courseKey 当前课程的主键
+     * @param courseId 课程id
      * @return 最新的公告对象
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public Announcement getLatestAnnouncement(final CourseKey courseKey) throws SQLException, DataAccessException {
-        Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        return jdbcTemplate.query(GET_LATEST_ANNOUNCEMENT_SQL, args, new ResultSetExtractor<Announcement>() {
+    public Announcement getLatestAnnouncement(final int courseId) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_LATEST_ANNOUNCEMENT_SQL, new Object[] {courseId}, new ResultSetExtractor<Announcement>() {
             @Override
             public Announcement extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 Announcement announcement = new Announcement();
@@ -62,7 +60,7 @@ public class AnnouncementDAO {
                     announcement.setTitle(resultSet.getString(SqlService.ANNOUNCEMENT_TITLE));
                     announcement.setContent(resultSet.getString(SqlService.ANNOUNCEMENT_CONTENT));
                     announcement.setDate(resultSet.getDate(SqlService.ANNOUNCEMENT_DATE));
-                    announcement.setCourseKey(courseKey);
+                    announcement.setCourseId(courseId);
                 }
 
                 return announcement;
@@ -73,14 +71,13 @@ public class AnnouncementDAO {
     /**
      * 获取公告列表
      *
-     * @param courseKey 当前课程的主键
+     * @param courseId 课程id
      * @return 公告列表
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<Announcement> getAnnouncementList(final CourseKey courseKey) throws SQLException, DataAccessException {
-        Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        return jdbcTemplate.query(GET_LATEST_ANNOUNCEMENT_SQL, args, new ResultSetExtractor<ArrayList<Announcement>>() {
+    public ArrayList<Announcement> getAnnouncementList(final int courseId) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_LATEST_ANNOUNCEMENT_SQL, new Object[] {courseId}, new ResultSetExtractor<ArrayList<Announcement>>() {
             @Override
             public ArrayList<Announcement> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 ArrayList<Announcement> announcementList = new ArrayList<Announcement>();
@@ -90,7 +87,7 @@ public class AnnouncementDAO {
                     announcement.setTitle((resultSet.getString(SqlService.ANNOUNCEMENT_TITLE)));
                     announcement.setContent(resultSet.getString(SqlService.ANNOUNCEMENT_CONTENT));
                     announcement.setDate(resultSet.getDate(SqlService.ANNOUNCEMENT_DATE));
-                    announcement.setCourseKey(courseKey);
+                    announcement.setCourseId(courseId);
                     announcementList.add(announcement);
                 }
 

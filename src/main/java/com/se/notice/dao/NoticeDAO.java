@@ -1,9 +1,6 @@
 package com.se.notice.dao;
 
-import com.se.global.domain.CourseKey;
-import com.se.global.domain.User;
-import com.se.global.service.SqlService;
-import com.se.notice.domain.DetailNotice;
+//import packages
 import com.se.notice.domain.Notice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -14,19 +11,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import com.se.global.service.SqlService;
 
 /**
  * @author  Yusen
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 @Repository
 public class NoticeDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String GET_TEACHER_ID_SQL = "SELECT * FROM teach WHERE " + SqlService.courseKeyInWhereClause();
-    private static final String GET_STUDENT_ID_LIST_SQL = "SELECT * FROM take WHERE " + SqlService.courseKeyInWhereClause();
-    private static final String ADD_NOTICE_SQL = "INSERT INTO notice(" + SqlService.NOTICE_USER_ID + "," + SqlService.courseKeyInColumn() + "," + SqlService.NOTICE_MESSAGE + "," + SqlService.NOTICE_TYPE + "," + SqlService.NOTICE_DATE + ") VALUES(?,?,?,?,?,?,?,?)";
-    private static final String GET_DETAIL_NOTICE_SQL = "SELECT * FROM notice WHERE " + SqlService.NOTICE_USER_ID +" = ? and " + SqlService.courseKeyInWhereClause() +" and " + SqlService.NOTICE_TYPE +" = ?";
+    private static final String GET_TEACHER_ID_SQL = "SELECT * FROM teach WHERE " + SqlService.TEACH_COURSE_ID + " = ?";
+    private static final String GET_STUDENT_ID_LIST_SQL = "SELECT * FROM take WHERE " + SqlService.TAKE_COURSE_ID + " = ?";
+    private static final String ADD_NOTICE_SQL = "INSERT INTO notice(" + SqlService.NOTICE_USER_ID + "," + SqlService.NOTICE_COURSE_ID + "," + SqlService.NOTICE_MESSAGE + "," + SqlService.NOTICE_TYPE + "," + SqlService.NOTICE_DATE + ") VALUES(?,?,?,?,?)";
+    private static final String GET_DETAIL_NOTICE_SQL = "SELECT * FROM notice WHERE " + SqlService.NOTICE_USER_ID +" = ?";
     private static final String REMOVE_NOTICE_SQL = "DELETE FROM notice WHERE " + SqlService.NOTICE_ID + " = ?";
 
     @Autowired
@@ -38,27 +36,26 @@ public class NoticeDAO {
      * 添加通知
      *
      * @param id 用户id
-     * @param courseKey 课程主键
+     * @param courseId 课程id
      * @param message 通知内容
      * @param type 通知类型
      * @throws DataAccessException 数据库访问出错
      */
-    public void addNotice(String id, CourseKey courseKey, String message, int type) throws DataAccessException {
-        Object[] args = new Object[] {id, courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), message, type, new Date()};
+    public void addNotice(String id, int courseId, String message, int type) throws DataAccessException {
+        Object[] args = new Object[] {id, courseId, message, type, new Date()};
         jdbcTemplate.update(ADD_NOTICE_SQL, args);
     }
 
     /**
      * 获取教师ID
      *
-     * @param courseKey 课程主键
+     * @param courseId 课程id
      * @return 教师ID
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public String getTeacherID(CourseKey courseKey) throws SQLException, DataAccessException {
-        Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        return jdbcTemplate.query(GET_TEACHER_ID_SQL, args, new ResultSetExtractor<String>() {
+    public String getTeacherID(int courseId) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_TEACHER_ID_SQL, new Object[] {courseId}, new ResultSetExtractor<String>() {
             @Override
             public String extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 resultSet.next();
@@ -70,14 +67,13 @@ public class NoticeDAO {
     /**
      * 获取学生ID
      *
-     * @param courseKey 课程主键
+     * @param courseId 课程id
      * @return 学生ID列表
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<String> getStudentIdList(CourseKey courseKey) throws SQLException, DataAccessException {
-        Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        return jdbcTemplate.query(GET_STUDENT_ID_LIST_SQL, args, new ResultSetExtractor<ArrayList<String>>() {
+    public ArrayList<String> getStudentIdList(int courseId) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_STUDENT_ID_LIST_SQL, new Object[] {courseId}, new ResultSetExtractor<ArrayList<String>>() {
             @Override
             public ArrayList<String> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 ArrayList<String> studentIdList = new ArrayList<String>();
@@ -92,28 +88,31 @@ public class NoticeDAO {
     }
 
     /**
-     * 获取获取某一课程的某一类型通知
+     * 获取通知列表
      *
-     * @param id 用户id
-     * @param courseKey 课程主键
-     * @param type 通知类型
-     * @return 该课程的该类型的所有通知
+     * @param userId 用户id
+     * @return 通知列表
      */
-    public DetailNotice getDetailNotice(String id, CourseKey courseKey, int type) {
-        Object[] args = new Object[] {id, courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), type};
-        return jdbcTemplate.query(GET_DETAIL_NOTICE_SQL, args, new ResultSetExtractor<DetailNotice>() {
+    public ArrayList<Notice> getNotices(final String userId) {
+        return jdbcTemplate.query(GET_DETAIL_NOTICE_SQL, new Object[] {userId}, new ResultSetExtractor<ArrayList<Notice>>() {
             @Override
-            public DetailNotice extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                DetailNotice detailNotice = new DetailNotice();
+            public ArrayList<Notice> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                ArrayList<Notice> notices = new ArrayList<Notice>();
 
                 while (resultSet.next()) {
-                    detailNotice.getMessageList().add(resultSet.getString(SqlService.NOTICE_MESSAGE));
-                    detailNotice.getMessageIdList().add(resultSet.getInt(SqlService.NOTICE_ID));
-                    detailNotice.getMessageDateList().add(resultSet.getDate(SqlService.NOTICE_DATE));
-                    detailNotice.setTotalNumber(detailNotice.getTotalNumber() + 1);
+                    Notice notice = new Notice();
+
+                    notice.setId(resultSet.getInt(SqlService.NOTICE_ID));
+                    notice.setUserId(userId);
+                    notice.setCourseId(resultSet.getInt(SqlService.NOTICE_COURSE_ID));
+                    notice.setMessage(resultSet.getString(SqlService.NOTICE_MESSAGE));
+                    notice.setType(resultSet.getInt(SqlService.NOTICE_TYPE));
+                    notice.setDate(resultSet.getDate(SqlService.NOTICE_DATE));
+
+                    notices.add(notice);
                 }
 
-                return detailNotice;
+                return notices;
             }
         });
     }
@@ -121,7 +120,7 @@ public class NoticeDAO {
     /**
      * 删除通知
      *
-     * @param id 通知的message_id
+     * @param id notice id
      * @throws DataAccessException 数据库访问出错
      */
     public void removeNotice(int id) throws DataAccessException {

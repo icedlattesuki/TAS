@@ -2,7 +2,6 @@ package com.se.comment.domain;
 
 //import packages
 import java.util.Date;
-import com.se.global.domain.CourseKey;
 import com.se.global.domain.User;
 
 /**
@@ -12,7 +11,7 @@ import com.se.global.domain.User;
  */
 public class Comment {
     private int commentId;
-    private CourseKey courseKey;
+    private int courseId;
     private User user;
     private Date date;
     private String content;
@@ -25,12 +24,12 @@ public class Comment {
         this.commentId = commentId;
     }
 
-    public CourseKey getCourseKey() {
-        return courseKey;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseKey(CourseKey courseKey) {
-        this.courseKey = courseKey;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public User getUser() {

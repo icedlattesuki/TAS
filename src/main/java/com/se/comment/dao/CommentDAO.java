@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import com.se.comment.domain.Comment;
-import com.se.global.domain.CourseKey;
 import com.se.global.domain.User;
 import com.se.global.service.SqlService;
 
@@ -23,9 +22,9 @@ import com.se.global.service.SqlService;
 public class CommentDAO {
     private JdbcTemplate jdbcTemplate;
     private static final String SUBMIT_COMMENT_SQL = "INSERT INTO comment(" + SqlService.COMMENT_USER_ID + "," + SqlService.COMMENT_USER_NAME + "," + SqlService.COMMENT_USER_IMAGE_POSITION +
-            "," + SqlService.courseKeyInColumn() + "," + SqlService.COMMENT_CONTENT + "," + SqlService.COMMENT_DATE +
-            ") VALUES(?,?,?,?,?,?,?,?,?)";
-    private static final String GET_COMMENT_LIST_SQL = "SELECT * FROM comment WHERE " + SqlService.courseKeyInWhereClause() + " ORDER BY date ASC";
+            "," + SqlService.COMMENT_COURSE_ID + "," + SqlService.COMMENT_CONTENT + "," + SqlService.COMMENT_DATE +
+            ") VALUES(?,?,?,?,?,?)";
+    private static final String GET_COMMENT_LIST_SQL = "SELECT * FROM comment WHERE " + SqlService.COMMENT_COURSE_ID + " = ? " + " ORDER BY date ASC";
     private static final String REMOVE_COMMENT_SQL = "DELETE FROM comment WHERE " + SqlService.COMMENT_ID + " = ?";
 
     @Autowired
@@ -35,26 +34,24 @@ public class CommentDAO {
      * 提交留言
      *
      * @param comment Comment对象
+     * @param courseId 课程id
      * @throws DataAccessException 数据库访问出错
      */
-    public void submitComment(Comment comment) throws DataAccessException {
-        CourseKey courseKey = comment.getCourseKey();
+    public void submitComment(Comment comment, int courseId) throws DataAccessException {
         User user = comment.getUser();
-        Object[] args = new Object[] {user.getId(), user.getName(), user.getImageLocation(), courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace(), comment.getContent(), comment.getDate()};
-        System.out.println(GET_COMMENT_LIST_SQL);
+        Object[] args = new Object[] {user.getId(), user.getName(), user.getImageLocation(), courseId, comment.getContent(), comment.getDate()};
         jdbcTemplate.update(SUBMIT_COMMENT_SQL, args);
     }
 
     /**
      * 获取留言列表
      *
-     * @param courseKey 当前课程的主键
+     * @param courseId 课程id
      * @return 留言列表
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<Comment> getCommentList(final CourseKey courseKey) throws DataAccessException {
-        Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
-        return jdbcTemplate.query(GET_COMMENT_LIST_SQL, args, new ResultSetExtractor<ArrayList<Comment>>() {
+    public ArrayList<Comment> getCommentList(final int courseId) throws DataAccessException {
+        return jdbcTemplate.query(GET_COMMENT_LIST_SQL, new Object[] {courseId}, new ResultSetExtractor<ArrayList<Comment>>() {
             @Override
             public ArrayList<Comment> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                 ArrayList<Comment> commentList = new ArrayList<Comment>();
@@ -64,7 +61,7 @@ public class CommentDAO {
                     comment.setCommentId(resultSet.getInt(SqlService.COMMENT_ID));
                     comment.setContent(resultSet.getString(SqlService.COMMENT_CONTENT));
                     comment.setDate(resultSet.getDate(SqlService.COMMENT_DATE));
-                    comment.setCourseKey(courseKey);
+                    comment.setCourseId(courseId);
 
                     User user = new User();
                     user.setId(resultSet.getString(SqlService.COMMENT_USER_ID));

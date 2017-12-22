@@ -14,7 +14,6 @@ import java.util.Date;
 import com.se.notice.service.NoticeService;
 import com.se.course.resource.material.dao.MaterialDAO;
 import com.se.course.resource.material.domain.Material;
-import com.se.global.domain.CourseKey;
 import com.se.global.domain.User;
 import com.se.global.service.FileService;
 import com.se.global.service.SessionService;
@@ -41,30 +40,30 @@ public class MaterialService extends FileService {
      *
      * @param session 当前会话
      * @param file 文件
+     * @param courseId 课程id
      * @return true表示上传成功，false表示上传失败
      */
-    public boolean upload(HttpSession session, MultipartFile file) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
+    public boolean upload(HttpSession session, MultipartFile file, int courseId) {
         User user = SessionService.getUser(session);
 
-        if (isFileExist(getDirPath(courseKey) + file.getOriginalFilename())) {
-            int fileId = materialDAO.getFileId(getDirPath(courseKey).substring(FileService.ROOT_PATH.length())+ file.getOriginalFilename());
-            remove(session, fileId);
+        if (isFileExist(getDirPath(courseId) + file.getOriginalFilename())) {
+            int fileId = materialDAO.getFileId(getDirPath(courseId).substring(FileService.ROOT_PATH.length())+ file.getOriginalFilename());
+            remove(session, courseId, fileId);
         }
 
-        if (store(file, getDirPath(courseKey))) {
+        if (store(file, getDirPath(courseId))) {
             Material material = new Material();
             material.setName(file.getOriginalFilename());
-            material.setLocation(getDirPath(courseKey).substring(FileService.ROOT_PATH.length()) + file.getOriginalFilename());
+            material.setLocation(getDirPath(courseId).substring(FileService.ROOT_PATH.length()) + file.getOriginalFilename());
             material.setSize(file.getSize());
             material.setDate(new Date());
-            material.setCourseKey(courseKey);
+            material.setCourseId(courseId);
             material.setUserId(user.getId());
 
             try {
                 materialDAO.upload(material);
                 String message = "新上传课件：" + file.getOriginalFilename();
-                noticeService.addNotice(session, message, NoticeService.MATERIAL_NOTICE_INDEX);
+                noticeService.addNotice(session, courseId, message, NoticeService.MATERIAL_NOTICE_INDEX);
                 return true;
             } catch (Exception exception) {
                 logger.error("upload fail! " + exception.getCause());
@@ -78,42 +77,39 @@ public class MaterialService extends FileService {
     /**
      * 获取资料列表
      *
-     * @param session 当前会话
+     * @param courseId 课程id
      * @return 资料列表
      */
-    public ArrayList<Material> getMaterials(HttpSession session) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
-        return (ArrayList<Material>) getFiles(courseKey, materialDAO);
+    public ArrayList<Material> getMaterials(int courseId) {
+        return (ArrayList<Material>) getFiles(courseId, materialDAO);
     }
 
     /**
      * 下载资料
      *
-     * @param session  当前会话
+     * @param courseId  课程id
      * @param fileId   文件id
      * @param response 响应
      */
-    public void download(HttpSession session, int fileId, HttpServletResponse response) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
-        download(fileId, getDirPath(courseKey), response);
+    public void download(int courseId, int fileId, HttpServletResponse response) {
+        download(fileId, getDirPath(courseId), response);
     }
 
     /**
      * 删除资料
      *
      * @param session 当前会话
+     * @param courseId 课程id
      * @param fileId 文件id
      * @return true表示删除成功，false表示删除失败
      */
-    public boolean remove(HttpSession session, int fileId) {
+    public boolean remove(HttpSession session, int courseId, int fileId) {
         User user = SessionService.getUser(session);
-        CourseKey courseKey = SessionService.getCourseKey(session);
-        return remove(fileId, user.getId(), getDirPath(courseKey), materialDAO);
+        return remove(fileId, user.getId(), getDirPath(courseId), materialDAO);
     }
 
     //获取目录绝对路径(不包括文件名)
-    private String getDirPath(CourseKey courseKey) {
-        return FileService.ROOT_PATH + File.separator +"material" + File.separator +courseKey.getId() + File.separator +
-                courseKey.getSemester() + File.separator + courseKey.getTime() + File.separator + courseKey.getPlace() + File.separator;
+    private String getDirPath(int courseId) {
+        return FileService.ROOT_PATH + File.separator +"material" + File.separator + courseId + File.separator;
     }
 }

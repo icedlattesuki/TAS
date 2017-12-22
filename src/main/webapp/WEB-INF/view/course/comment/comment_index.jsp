@@ -8,7 +8,8 @@
 --%>
 <%--@elvariable id="user" type="com.se.global.domain.User"--%>
 <%--@elvariable id="comment" type="com.se.comment.domain.Comment"--%>
-<%--@elvariable id="commentList" type="java.util.ArrayList<Comment>"--%>
+<%--@elvariable id="comments" type="java.util.ArrayList<Comment>"--%>
+<%--@elvariable id="courseId" type="int"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,18 +18,18 @@
 </head>
 <body>
 <h4>${error}</h4>
-<c:forEach var="comment" items="${commentList}" varStatus="status">
+<c:forEach var="comment" items="${comments}" varStatus="status">
     <div>
         <img class="img-circle" src="${comment.user.imageLocation}" height="42" width="42"/>
         <h4>${comment.user.name}</h4>
         <p>${comment.content}</p>
         <h6>${comment.date}</h6>
         <c:if test="${user.type == 2}">
-            <a href="/course/comment/remove?comment_index=${status.index}">删除</a>
+            <a href="/course/${courseId}/comment/remove?comment_index=${status.index}">删除</a>
         </c:if>
     </div>
 </c:forEach>
-<form action="/course/comment/submit" method="post">
+<form action="/course/${courseId}/comment/submit" method="post">
     留言：
     <input type="text" name="content" />
     <input type="submit" value="submit">

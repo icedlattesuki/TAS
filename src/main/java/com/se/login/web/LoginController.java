@@ -83,17 +83,17 @@ public class LoginController {
     @RequestMapping("/index")
     public String indexPage(HttpSession session, Model model) {
         User user = SessionService.getUser(session);
-        ArrayList<Course> courseList = loginSuccessService.getCourseList(session);
-        SessionService.setCourseList(session, courseList);
-        ModelService.setCourseList(model, courseList);
+        ArrayList<Course> courses = loginSuccessService.getCourseList(session);
+        SessionService.setCourses(session, courses);
+        ModelService.setCourses(model, courses);
 
         if (user == null) {
             return "user/index/passenger_index";
         }
 
-        Notice notice = noticeService.getNotice(session);
-        SessionService.setNotice(session, notice);
-        ModelService.setNotice(model, notice);
+        ArrayList<Notice> notices = noticeService.getNotices(session);
+        SessionService.setNotices(session, notices);
+        ModelService.setNoticeTotalNum(model, notices.size());
 
         if (user.getType() == User.STUDENT_TYPE) {
             return "user/index/student_index";

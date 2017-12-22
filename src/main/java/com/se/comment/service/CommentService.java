@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import com.se.comment.dao.CommentDAO;
 import com.se.comment.domain.Comment;
-import com.se.global.domain.CourseKey;
 import com.se.global.service.SessionService;
 import com.se.global.domain.User;
 
@@ -36,23 +35,23 @@ public class CommentService {
      * 提交留言
      *
      * @param session 当前会话
+     * @param courseId 课程id
      * @param content 留言内容
      * @return true表示提交成功，false表示提交失败
      */
-    public boolean submitComment(HttpSession session, String content) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
+    public boolean submitComment(HttpSession session, int courseId, String content) {
         User user = SessionService.getUser(session);
 
         Comment comment = new Comment();
-        comment.setCourseKey(courseKey);
+        comment.setCourseId(courseId);
         comment.setUser(user);
         comment.setDate(new Date());
         comment.setContent(content);
 
         try {
-            commentDAO.submitComment(comment);
+            commentDAO.submitComment(comment, courseId);
             String message = "新留言:" + content.substring(0, content.length() > 20 ? 20 : content.length());
-            noticeService.addNotice(session, message, NoticeService.COMMENT_NOTICE_INDEX);
+            noticeService.addNotice(session, courseId, message, NoticeService.COMMENT_NOTICE_INDEX);
             return true;
         } catch (Exception exception) {
             logger.error("submitComment fail! " + exception.getCause());
@@ -63,14 +62,12 @@ public class CommentService {
     /**
      * 获取留言列表
      *
-     * @param session 当前会话
+     * @param courseId 课程id
      * @return 留言列表
      */
-    public ArrayList<Comment> getCommentList(HttpSession session) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
-
+    public ArrayList<Comment> getCommentList(int courseId) {
         try {
-            return commentDAO.getCommentList(courseKey);
+            return commentDAO.getCommentList(courseId);
         } catch (Exception exception) {
             logger.error("getCommentList fail! " + exception.getCause());
             return new ArrayList<Comment>();
@@ -85,8 +82,8 @@ public class CommentService {
      * @return true表示删除成功，false表示删除失败
      */
     public boolean removeComment(HttpSession session, int commentIndex) {
-        ArrayList<Comment> commentList = SessionService.getCommentList(session);
-        Comment comment = commentList.get(commentIndex);
+        ArrayList<Comment> comments = SessionService.getComments(session);
+        Comment comment = comments.get(commentIndex);
 
         try {
             commentDAO.removeComment(comment.getCommentId());

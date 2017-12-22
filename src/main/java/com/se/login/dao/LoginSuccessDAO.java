@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import com.se.global.domain.CourseKey;
 import com.se.global.domain.Course;
 
 /**
@@ -21,7 +20,7 @@ import com.se.global.domain.Course;
 @Repository
 public class LoginSuccessDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String GET_COURSE_LIST_SQL = "SELECT * FROM course WHERE " + SqlService.courseKeyInWhereClause1();
+    private static final String GET_COURSE_LIST_SQL = "SELECT * FROM course WHERE " + SqlService.COURSE_ID + " = ?";
     private static final String GET_ALL_COURSE_SQL = "SELECT * FROM course";
 
     @Autowired
@@ -32,22 +31,16 @@ public class LoginSuccessDAO {
     /**
      * 获取课程列表
      *
-     * @param courseKeyList 课程主键列表
+     * @param courseIds 课程id列表
      * @return 课程列表
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<Course> getCourseList(ArrayList<CourseKey> courseKeyList) throws SQLException, DataAccessException {
-        ArrayList<Course> courseList = new ArrayList<Course>();
+    public ArrayList<Course> getCourseList(ArrayList<Integer> courseIds) throws SQLException, DataAccessException {
+        ArrayList<Course> courses = new ArrayList<Course>();
 
-        for (CourseKey courseKey : courseKeyList) {
-            String id = courseKey.getId();
-            String semester = courseKey.getSemester();
-            String time = courseKey.getTime();
-            String place = courseKey.getPlace();
-            Object[] args = new Object[]{id, semester, time, place};
-
-            Course course = jdbcTemplate.query(GET_COURSE_LIST_SQL, args, new ResultSetExtractor<Course>() {
+        for (int courseId : courseIds) {
+            Course course = jdbcTemplate.query(GET_COURSE_LIST_SQL, new Object[] {courseId}, new ResultSetExtractor<Course>() {
                 @Override
                 public Course extractData(ResultSet resultSet) throws SQLException, DataAccessException {
                     resultSet.next();
@@ -55,10 +48,10 @@ public class LoginSuccessDAO {
                 }
             });
 
-            courseList.add(course);
+            courses.add(course);
         }
 
-        return courseList;
+        return courses;
     }
 
     /**
@@ -86,16 +79,15 @@ public class LoginSuccessDAO {
 
     private Course setCourse(ResultSet resultSet) throws SQLException {
         Course course = new Course();
-        CourseKey courseKey = new CourseKey();
 
-        courseKey.setId(resultSet.getString(SqlService.COURSE_ID));
-        courseKey.setSemester(resultSet.getString(SqlService.COURSE_SEMESTER));
-        courseKey.setTime(resultSet.getString(SqlService.COURSE_TIME));
-        courseKey.setPlace(resultSet.getString(SqlService.COURSE_PLACE));
-        course.setCourseKey(courseKey);
+        course.setId(resultSet.getInt(SqlService.COURSE_ID));
+        course.setCode(resultSet.getString(SqlService.COURSE_CODE));
         course.setName(resultSet.getString(SqlService.COURSE_NAME));
         course.setCredit(resultSet.getFloat(SqlService.COURSE_CREDIT));
         course.setCollege(resultSet.getString(SqlService.COURSE_COLLEGE));
+        course.setSemester(resultSet.getString(SqlService.COURSE_SEMESTER));
+        course.setTime(resultSet.getString(SqlService.COURSE_TIME));
+        course.setPlace(resultSet.getString(SqlService.COURSE_PLACE));
         course.setIntroduction(resultSet.getString(SqlService.COURSE_NTRODUCTION));
         course.setLike(resultSet.getInt(SqlService.COURSE_LIKE_NUMBER));
 

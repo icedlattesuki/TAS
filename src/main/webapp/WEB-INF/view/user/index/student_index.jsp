@@ -1,7 +1,7 @@
 <%--@elvariable id="user" type="com.se.global.domain.User"--%>
 <%--@elvariable id="course" type="com.se.global.domain.Course"--%>
-<%--@elvariable id="courseList" type="java.util.ArrayList<Course>"--%>
-<%--@elvariable id="notice" type="com.se.notice.domain.Notice"--%>
+<%--@elvariable id="courses" type="java.util.ArrayList<Course>"--%>
+<%--@elvariable id="noticeTotalNum" type="int"--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -37,7 +37,7 @@
                             <i class="material-icons">
                                 notifications
                                 <small class="notification-badge">
-                                    ${notice.totalNumber}
+                                    ${noticeTotalNum}
                                 </small>
                             </i>
                         </a>
@@ -81,7 +81,7 @@
         <div class="section">
 
         </div>
-        <c:forEach var="course" items="${courseList}" varStatus="status">
+        <c:forEach var="course" items="${courses}" varStatus="status">
             <c:if test="${status.index % 3 == 0}">
                 <div class="row">
             </c:if>
@@ -90,10 +90,10 @@
                     <div class="card-content black-text">
                         <span class="card-title">${course.name}</span>
                         <p>
-                            ${course.courseKey.semester += " " += course.courseKey.time}
+                            ${course.semester += " " += course.time}
                         </p>
                         <p>
-                            ${course.courseKey.place}
+                            ${course.place}
                         </p>
                         <p>
                             ${course.credit}学分
@@ -103,7 +103,7 @@
                         </p>
                     </div>
                     <div class="card-action">
-                        <a href="/course/index?courseIndex=${status.index}" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan box-shadow">进入管理</a>
+                        <a href="/course/${course.id}" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan box-shadow">进入管理</a>
                     </div>
                 </div>
             </div>

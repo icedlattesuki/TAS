@@ -6,8 +6,9 @@
   Time: 上午11:36
   To change this template use File | Settings | File Templates.
 --%>
-<%--@elvariable id="messageList" type="java.util.ArrayList<String>"--%>
-<%--@elvariable id="messageURL" type="String"--%>
+<%--@elvariable id="notice" type="com.se.notice.domain.Notice"--%>
+<%--@elvariable id="notices" type="java.util.ArrayList<com.se.notice.domain.Notice>"--%>
+<%--@elvariable id="noticeURL" type="String"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,9 +16,9 @@
 </head>
 <body>
 <ul>
-    <c:forEach var="message" items="${messageList}" varStatus="status">
+    <c:forEach var="notice" items="${notices}" varStatus="status">
         <li>
-            <a href="${messageURL += "?message_index=" += status.index}">${message}</a>
+            <a href="${"/course/" += notice.courseId += noticeURL += "?notice_id=" += notice.id}">${notice.message}</a>
         </li>
     </c:forEach>
 </ul>

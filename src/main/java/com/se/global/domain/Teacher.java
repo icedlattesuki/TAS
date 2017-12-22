@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Teacher extends User {
     private String title;
-    private ArrayList<CourseKey> teaches;
+    private ArrayList<Integer> teaches;
 
     public String getTitle() {
         return title;
@@ -21,11 +21,11 @@ public class Teacher extends User {
         this.title = title;
     }
 
-    public ArrayList<CourseKey> getTeaches() {
+    public ArrayList<Integer> getTeaches() {
         return teaches;
     }
 
-    public void setTeaches(ArrayList<CourseKey> teaches) {
+    public void setTeaches(ArrayList<Integer> teaches) {
         this.teaches = teaches;
     }
 }

@@ -8,11 +8,10 @@ import java.util.ArrayList;
 import com.se.global.domain.User;
 import com.se.notice.domain.Notice;
 import com.se.global.domain.Course;
-import com.se.global.domain.CourseKey;
 
 /**
  * @author Yusen
- * @version 1.0
+ * @version 1.1
  * @since 1.0
  */
 @Service
@@ -21,69 +20,32 @@ public class SessionService {
         return (User)session.getAttribute("user");
     }
 
-    public static CourseKey getCourseKey(HttpSession session) {
-        ArrayList<Course> courseList = getCourseList(session);
-        Object object = session.getAttribute("courseIndex");
-
-        if (object != null) {
-            return courseList.get((Integer)object).getCourseKey();
-        } else if (session.getAttribute("courseKey") != null) {
-            return (CourseKey)session.getAttribute("courseKey");
-        }
-
-        return null;
+    public static ArrayList<Course> getCourses(HttpSession session) {
+        return (ArrayList<Course>)session.getAttribute("courses");
     }
 
-    public static ArrayList<Course> getCourseList(HttpSession session) {
-        return (ArrayList<Course>)session.getAttribute("courseList");
+    public static ArrayList<Notice> getNotices(HttpSession session) {
+        return (ArrayList<Notice>) session.getAttribute("notices");
     }
 
-    public static Notice getNotice(HttpSession session) {
-        return (Notice)session.getAttribute("notice");
-    }
-
-    public static int getCourseNoticeIndex(HttpSession session) {
-        return (Integer)session.getAttribute("courseNoticeIndex");
-    }
-
-    public static int getDetailNoticeType(HttpSession session) {
-        return (Integer)session.getAttribute("detailNoticeType");
-    }
-
-    public static ArrayList<Comment> getCommentList(HttpSession session) {
-        return (ArrayList<Comment>)session.getAttribute("commentList");
+    public static ArrayList<Comment> getComments(HttpSession session) {
+        return (ArrayList<Comment>)session.getAttribute("comments");
     }
 
     public static void setUser(HttpSession session, User user) {
         session.setAttribute("user", user);
     }
 
-    public static void setCourseKey(HttpSession session, CourseKey courseKey) {
-        session.setAttribute("courseKey", courseKey);
+    public static void setCourses(HttpSession session, ArrayList<Course> courses) {
+        session.setAttribute("courses", courses);
     }
 
-    public static void setCourseList(HttpSession session, ArrayList<Course> courseList) {
-        session.setAttribute("courseList", courseList);
+    public static void setNotices(HttpSession session, ArrayList<Notice> notices) {
+        session.setAttribute("notices", notices);
     }
 
-    public static void setCourseIndex(HttpSession session, int courseIndex) {
-        session.setAttribute("courseIndex", courseIndex);
-    }
-
-    public static void setNotice(HttpSession session, Notice notice) {
-        session.setAttribute("notice", notice);
-    }
-
-    public static void setDetailNoticeType(HttpSession session, int detailNoticeType) {
-        session.setAttribute("detailNoticeType", detailNoticeType);
-    }
-
-    public static void setCourseNoticeIndex(HttpSession session, int courseNoticeIndex) {
-        session.setAttribute("courseNoticeIndex", courseNoticeIndex);
-    }
-
-    public static void setCommentList(HttpSession session, ArrayList<Comment> commentList) {
-        session.setAttribute("commentList", commentList);
+    public static void setComments(HttpSession session, ArrayList<Comment> comments) {
+        session.setAttribute("comments", comments);
     }
 
     public static void removeUser(HttpSession session) {

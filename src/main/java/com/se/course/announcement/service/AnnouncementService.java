@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import com.se.course.announcement.dao.AnnouncementDAO;
-import com.se.global.domain.CourseKey;
 import com.se.course.announcement.domain.Announcement;
-import com.se.global.service.SessionService;
 import com.se.notice.service.NoticeService;
 
 /**
@@ -39,13 +37,11 @@ public class AnnouncementService {
      * @param content 公告内容
      * @return true表示上传成功，false表示上传失败
      */
-    public boolean uploadAnnouncement(HttpSession session, String title, String content) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
-
+    public boolean uploadAnnouncement(HttpSession session, int courseId, String title, String content) {
         try {
-            announcementDAO.uploadAnnouncement(courseKey, title, content);
+            announcementDAO.uploadAnnouncement(courseId, title, content);
             String message = "新公告发布:" + title;
-            noticeService.addNotice(session, message, NoticeService.ANNOUNCEMENT_NOTICE_INDEX);
+            noticeService.addNotice(session, courseId, message, NoticeService.ANNOUNCEMENT_NOTICE_INDEX);
             return true;
         } catch (DataAccessException exception) {
             logger.error("uploadAnnouncement fail! " + exception.getCause());
@@ -56,18 +52,12 @@ public class AnnouncementService {
     /**
      * 获取最新公告
      *
-     * @param session 当前会话
+     * @param courseId 课程id
      * @return 最新的公告对象
      */
-    public Announcement getLatestAnnouncement(HttpSession session) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
-
-        if (courseKey == null) {
-            return new Announcement();
-        }
-
+    public Announcement getLatestAnnouncement(int courseId) {
         try {
-            return announcementDAO.getLatestAnnouncement(courseKey);
+            return announcementDAO.getLatestAnnouncement(courseId);
         } catch (Exception exception) {
             logger.error("getLatestAnnouncement fail! " + exception.getMessage());
             return new Announcement();
@@ -77,14 +67,12 @@ public class AnnouncementService {
     /**
      * 获取公告列表
      *
-     * @param session 当前会话
+     * @param courseId 课程id
      * @return 公告列表
      */
-    public ArrayList<Announcement> getAnnouncementList(HttpSession session) {
-        CourseKey courseKey = SessionService.getCourseKey(session);
-
+    public ArrayList<Announcement> getAnnouncementList(int courseId) {
         try {
-            return announcementDAO.getAnnouncementList(courseKey);
+            return announcementDAO.getAnnouncementList(courseId);
         } catch (Exception exception) {
             logger.error("getAnnouncementList fail! " + exception.getCause());
             return new ArrayList<Announcement>();

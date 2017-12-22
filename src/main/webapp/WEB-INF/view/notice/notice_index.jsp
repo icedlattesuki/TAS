@@ -6,8 +6,9 @@
   Time: 上午11:00
   To change this template use File | Settings | File Templates.
 --%>
-<%--@elvariable id="courseNotice" type="com.se.notice.domain.CourseNotice"--%>
-<%--@elvariable id="courseNoticeList" type="java.util.ArrayList<CourseNotice>"--%>
+<%--@elvariable id="course" type="com.se.global.domain.Course"--%>
+<%--@elvariable id="courses" type="java.util.ArrayList<com.se.global.domain.Course>"--%>
+<%--@elvariable id="noticeCourseNum" type="java.util.ArrayList<Integer>"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -15,8 +16,8 @@
 </head>
 <body>
 <ul>
-    <c:forEach var="courseNotice" items="${courseNoticeList}" varStatus="status">
-        <li>${courseNotice.course.name},${courseNotice.totalNumber}条未读消息,<a href="/notice/course?course_notice_index=${status.index}">点击查看</a></li>
+    <c:forEach var="course" items="${courses}" varStatus="status">
+        <li>${course.name},${noticeCourseNum.get(status.index)}条未读消息,<a href="/notice/${course.id}">点击查看</a></li>
     </c:forEach>
 </ul>
 </body>

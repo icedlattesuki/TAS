@@ -4,6 +4,7 @@ package com.se.course;
 import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
@@ -28,19 +29,14 @@ public class CourseController {
      * 显示课程功能界面
      *
      * @param session 当前会话
-     * @param request 当前请求
      * @param model Model对象
      * @return 课程功能界面逻辑视图名
      */
-    @RequestMapping("/course/index")
-    public String indexPage(HttpSession session, HttpServletRequest request, Model model) {
-        if (request.getParameter("courseIndex") != null) {
-            int courseIndex = Integer.parseInt(request.getParameter("courseIndex"));
-            SessionService.setCourseIndex(session, courseIndex);
-        }
-
-        Announcement announcement = announcementService.getLatestAnnouncement(session);
+    @RequestMapping("/course/{courseId}")
+    public String indexPage(HttpSession session, @PathVariable int courseId, Model model) {
+        Announcement announcement = announcementService.getLatestAnnouncement(courseId);
         model.addAttribute("announcement", announcement);
+        model.addAttribute("courseId", courseId);
 
         User user = SessionService.getUser(session);
 
