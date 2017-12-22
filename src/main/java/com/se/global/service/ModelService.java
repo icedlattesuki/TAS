@@ -1,18 +1,17 @@
 package com.se.global.service;
 
 //import packages
-import com.se.comment.domain.Comment;
+import com.se.course.comment.domain.Comment;
 import com.se.course.resource.material.domain.Material;
 import com.se.course.resource.video.domain.Video;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import java.util.ArrayList;
-import java.util.Date;
+
 import com.se.course.announcement.domain.Announcement;
 import com.se.global.domain.User;
 import com.se.global.domain.Course;
 import com.se.notice.domain.Notice;
-import com.se.notice.service.NoticeService;
 
 /**
  * @author Yusen

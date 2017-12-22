@@ -1,8 +1,6 @@
 package com.se.user.password.web;
 
 //import packages
-import com.se.global.service.ModelService;
-import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +10,9 @@ import javax.servlet.http.HttpSession;
 import com.se.global.domain.User;
 import com.se.user.email.domain.EmailContext;
 import com.se.user.email.service.EmailService;
-import com.se.user.password.service.PasswordUpdateService;
+import com.se.global.service.ModelService;
+import com.se.global.service.SessionService;
+import com.se.user.password.service.PasswordService;
 
 /**
  * @author Yusen
@@ -21,17 +21,13 @@ import com.se.user.password.service.PasswordUpdateService;
  */
 @Controller
 public class PasswordController {
-    private PasswordUpdateService passwordUpdateService;
-    private EmailService emailService;
-    private static final String DEFAULT_PASSWORD = "123456";
+    private PasswordService passwordService;
+    private final String DEFAULT_PASSWORD = "123456";
 
     @Autowired
-    public void setPasswordUpdateService(PasswordUpdateService passwordUpdateService) {
-        this.passwordUpdateService = passwordUpdateService;
+    public void setPasswordService(PasswordService passwordService) {
+        this.passwordService = passwordService;
     }
-
-    @Autowired
-    public void setEmailService(EmailService emailService) { this.emailService = emailService; }
 
     /**
      * 显示密码修改界面
@@ -40,7 +36,7 @@ public class PasswordController {
      * @return 若用户未设置邮箱则返回邮箱设置界面逻辑视图名，否则返回密码修改界面逻辑视图名
      */
     @RequestMapping("/user/password-modify")
-    public String passwordModifyPage(HttpSession session) {
+    public String modifyPage(HttpSession session) {
         User user = SessionService.getUser(session);
         String email = user.getEmail();
 
@@ -61,15 +57,15 @@ public class PasswordController {
      * @return 若修改失败则返回密码修改界面逻辑视图名，否则返回修改成功界面逻辑视图名
      */
     @RequestMapping("/user/password-modify/modify")
-    public String modifyPassword(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword1") String newPassword, Model model) {
+    public String modify(HttpSession session, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword1") String newPassword, Model model) {
         User user = SessionService.getUser(session);
 
-        if (!passwordUpdateService.identifyPassword(user.getId(), oldPassword)) {
+        if (!passwordService.identifyPassword(user.getId(), oldPassword)) {
             ModelService.setError(model, "密码错误!");
             return "user/password/password_modify";
         }
 
-        if (!passwordUpdateService.updatePassword(session, newPassword)) {
+        if (!passwordService.update(session, newPassword)) {
             ModelService.setError(model, "更新密码出错!");
             return "user/password/password_modify";
         }
@@ -84,7 +80,7 @@ public class PasswordController {
      * @return 密码重置界面逻辑视图名
      */
     @RequestMapping("/user/password-reset")
-    public String passwordResetPage() {
+    public String resetPage() {
         return "user/password/password_reset";
     }
 
@@ -97,22 +93,15 @@ public class PasswordController {
      * @return 响应成功则返回邮件发送成功界面逻辑视图名，否则返回密码重置界面逻辑视图名
      */
     @RequestMapping("/user/password-reset/to-reset")
-    public String toResetPassword(HttpSession session, @RequestParam("id") String id, @RequestParam("email") String email, Model model) {
-        int type = passwordUpdateService.identifyEmail(id, email);
+    public String toReset(HttpSession session, @RequestParam("id") String id, @RequestParam("email") String email, Model model) {
+        int type = passwordService.identifyEmail(id, email);
 
         if (type == 0) {
             ModelService.setError(model, "学号或邮箱不正确!");
             return "/user/password/password_reset";
         }
 
-        User user = new User();
-        user.setId(id);
-        user.setType(type);
-
-        EmailContext emailContext = new EmailContext();
-        emailContext.setText("<html><body><a href=\"http://localhost:8080/user/password-reset/reset?id=" + emailContext.getUuid() + "\">点击该链接即可成功重置密码！</a></body></html>");
-
-        if (emailService.sendEmail(session, email, emailContext)) {
+        if (passwordService.sendEmail(session, id, type, email)) {
             return "user/email/email_send_success";
         } else {
             ModelService.setError(model, "发送邮件失败!");
@@ -128,10 +117,10 @@ public class PasswordController {
      * @return 密码重置完成界面逻辑视图名
      */
     @RequestMapping("/user/password-reset/reset")
-    public String resetPassword(HttpSession session, @RequestParam("id") String uuid, Model model) {
-        User user = emailService.getUser(uuid);
+    public String reset(HttpSession session, @RequestParam("id") String uuid, Model model) {
+        User user = passwordService.getUser(uuid);
 
-        if (user != null && passwordUpdateService.updatePassword(session, DEFAULT_PASSWORD)) {
+        if (user != null && passwordService.update(session, DEFAULT_PASSWORD)) {
             ModelService.setInfo(model, "密码重置成功!");
         } else {
             ModelService.setInfo(model, "密码重置失败!");

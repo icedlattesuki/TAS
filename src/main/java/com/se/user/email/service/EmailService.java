@@ -24,9 +24,9 @@ import com.se.user.email.domain.EmailContext;
  */
 @Service
 public class EmailService {
-    private static final Logger logger = LoggerFactory.getLogger("EmailService.class");
-    private static Map<String, User> uuidMap = new HashMap<String, User>();
-    private static final String host = "898592099@qq.com";
+    private final Logger logger = LoggerFactory.getLogger("EmailService.class");
+    private Map<String, User> uuidMap = new HashMap<String, User>();
+    private final String host = "898592099@qq.com";
     private JavaMailSender sender;
     private EmailDAO emailDAO;
 
@@ -44,7 +44,7 @@ public class EmailService {
      * @param emailContext 邮箱上下文，封装将要发送的邮件信息
      * @return true表示发送成功，false表示发送失败
      */
-    public boolean sendEmail(HttpSession session, String email, EmailContext emailContext) {
+    public boolean send(HttpSession session, String email, EmailContext emailContext) {
         User user = SessionService.getUser(session);
         user.setEmail(email);
         uuidMap.put(emailContext.getUuid(), user);
@@ -63,7 +63,7 @@ public class EmailService {
             sender.send(message);
             return true;
         } catch (Exception exception) {
-            logger.error("sendEmail fail! " + exception.getCause());
+            logger.error("send fail! " + exception.getCause());
             return false;
         }
     }
@@ -74,14 +74,14 @@ public class EmailService {
      * @param uuid 用户id对应的随机字符串
      * @return 绑定成功返回对应的User对象，否则返回null
      */
-    public User bindEmail(String uuid) {
+    public User bind(String uuid) {
         User user = uuidMap.get(uuid);
 
         try {
-            emailDAO.updateEmail(user, user.getEmail());
+            emailDAO.update(user, user.getEmail());
             return user;
         } catch (DataAccessException exception) {
-            logger.error("bindEmail fail! " + exception.getCause());
+            logger.error("bind fail! " + exception.getCause());
             return null;
         }
     }
@@ -92,14 +92,14 @@ public class EmailService {
      * @param uuid 用户id对应的随机字符串
      * @return 解绑成功返回对应的User对象，否则返回null
      */
-    public User unbindEmail(String uuid) {
+    public User unbind(String uuid) {
         User user = uuidMap.get(uuid);
 
         try {
-            emailDAO.updateEmail(user, "");
+            emailDAO.update(user, "");
             return user;
         } catch (DataAccessException exception) {
-            logger.error("unbindEmail fail! " + exception.getCause());
+            logger.error("unbind fail! " + exception.getCause());
             return null;
         }
     }

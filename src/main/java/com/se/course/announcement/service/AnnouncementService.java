@@ -21,7 +21,7 @@ import com.se.notice.service.NoticeService;
 public class AnnouncementService {
     private AnnouncementDAO announcementDAO;
     private NoticeService noticeService;
-    private static final Logger logger = LoggerFactory.getLogger("AnnouncementService.class");
+    private final Logger logger = LoggerFactory.getLogger("AnnouncementService.class");
 
     @Autowired
     public void setAnnouncementDAO(AnnouncementDAO announcementDAO) { this.announcementDAO = announcementDAO; }
@@ -37,14 +37,14 @@ public class AnnouncementService {
      * @param content 公告内容
      * @return true表示上传成功，false表示上传失败
      */
-    public boolean uploadAnnouncement(HttpSession session, int courseId, String title, String content) {
+    public boolean upload(HttpSession session, int courseId, String title, String content) {
         try {
-            announcementDAO.uploadAnnouncement(courseId, title, content);
+            announcementDAO.upload(courseId, title, content);
             String message = "新公告发布:" + title;
             noticeService.addNotice(session, courseId, message, NoticeService.ANNOUNCEMENT_NOTICE_INDEX);
             return true;
         } catch (DataAccessException exception) {
-            logger.error("uploadAnnouncement fail! " + exception.getCause());
+            logger.error("upload fail! " + exception.getCause());
             return false;
         }
     }
@@ -70,11 +70,11 @@ public class AnnouncementService {
      * @param courseId 课程id
      * @return 公告列表
      */
-    public ArrayList<Announcement> getAnnouncementList(int courseId) {
+    public ArrayList<Announcement> getAnnouncements(int courseId) {
         try {
-            return announcementDAO.getAnnouncementList(courseId);
+            return announcementDAO.getAnnouncements(courseId);
         } catch (Exception exception) {
-            logger.error("getAnnouncementList fail! " + exception.getCause());
+            logger.error("getAnnouncements fail! " + exception.getCause());
             return new ArrayList<Announcement>();
         }
     }

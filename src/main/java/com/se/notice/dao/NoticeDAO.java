@@ -21,11 +21,11 @@ import com.se.global.service.SqlService;
 @Repository
 public class NoticeDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String GET_TEACHER_ID_SQL = "SELECT * FROM teach WHERE " + SqlService.TEACH_COURSE_ID + " = ?";
-    private static final String GET_STUDENT_ID_LIST_SQL = "SELECT * FROM take WHERE " + SqlService.TAKE_COURSE_ID + " = ?";
-    private static final String ADD_NOTICE_SQL = "INSERT INTO notice(" + SqlService.NOTICE_USER_ID + "," + SqlService.NOTICE_COURSE_ID + "," + SqlService.NOTICE_MESSAGE + "," + SqlService.NOTICE_TYPE + "," + SqlService.NOTICE_DATE + ") VALUES(?,?,?,?,?)";
-    private static final String GET_DETAIL_NOTICE_SQL = "SELECT * FROM notice WHERE " + SqlService.NOTICE_USER_ID +" = ?";
-    private static final String REMOVE_NOTICE_SQL = "DELETE FROM notice WHERE " + SqlService.NOTICE_ID + " = ?";
+    private final String GET_TEACHER_ID_SQL = "SELECT * FROM teach WHERE " + SqlService.TEACH_COURSE_ID + " = ?";
+    private final String GET_STUDENT_ID_LIST_SQL = "SELECT * FROM take WHERE " + SqlService.TAKE_COURSE_ID + " = ?";
+    private final String ADD_NOTICE_SQL = "INSERT INTO notice(" + SqlService.NOTICE_USER_ID + "," + SqlService.NOTICE_COURSE_ID + "," + SqlService.NOTICE_MESSAGE + "," + SqlService.NOTICE_TYPE + "," + SqlService.NOTICE_DATE + ") VALUES(?,?,?,?,?)";
+    private final String GET_DETAIL_NOTICE_SQL = "SELECT * FROM notice WHERE " + SqlService.NOTICE_USER_ID +" = ?";
+    private final String REMOVE_NOTICE_SQL = "DELETE FROM notice WHERE " + SqlService.NOTICE_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -41,7 +41,7 @@ public class NoticeDAO {
      * @param type 通知类型
      * @throws DataAccessException 数据库访问出错
      */
-    public void addNotice(String id, int courseId, String message, int type) throws DataAccessException {
+    public void add(String id, int courseId, String message, int type) throws DataAccessException {
         Object[] args = new Object[] {id, courseId, message, type, new Date()};
         jdbcTemplate.update(ADD_NOTICE_SQL, args);
     }
@@ -72,7 +72,7 @@ public class NoticeDAO {
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<String> getStudentIdList(int courseId) throws SQLException, DataAccessException {
+    public ArrayList<String> getStudentIds(int courseId) throws SQLException, DataAccessException {
         return jdbcTemplate.query(GET_STUDENT_ID_LIST_SQL, new Object[] {courseId}, new ResultSetExtractor<ArrayList<String>>() {
             @Override
             public ArrayList<String> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
@@ -123,7 +123,7 @@ public class NoticeDAO {
      * @param id notice id
      * @throws DataAccessException 数据库访问出错
      */
-    public void removeNotice(int id) throws DataAccessException {
+    public void remove(int id) throws DataAccessException {
         jdbcTemplate.update(REMOVE_NOTICE_SQL, id);
     }
 }

@@ -1,8 +1,6 @@
 package com.se.user.info.web;
 
 //import packages
-import com.se.global.service.ModelService;
-import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import com.se.global.domain.User;
-import com.se.user.info.domain.EditableUserInfo;
-import com.se.user.info.service.UserInfoService;
+import com.se.global.service.ModelService;
+import com.se.global.service.SessionService;
+import com.se.user.info.domain.EditableInfo;
+import com.se.user.info.service.InfoService;
 
 /**
  * @author Yusen
@@ -21,11 +21,11 @@ import com.se.user.info.service.UserInfoService;
  * @since 1.0
  */
 @Controller
-public class UserInfoController {
-    private UserInfoService userInfoService;
+public class InfoController {
+    private InfoService infoService;
 
     @Autowired
-    public void setPersonalInfoService(UserInfoService userInfoService) { this.userInfoService = userInfoService; }
+    public void setInfoService(InfoService infoService) { this.infoService = infoService; }
 
     /**
      * 显示用户个人信息
@@ -64,15 +64,15 @@ public class UserInfoController {
      * @return 带着操作结果重定向个人信息界面逻辑视图名
      */
     @RequestMapping("/user/info/update")
-    public String updateInfo(HttpServletRequest request, @RequestParam("image") MultipartFile image,  HttpSession session, Model model) {
+    public String update(HttpServletRequest request, @RequestParam("image") MultipartFile image,  HttpSession session, Model model) {
         User user = SessionService.getUser(session);
-        EditableUserInfo editableUserInfo = new EditableUserInfo();
-        editableUserInfo.setSignature(request.getParameter("signature"));
-        editableUserInfo.setProfile(request.getParameter("profile"));
-        editableUserInfo.setImage(image);
+        EditableInfo editableInfo = new EditableInfo();
+        editableInfo.setSignature(request.getParameter("signature"));
+        editableInfo.setProfile(request.getParameter("profile"));
+        editableInfo.setImage(image);
 
-        if (userInfoService.updateInfo(session, editableUserInfo)) {
-            updateUser(user, editableUserInfo);
+        if (infoService.update(session, editableInfo)) {
+            updateUser(user, editableInfo);
             ModelService.setInfo(model, "Success: 个人资料修改成功!");
         }
         else {
@@ -82,9 +82,9 @@ public class UserInfoController {
         return "redirect:/user/info";
     }
 
-    private void updateUser(User user, EditableUserInfo editableUserInfo) {
-        user.setImageLocation(editableUserInfo.getImageLocation());
-        user.setSignature(editableUserInfo.getSignature());
-        user.setProfile(editableUserInfo.getProfile());
+    private void updateUser(User user, EditableInfo editableInfo) {
+        user.setImageLocation(editableInfo.getImageLocation());
+        user.setSignature(editableInfo.getSignature());
+        user.setProfile(editableInfo.getProfile());
     }
 }

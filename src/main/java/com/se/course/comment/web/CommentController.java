@@ -1,4 +1,4 @@
-package com.se.comment.web;
+package com.se.course.comment.web;
 
 //import packages
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,8 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import com.se.comment.domain.Comment;
-import com.se.comment.service.CommentService;
+import com.se.course.comment.domain.Comment;
+import com.se.course.comment.service.CommentService;
 import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import com.se.notice.service.NoticeService;
@@ -45,7 +45,7 @@ public class CommentController {
     public String CommentPage(HttpSession session, HttpServletRequest request, @PathVariable int courseId, Model model) {
         noticeService.removeNotice(session, request);
 
-        ArrayList<Comment> comments = commentService.getCommentList(courseId);
+        ArrayList<Comment> comments = commentService.getComments(courseId);
         SessionService.setComments(session, comments);
         ModelService.setComments(model, comments);
         return "/course/comment/comment_index";
@@ -61,8 +61,8 @@ public class CommentController {
      * @return 重定向至留言板界面
      */
     @RequestMapping("/course/{courseId}/comment/submit")
-    public String submitComment(HttpSession session, @PathVariable int courseId, @RequestParam("content") String content, Model model) {
-        if (!commentService.submitComment(session, courseId, content)) {
+    public String submit(HttpSession session, @PathVariable int courseId, @RequestParam("content") String content, Model model) {
+        if (!commentService.submit(session, courseId, content)) {
             ModelService.setError(model, "留言失败!");
         }
 
@@ -79,8 +79,8 @@ public class CommentController {
      * @return 重定向至留言板界面
      */
     @RequestMapping("/course/{courseId}/comment/remove")
-    public String removeComment(HttpSession session, @PathVariable int courseId, @RequestParam("comment_index") int commentIndex, Model model) {
-        if (!commentService.removeComment(session, commentIndex)) {
+    public String remove(HttpSession session, @PathVariable int courseId, @RequestParam("comment_index") int commentIndex, Model model) {
+        if (!commentService.remove(session, commentIndex)) {
             ModelService.setError(model, "删除留言失败!");
         }
 
