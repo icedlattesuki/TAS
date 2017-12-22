@@ -11,7 +11,7 @@
     <title>布置作业</title>
 </head>
 <body>
-<form id="homeworkForm" action="/course/homework/assign" enctype="multipart/form-data" method="post">
+<form id="homeworkForm" action="/course/${course_id}/homework/assign" enctype="multipart/form-data" method="post">
     <label for="homeworkTitle">名称</label>
     <input type="text" name="title" id="homeworkTitle"><br>
     <label for="homeworkDDL">截止日期</label>

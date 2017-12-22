@@ -100,6 +100,29 @@ create table comment(
     foreign key (course_id) references course(id)
 );
 
+CREATE TABLE attachment (
+  file_id     INT,
+  homework_id INT,
+  FOREIGN KEY (file_id) REFERENCES file (id),
+  FOREIGN KEY (homework_id) REFERENCES homework (id)
+);
+CREATE TABLE homework
+(
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  title       VARCHAR(50)  NOT NULL,
+  content     VARCHAR(500) NULL,
+  create_date DATE         NULL,
+  ddl_date    DATE         NULL,
+  score       INT          NULL,
+  attachment  VARCHAR(10)  NULL,
+  course_id   VARCHAR(10)  NULL,
+  semester    VARCHAR(15)  NULL,
+  time        VARCHAR(15)  NULL,
+  place       VARCHAR(20)  NULL,
+  course_id   INT          NOT NULL,
+  FOREIGN KEY (course_id) REFERENCES course(id)
+);
+
 insert into student values("3150102100", "123456", "黄雨生", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1501", "");
 insert into student values("3150101100", "123456", "吴道义", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1503", "");
 insert into student values("3150102210", "123456", "林世鹏", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1502", "");
@@ -122,6 +145,9 @@ insert into teach values("300400", "1");
 insert into teach values("300500", "2");
 insert into teach values("300600", "3");
 
-
-
-
+INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (1, '123change', '123change', '2017-12-16', '2017-12-07', 100, '4', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
+INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (2, '4774', '黄海波 v 好', '2017-12-17', '2017-12-19', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
+INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (3, 'hbybqwe', 'hbqwyeyy', '2017-12-17', '2017-12-27', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
+INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (5, 'test5', 'test5', '2017-12-17', '2017-12-19', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
+INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (6, 'test6', 'taehbhb', '2017-12-21', '2018-01-17', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
+INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (7, 'test7', 'hbqhwbegv', '2017-12-21', '2017-12-12', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');

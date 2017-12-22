@@ -17,5 +17,6 @@
 <a href="/course/${courseId}/resource/video/watch">视频观看</a>
 <a href="/course/${courseId}/resource/announcement/to-upload">公告发布</a>
 <a href="/course/${courseId}/comment">留言</a>
+<a href="/course/${courseId}/homework/list">作业列表</a>
 </body>
 </html>

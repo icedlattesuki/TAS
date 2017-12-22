@@ -94,6 +94,7 @@ public class SqlService {
     public static final String HOMEWORK_ATTACHMENT = "attachment";
     public static final String HOMEWORK_SCORE = "score";
     public static final String HOMEWORK_ID = "id";
+    public static final String HOMEWORK_COURSE_ID = "course_id";
 
     public static final String ATTACHMENT_FILE_ID = "file_id";
     public static final String ATTACHMENT_HOMEWORK_ID = "homework_id";

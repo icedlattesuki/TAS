@@ -11,7 +11,7 @@
     <title>更新作业信息</title>
 </head>
 <body>
-<form id="homeworkForm" action="/course/homework/${homework.id}/update" enctype="multipart/form-data" method="post">
+<form id="homeworkForm" action="/course/${course_id}/homework/${homework.id}/update" enctype="multipart/form-data" method="post">
     <label for="homeworkTitle">名称</label>
     <input type="text" name="title" id="homeworkTitle" value=${homework.title}><br>
     <label for="homeworkDDL">截止日期</label>

@@ -1,6 +1,5 @@
 package com.se.course.homework.domain;
 
-import com.se.global.domain.CourseKey;
 
 import java.util.Date;
 
@@ -12,13 +11,15 @@ public class Homework {
     private Date ddl_date;
     private int score;
     private String attachments;
-    private CourseKey courseKey;
-    public static final String TITLE = "title";
-    public static final String CONTENT = "content";
-    public static final String DDL_DATE = "ddl_date";
-    public static final String DATE = "create_date";
-    public static final String ATTACHMENT = "attachment";
-    public static final String SCORE = "score";
+    private int course_id;
+
+    public int getCourse_id() {
+        return course_id;
+    }
+
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
+    }
 
     public Date getCreate_date() {
         return create_date;
@@ -74,13 +75,5 @@ public class Homework {
 
     public void setAttachments(String attachments) {
         this.attachments = attachments;
-    }
-
-    public CourseKey getCourseKey() {
-        return courseKey;
-    }
-
-    public void setCourseKey(CourseKey courseKey) {
-        this.courseKey = courseKey;
     }
 }

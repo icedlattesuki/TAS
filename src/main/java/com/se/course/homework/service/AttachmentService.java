@@ -2,7 +2,6 @@ package com.se.course.homework.service;
 
 import com.se.course.homework.dao.AttachmentDAO;
 import com.se.course.homework.domain.Attachment;
-import com.se.global.domain.CourseKey;
 import com.se.global.domain.User;
 import com.se.global.service.FileService;
 import com.se.global.service.SessionService;
@@ -25,9 +24,8 @@ public class AttachmentService extends FileService{
         this.attachmentDAO = attachmentDAO;
     }
 
-    public boolean upload(HttpSession session, MultipartFile file, int homework_id) {
+    public boolean upload(HttpSession session, MultipartFile file, int homework_id, int course_id) {
         User user = SessionService.getUser(session);
-        CourseKey courseKey = SessionService.getCourseKey(session);
 
 
         if (isFileExist(getDirPath() + file.getOriginalFilename())) {
@@ -42,7 +40,7 @@ public class AttachmentService extends FileService{
             attachment.setLocation(getDirPath().substring(FileService.ROOT_PATH.length()));
             attachment.setSize(file.getSize());
             attachment.setDate(new Date());
-            attachment.setCourseKey(courseKey);
+            attachment.setCourseId(course_id);
             attachment.setUserId(user.getId());
 
             try {

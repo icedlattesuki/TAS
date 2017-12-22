@@ -1,7 +1,6 @@
 package com.se.course.homework.dao;
 
 import com.se.course.homework.domain.Homework;
-import com.se.global.domain.CourseKey;
 import com.se.global.service.SqlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -19,14 +18,14 @@ import java.util.Date;
 public class HomeworkDAO {
     private JdbcTemplate jdbcTemplate;
 
-    private static final String ASSIGN_HOMEWORK_SQL = "insert into homework(" + Homework.TITLE + "," + Homework.CONTENT
-            + "," + Homework.DATE + ","  + Homework.DDL_DATE + "," + Homework.SCORE + "," + Homework.ATTACHMENT + ","
-            + SqlService.courseKeyInColumn() + ")"
-            + "values(?,?,?,?,?,?,?,?,?,?)";
+    private static final String ASSIGN_HOMEWORK_SQL = "insert into homework(" + SqlService.HOMEWORK_TITLE + "," + SqlService.HOMEWORK_CONTENT
+            + "," + SqlService.HOMEWORK_DATE+ ","  + SqlService.HOMEWORK_DDL_DATE + "," + SqlService.HOMEWORK_SCORE + "," + SqlService.HOMEWORK_ATTACHMENT + ","
+            + SqlService.HOMEWORK_COURSE_ID + ")"
+            + "values(?,?,?,?,?,?,?)";
     private static final String GET_HOMEWORK_LIST_SQL = "select * from homework where " +
-            SqlService.courseKeyInWhereClause() + " order by " + Homework.DATE + " DESC";
-    private static final String UPDATE_HOMEWORK_SQL = "update homework set " + Homework.TITLE + " =?, " + Homework.DDL_DATE +
-            " =?, " + Homework.SCORE + " =?, " + Homework.CONTENT + " =?, " + Homework.ATTACHMENT + " =? " +
+            SqlService.HOMEWORK_COURSE_ID + " = ? " + " order by " + SqlService.HOMEWORK_DATE+ " DESC";
+    private static final String UPDATE_HOMEWORK_SQL = "update homework set " + SqlService.HOMEWORK_TITLE + " =?, " + SqlService.HOMEWORK_DDL_DATE +
+            " =?, " + SqlService.HOMEWORK_SCORE + " =?, " + SqlService.HOMEWORK_CONTENT + " =?, " + SqlService.HOMEWORK_ATTACHMENT + " =? " +
             "where id = ?";
     private static final String GET_HOMEWORK_SQL = "select * from homework where id = ?";
     private static final String GET_MAX_ID_SQL = "select max(" + SqlService.HOMEWORK_ID + ") from homework";
@@ -38,10 +37,9 @@ public class HomeworkDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void assignHomework(CourseKey courseKey, String title, String content, Date ddl_date
+    public void assignHomework(int course_id, String title, String content, Date ddl_date
             , int score, String attachments) {
-        Object[] args = new Object[] {title, content, new Date(), ddl_date, score, attachments, courseKey.getId()
-                , courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
+        Object[] args = new Object[] {title, content, new Date(), ddl_date, score, attachments, course_id};
         jdbcTemplate.update(ASSIGN_HOMEWORK_SQL, args);
     }
 
@@ -50,7 +48,7 @@ public class HomeworkDAO {
         jdbcTemplate.update(UPDATE_HOMEWORK_SQL, args);
     }
 
-    public Homework getHomework(final CourseKey courseKey, final int id) {
+    public Homework getHomework(final int course_id, final int id) {
         final Homework homework = new Homework();
         Object[] args = new Object[] {id};
         jdbcTemplate.query(GET_HOMEWORK_SQL, args,
@@ -62,7 +60,7 @@ public class HomeworkDAO {
                         homework.setDdl_date(rs.getDate("ddl_date"));
                         homework.setId(id);
                         homework.setCreate_date(rs.getDate("create_date"));
-                        homework.setCourseKey(courseKey);
+                        homework.setCourse_id(course_id);
                         homework.setContent(rs.getString("content"));
                         homework.setAttachments(rs.getString("attachment"));
                     }
@@ -75,12 +73,16 @@ public class HomeworkDAO {
     }
 
     public int getNextHomeworkId() {
-        int id = jdbcTemplate.queryForObject(GET_MAX_ID_SQL, Integer.class);
-        return id+1;
+        try {
+            int id = jdbcTemplate.queryForObject(GET_MAX_ID_SQL, Integer.class);
+            return id + 1;
+        } catch (Exception e) {
+            return 1;
+        }
     }
 
-    public ArrayList<Homework> getHomeworkList(final CourseKey courseKey) {
-        Object[] args = new Object[] {courseKey.getId(), courseKey.getSemester(), courseKey.getTime(), courseKey.getPlace()};
+    public ArrayList<Homework> getHomeworkList(final int course_id) {
+        Object[] args = new Object[] {course_id};
         return jdbcTemplate.query(GET_HOMEWORK_LIST_SQL, args, new ResultSetExtractor<ArrayList<Homework>>() {
             @Override
             public ArrayList<Homework> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -88,14 +90,14 @@ public class HomeworkDAO {
 
                 while (rs.next()) {
                     Homework homework = new Homework();
-                    homework.setTitle(rs.getString(Homework.TITLE));
-                    homework.setAttachments(rs.getString(Homework.ATTACHMENT));
-                    homework.setContent(rs.getString(Homework.CONTENT));
-                    homework.setCourseKey(courseKey);
-                    homework.setCreate_date(rs.getDate(Homework.DATE));
+                    homework.setTitle(rs.getString(SqlService.HOMEWORK_TITLE));
+                    homework.setAttachments(rs.getString(SqlService.HOMEWORK_ATTACHMENT));
+                    homework.setContent(rs.getString(SqlService.HOMEWORK_CONTENT));
+                    homework.setCourse_id(course_id);
+                    homework.setCreate_date(rs.getDate(SqlService.HOMEWORK_DATE));
                     homework.setId(rs.getInt("id"));
-                    homework.setDdl_date(rs.getDate(Homework.DDL_DATE));
-                    homework.setScore(rs.getInt(Homework.SCORE));
+                    homework.setDdl_date(rs.getDate(SqlService.HOMEWORK_DDL_DATE));
+                    homework.setScore(rs.getInt(SqlService.HOMEWORK_SCORE));
                     homeworkArrayList.add(homework);
                 }
                 return homeworkArrayList;
