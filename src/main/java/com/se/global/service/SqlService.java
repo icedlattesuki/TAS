@@ -99,4 +99,13 @@ public class SqlService {
     public static final String ATTACHMENT_FILE_ID = "file_id";
     public static final String ATTACHMENT_HOMEWORK_ID = "homework_id";
 
+    public static final String UPLOAD_HOMEWORK_ID = "id";
+    public static final String UPLOAD_HOMEWORK_STUDENT_ID = "student_id";
+    public static final String UPLOAD_HOMEWORK_HOMEWORK_ID = "homework_id";
+    public static final String UPLOAD_HOMEWORK_GET_SCORE = "get_score";
+    public static final String UPLOAD_HOMEWORK_HANDLE_DATE = "handle_date";
+    public static final String UPLOAD_HOMEWORK_COURSE_ID = "course_id";
+    public static final String UPLOAD_HOMEWORK_FILE_ID = "upload_homework_file";
+
 }
+

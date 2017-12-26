@@ -2,9 +2,13 @@ package com.se.course.homework.web;
 
 import com.se.course.homework.domain.Attachment;
 import com.se.course.homework.domain.Homework;
+import com.se.course.homework.domain.UploadHomework;
 import com.se.course.homework.service.AttachmentService;
 import com.se.course.homework.service.HomeworkService;
+import com.se.course.homework.service.UploadHomeworkService;
+import com.se.global.domain.User;
 import com.se.global.service.ModelService;
+import com.se.global.service.SessionService;
 import com.se.notice.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +31,12 @@ public class HomeworkController {
     private HomeworkService homeworkService;
     private NoticeService noticeService;
     private AttachmentService attachmentService;
+    private UploadHomeworkService uploadHomeworkService;
+
+    @Autowired
+    public void setUploadHomeworkService(UploadHomeworkService uploadHomeworkService) {
+        this.uploadHomeworkService = uploadHomeworkService;
+    }
 
     @Autowired
     public void setAttachmentService(AttachmentService attachmentService) {
@@ -89,6 +101,8 @@ public class HomeworkController {
         ArrayList<Homework> homeworkArrayList = homeworkService.getHomeworkList(session, courseId);
         model.addAttribute("homeworkList", homeworkArrayList);
         model.addAttribute("course_id", courseId);
+        User user = SessionService.getUser(session);
+        model.addAttribute("userType", user.getType());
         return "/course/homework/homework_list";
     }
 
@@ -96,9 +110,13 @@ public class HomeworkController {
     public String homeworkDetailPage(HttpSession session, @PathVariable int id, @PathVariable int courseId, Model model) {
         Homework homework = homeworkService.getHomework(session, id, courseId);
         Attachment attachment = attachmentService.getHomeworkAttachment(id);
+        User user = SessionService.getUser(session);
+        UploadHomework uploadHomework = uploadHomeworkService.getUploadHomework(user.getId(), id);
         if (homework != null) {
             model.addAttribute("homework", homework);
             model.addAttribute("attachment", attachment);
+            model.addAttribute("userType", user.getType());
+            model.addAttribute("uploadHomework", uploadHomework);
             return "/course/homework/homework_detail";
         } else {
             return "error/404";
@@ -108,5 +126,24 @@ public class HomeworkController {
     @RequestMapping("/course/homework/download")
     public void attachmentDownload(HttpSession session, @RequestParam("file_id") int file_id, HttpServletResponse response) {
         attachmentService.download(session, file_id, response);
+    }
+
+    @RequestMapping("/course/{course_id}/homework/{homework_id}/upload")
+    public String uploadHomework(HttpSession session, @PathVariable int course_id, @PathVariable int homework_id,
+                                 @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        String userId = SessionService.getUser(session).getId();
+        //必须有file
+        if (!uploadHomeworkService.uploadHomework(file, homework_id, course_id, userId)) {
+            redirectAttributes.addFlashAttribute("error", "上传失败");
+        }
+        return "redirect:/course/" + course_id + "/homework/" + homework_id + "/homework_detail";
+    }
+
+    @RequestMapping("/course/{course_id}/homework/{homework_id}/upload_list")
+    public String uploadHomeworkListPage(HttpSession session, @PathVariable int course_id, @PathVariable int homework_id,
+                                         Model model) {
+        ArrayList<UploadHomeworkList> uploadHomeworkLists = uploadHomeworkService.getUploadHomeworkList(course_id, homework_id);
+        model.addAttribute("uploadHomeworkList", uploadHomeworkLists);
+        return "/course/homework/upload_list";
     }
 }

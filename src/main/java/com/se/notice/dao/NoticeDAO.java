@@ -72,7 +72,7 @@ public class NoticeDAO {
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<String> getStudentIdList(int courseId) throws SQLException, DataAccessException {
+    public ArrayList<String> getStudentIdList(int courseId) {
         return jdbcTemplate.query(GET_STUDENT_ID_LIST_SQL, new Object[] {courseId}, new ResultSetExtractor<ArrayList<String>>() {
             @Override
             public ArrayList<String> extractData(ResultSet resultSet) throws SQLException, DataAccessException {

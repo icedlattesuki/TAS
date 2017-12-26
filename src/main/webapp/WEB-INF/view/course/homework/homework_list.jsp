@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
   Created by IntelliJ IDEA.
   User: linsp
@@ -17,6 +17,10 @@
         <a href="/course/${course_id}/homework/${homework.id}">${homework.title}</a>
     </div>
 </c:forEach>
-<a href="/course/${course_id}/homework/to-assign">上传作业</a>
+
+<c:if test="${userType == 2}">
+    <a href="/course/${course_id}/homework/to-assign">上传作业</a>
+</c:if>
+
 </body>
 </html>
