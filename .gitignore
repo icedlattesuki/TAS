@@ -5,3 +5,4 @@ Maven__org_springframework_boot_spring_boot_starter_logging_1_5_8_RELEASE.xml
 Maven__org_springframework_boot_spring_boot_starter_tomcat_1_5_8_RELEASE.xml
 target
 src/main/resources/static/homework
+src/main/resources/static/upload_homework

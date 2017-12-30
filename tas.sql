@@ -123,6 +123,20 @@ CREATE TABLE homework
   FOREIGN KEY (course_id) REFERENCES course(id)
 );
 
+CREATE TABLE upload_homework(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id CHAR(10),
+    homework_id INT,
+    get_score INT,
+    handle_date DATE,
+    course_id INT,
+    upload_homework_file INT,
+    FOREIGN KEY (student_id) REFERENCES student(id),
+    FOREIGN KEY (homework_id) REFERENCES homework(id),
+    FOREIGN KEY (course_id) REFERENCES course(id),
+    FOREIGN KEY (upload_homework_file) REFERENCES file(id)
+);
+
 insert into student values("3150102100", "123456", "黄雨生", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1501", "");
 insert into student values("3150101100", "123456", "吴道义", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1503", "");
 insert into student values("3150102210", "123456", "林世鹏", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1502", "");
