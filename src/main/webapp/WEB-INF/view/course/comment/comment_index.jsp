@@ -7,7 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%--@elvariable id="user" type="com.se.global.domain.User"--%>
-<%--@elvariable id="comment" type="com.se.comment.domain.Comment"--%>
+<%--@elvariable id="comment" type="com.se.course.comment.domain.Comment"--%>
 <%--@elvariable id="comments" type="java.util.ArrayList<Comment>"--%>
 <%--@elvariable id="courseId" type="int"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

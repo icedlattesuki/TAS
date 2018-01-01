@@ -37,7 +37,7 @@ public class AnnouncementController {
      * @return 公告发布页面逻辑视图名
      */
     @RequestMapping("/course/{courseId}/resource/announcement/to-upload")
-    public String announcementUploadPage(@PathVariable int courseId) {
+    public String uploadPage(@PathVariable int courseId) {
         return "course/announcement/announcement_upload";
     }
 
@@ -52,8 +52,8 @@ public class AnnouncementController {
      * @return 成功则重定向到课程功能入口页面，否则返回到公告发布页面
      */
     @RequestMapping("/course/{courseId}/resource/announcement/upload")
-    public String uploadAnnouncement(HttpSession session, @PathVariable int courseId, @RequestParam("title") String title, @RequestParam("content") String content, Model model) {
-        if (announcementService.uploadAnnouncement(session, courseId, title, content)) {
+    public String upload(HttpSession session, @PathVariable int courseId, @RequestParam("title") String title, @RequestParam("content") String content, Model model) {
+        if (announcementService.upload(session, courseId, title, content)) {
             return "redirect:/course/index";
         } else {
             ModelService.setError(model, "发布失败!");
@@ -71,9 +71,9 @@ public class AnnouncementController {
      * @return 公告列表页面逻辑视图名
      */
     @RequestMapping("/course/{courseId}/resource/announcement/list")
-    public String announcementListPage(HttpSession session, HttpServletRequest request, @PathVariable int courseId, Model model) {
+    public String listPage(HttpSession session, HttpServletRequest request, @PathVariable int courseId, Model model) {
         noticeService.removeNotice(session, request);
-        ArrayList<Announcement> announcements =  announcementService.getAnnouncementList(courseId);
+        ArrayList<Announcement> announcements =  announcementService.getAnnouncements(courseId);
         ModelService.setAnnouncements(model, announcements);
         return "course/announcement/announcement_list";
     }

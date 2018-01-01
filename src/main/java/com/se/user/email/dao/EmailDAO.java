@@ -17,8 +17,8 @@ import com.se.global.domain.User;
 @Repository
 public class EmailDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String UPDATE_STUDENT_EMAIL_SQL = "UPDATE student SET " + SqlService.STUDENT_EMAIL + " = ? WHERE " + SqlService.STUDENT_ID + " = ?";
-    private static final String UPDATE_TEACHER_EMAIL_SQL = "update teacher set " + SqlService.TEACHER_EMAIL + " = ? WHERE " + SqlService.TEACHER_ID + " = ?";
+    private final String UPDATE_STUDENT_EMAIL_SQL = "UPDATE student SET " + SqlService.STUDENT_EMAIL + " = ? WHERE " + SqlService.STUDENT_ID + " = ?";
+    private final String UPDATE_TEACHER_EMAIL_SQL = "update teacher set " + SqlService.TEACHER_EMAIL + " = ? WHERE " + SqlService.TEACHER_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -30,7 +30,7 @@ public class EmailDAO {
      * @param email 新邮箱
      * @throws DataAccessException 数据库访问出错
      */
-    public void updateEmail(User user, String email) throws DataAccessException {
+    public void update(User user, String email) throws DataAccessException {
         Object[] args = new Object[] {email, user.getId()};
 
         if (user.getType() == 1) {

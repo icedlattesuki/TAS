@@ -8,6 +8,8 @@
 --%>
 <%--@elvariable id="announcement" type="com.se.course.announcement.domain.Announcement"--%>
 <%--@elvariable id="announcementList" type="java.util.ArrayList<Announcement>"--%>
+<%--@elvariable id="courseId" type="int"--%>
+<%--@elvariable id="noticeTotalNum" type="int"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -41,7 +43,7 @@
                             <i class="material-icons">
                                 notifications
                                 <small class="notification-badge">
-                                    ${notice.totalNumber}
+                                    ${noticeTotalNum}
                                 </small>
                             </i>
                         </a>
@@ -82,7 +84,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/course/resource/material/to-download">
+                    <a href="/course/${courseId}/resource/material/to-download">
                         <i class="material-icons left">
                             folder_open
                         </i>
@@ -93,7 +95,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/course/resource/video/watch">
+                    <a href="/course/${courseId}/resource/video/watch">
                         <i class="material-icons left">
                             video_library
                         </i>
@@ -104,7 +106,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/course/comment">
+                    <a href="/course/${courseId}/comment">
                         <i class="material-icons left">
                             comment
                         </i>
@@ -135,6 +137,5 @@
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="/js/materialize.js"></script>
-
 </body>
 </html>
