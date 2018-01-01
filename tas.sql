@@ -99,13 +99,6 @@ create table comment(
     date datetime,
     foreign key (course_id) references course(id)
 );
-
-CREATE TABLE attachment (
-  file_id     INT,
-  homework_id INT,
-  FOREIGN KEY (file_id) REFERENCES file (id),
-  FOREIGN KEY (homework_id) REFERENCES homework (id)
-);
 CREATE TABLE homework
 (
   id          INT AUTO_INCREMENT PRIMARY KEY,
@@ -121,6 +114,58 @@ CREATE TABLE homework
   place       VARCHAR(20)  NULL,
   course_id   INT          NOT NULL,
   FOREIGN KEY (course_id) REFERENCES course(id)
+);
+
+CREATE TABLE attachment (
+  file_id     INT,
+  homework_id INT,
+  FOREIGN KEY (file_id) REFERENCES file (id),
+  FOREIGN KEY (homework_id) REFERENCES homework (id)
+);
+
+CREATE TABLE upload_homework(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  student_id CHAR(10),
+  homework_id INT,
+  get_score INT,
+  handle_date DATE,
+  course_id INT,
+  upload_homework_file INT,
+  FOREIGN KEY (student_id) REFERENCES student(id),
+  FOREIGN KEY (homework_id) REFERENCES homework(id),
+  FOREIGN KEY (course_id) REFERENCES course(id),
+  FOREIGN KEY (upload_homework_file) REFERENCES file(id)
+);
+
+CREATE TABLE online_test(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  course_id INT,
+  ddl_date DATETIME,
+  score INT,
+  title VARCHAR(100),
+  FOREIGN KEY (course_id) REFERENCES course(id)
+);
+
+CREATE TABLE choice_question(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  test_id INT,
+  score INT,
+  title TEXT,
+  choice_a VARCHAR(200),
+  choice_b VARCHAR(200),
+  choice_c VARCHAR(200),
+  choice_d VARCHAR(200),
+  answer VARCHAR(10),
+  FOREIGN KEY (test_id) REFERENCES online_test(id)
+);
+
+CREATE TABLE fill_question(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  test_id INT,
+  score INT,
+  title TEXT,
+  content TEXT,
+  FOREIGN KEY (test_id) REFERENCES online_test(id)
 );
 
 insert into student values("3150102100", "123456", "黄雨生", "计算机科学与技术学院", "", "", "", "", "软件工程", "3", "1501", "");
@@ -151,3 +196,11 @@ INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, atta
 INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (5, 'test5', 'test5', '2017-12-17', '2017-12-19', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
 INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (6, 'test6', 'taehbhb', '2017-12-21', '2018-01-17', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
 INSERT INTO tas.homework (id, title, content, create_date, ddl_date, score, attachment, course_id, semester, time, place) VALUES (7, 'test7', 'hbqhwbegv', '2017-12-21', '2017-12-12', 100, '', 'Ex100', '春学期', '周一3、4', '紫金港-东1-104');
+
+INSERT INTO tas.online_test (id, course_id, ddl_date, score, title) VALUES (2, 1, '2018-01-16 16:00:00', 100, 'test1');
+
+INSERT INTO tas.choice_question (id, test_id, score, title, choice_a, choice_b, choice_c, choice_d, answer) VALUES (3, 2, 10, 'qrwqr', 'qwe', '123', '412', '123', 'b');
+INSERT INTO tas.choice_question (id, test_id, score, title, choice_a, choice_b, choice_c, choice_d, answer) VALUES (4, 2, 20, '78jhbbh', 'hbhqwe', 'hgqw', 'gvxdj', 'gvgqwe', 'c');
+
+INSERT INTO tas.fill_question (id, test_id, score, title, content) VALUES (1, 2, 30, '4123', '4343133');
+INSERT INTO tas.fill_question (id, test_id, score, title, content) VALUES (2, 2, 40, '12477', 'hgybyh');
