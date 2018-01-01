@@ -17,12 +17,12 @@ import com.se.global.domain.User;
  * @since 1.0
  */
 @Repository
-public class PasswordUpdateDAO {
+public class PasswordDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String UPDATE_STUDENT_PASSWORD_SQL = "UPDATE student SET " + SqlService.STUDENT_PASSWORD + " = ? WHERE " + SqlService.STUDENT_ID + " = ?";
-    private static final String UPDATE_TEACHER_PASSWORD_SQL = "UPDATE teacher SET " + SqlService.TEACHER_PASSWORD + " = ? WHERE " + SqlService.TEACHER_ID + " = ?";
-    private static final String IDENTIFY_STUDENT_ID_AND_EMAIL_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ? and " + SqlService.STUDENT_EMAIL + " = ?";
-    private static final String IDENTIFY_TEACHER_ID_AND_EMAIL_SQL = "SELECT * FROM teacher WHERE " + SqlService.TEACHER_ID + " = ? and " + SqlService.TEACHER_EMAIL + " = ?";
+    private final String UPDATE_STUDENT_PASSWORD_SQL = "UPDATE student SET " + SqlService.STUDENT_PASSWORD + " = ? WHERE " + SqlService.STUDENT_ID + " = ?";
+    private final String UPDATE_TEACHER_PASSWORD_SQL = "UPDATE teacher SET " + SqlService.TEACHER_PASSWORD + " = ? WHERE " + SqlService.TEACHER_ID + " = ?";
+    private final String IDENTIFY_STUDENT_ID_AND_EMAIL_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ? and " + SqlService.STUDENT_EMAIL + " = ?";
+    private final String IDENTIFY_TEACHER_ID_AND_EMAIL_SQL = "SELECT * FROM teacher WHERE " + SqlService.TEACHER_ID + " = ? and " + SqlService.TEACHER_EMAIL + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
@@ -34,7 +34,7 @@ public class PasswordUpdateDAO {
      * @param password 愿密码
      * @throws DataAccessException 数据库访问出错
      */
-    public void updatePassword(User user, String password) throws DataAccessException {
+    public void update(User user, String password) throws DataAccessException {
         Object[] args = new Object[] {password, user.getId()};
 
         if (user.getType() == User.STUDENT_TYPE) {

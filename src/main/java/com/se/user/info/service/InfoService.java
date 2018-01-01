@@ -11,9 +11,9 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import com.se.global.domain.User;
-import com.se.user.info.dao.UserInfoDAO;
-import com.se.user.info.domain.EditableUserInfo;
 import com.se.global.service.SessionService;
+import com.se.user.info.dao.InfoDAO;
+import com.se.user.info.domain.EditableInfo;
 
 /**
  * @author Yusen
@@ -21,27 +21,27 @@ import com.se.global.service.SessionService;
  * @since 1.0
  */
 @Service
-public class UserInfoService {
-    private UserInfoDAO userInfoDAO;
+public class InfoService {
+    private InfoDAO infoDAO;
     private static final Logger logger = LoggerFactory.getLogger("UserInfoService.class");
 
     @Autowired
-    public void setUserInfoDAO(UserInfoDAO userInfoDAO) { this.userInfoDAO = userInfoDAO; }
+    public void setInfoDAO(InfoDAO infoDAO) { this.infoDAO = infoDAO; }
 
     /**
      * 更新用户个人信息
      *
      * @param session 当前会话
-     * @param editableUserInfo EditableUserInfo对象
+     * @param editableInfo EditableUserInfo对象
      * @return true表示更新成功，false表示更新失败
      */
-    public boolean updateInfo(HttpSession session, EditableUserInfo editableUserInfo) {
+    public boolean update(HttpSession session, EditableInfo editableInfo) {
         User user = SessionService.getUser(session);
-        String imageLocation = storeImage(user, editableUserInfo.getImage());
-        editableUserInfo.setImageLocation(imageLocation);
+        String imageLocation = storeImage(user, editableInfo.getImage());
+        editableInfo.setImageLocation(imageLocation);
 
         try {
-            userInfoDAO.updateInfo(user, editableUserInfo);
+            infoDAO.update(user, editableInfo);
             return true;
         } catch (DataAccessException exception) {
             logger.error("updateInfo fail! " + exception.getCause());

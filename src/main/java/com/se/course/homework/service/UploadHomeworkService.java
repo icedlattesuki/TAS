@@ -105,16 +105,20 @@ public class UploadHomeworkService extends FileService {
             uploadHomeworkList.setUploadFileId(uploadHomework.getUpload_homework_file());
             uploadHomeworkLists.add(uploadHomeworkList);
         }
-        ArrayList<String> allStudentId = noticeDAO.getStudentIdList(courseId);
-        for (String studentId : allStudentId) {
-            if (!haveAddedStudentId.contains(studentId)) {
-                UploadHomeworkList uploadHomeworkList = new UploadHomeworkList();
-                uploadHomeworkList.setStudentId(studentId);
-                uploadHomeworkList.setStudentName(userDAO.getUserName(studentId));
-                uploadHomeworkList.setUploadFileName("");
-                uploadHomeworkList.setUploadFileId(-1);
-                uploadHomeworkLists.add(uploadHomeworkList);
+        try {
+            ArrayList<String> allStudentId = noticeDAO.getStudentIds(courseId);
+            for (String studentId : allStudentId) {
+                if (!haveAddedStudentId.contains(studentId)) {
+                    UploadHomeworkList uploadHomeworkList = new UploadHomeworkList();
+                    uploadHomeworkList.setStudentId(studentId);
+                    uploadHomeworkList.setStudentName(userDAO.getUserName(studentId));
+                    uploadHomeworkList.setUploadFileName("");
+                    uploadHomeworkList.setUploadFileId(-1);
+                    uploadHomeworkLists.add(uploadHomeworkList);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return uploadHomeworkLists;
     }

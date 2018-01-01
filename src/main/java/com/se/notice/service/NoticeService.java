@@ -21,7 +21,7 @@ import com.se.global.service.SessionService;
 @Service
 public class NoticeService {
     private NoticeDAO noticeDAO;
-    private static final Logger logger = LoggerFactory.getLogger("NoticeService.class");
+    private final Logger logger = LoggerFactory.getLogger("NoticeService.class");
     public static final int MAX_NOTICE_INDEX = 4;
     //以下列出所有的通知类型
     public static final int MATERIAL_NOTICE_INDEX = 0;
@@ -84,7 +84,7 @@ public class NoticeService {
         }
 
         try {
-            noticeDAO.removeNotice(Integer.parseInt(noticeId));
+            noticeDAO.remove(Integer.parseInt(noticeId));
 
             ArrayList<Notice> notices = SessionService.getNotices(session);
 
@@ -103,7 +103,7 @@ public class NoticeService {
     private void addNotice1(int courseId, String message, int type) {
         try {
             String id = noticeDAO.getTeacherID(courseId);
-            noticeDAO.addNotice(id, courseId, message, type);
+            noticeDAO.add(id, courseId, message, type);
         } catch (Exception exception) {
             logger.error("addNotice1 fail! " + exception.getCause());
         }
@@ -112,9 +112,9 @@ public class NoticeService {
     //teacher
     private void addNotice2(int courseId, String message, int type) {
         try {
-            ArrayList<String> studentIdList = noticeDAO.getStudentIdList(courseId);
+            ArrayList<String> studentIdList = noticeDAO.getStudentIds(courseId);
             for (String id : studentIdList) {
-                noticeDAO.addNotice(id, courseId, message, type);
+                noticeDAO.add(id, courseId, message, type);
             }
         } catch (Exception exception) {
             logger.error("addNotice2 fail! " + exception.getCause());

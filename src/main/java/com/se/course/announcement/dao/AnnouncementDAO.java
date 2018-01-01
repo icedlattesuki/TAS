@@ -21,9 +21,9 @@ import com.se.course.announcement.domain.Announcement;
 @Repository
 public class AnnouncementDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String UPLOAD_ANNOUNCEMENT_SQL = "INSERT INTO announcement(" + SqlService.ANNOUNCEMENT_TITLE + "," +
+    private final String UPLOAD_ANNOUNCEMENT_SQL = "INSERT INTO announcement(" + SqlService.ANNOUNCEMENT_TITLE + "," +
             SqlService.ANNOUNCEMENT_CONTENT + "," + SqlService.ANNOUNCEMENT_DATE + "," + SqlService.ANNOUNCEMENT_COURSE_ID + ") VALUES(?,?,?,?)";
-    private static final String GET_LATEST_ANNOUNCEMENT_SQL = "SELECT * FROM announcement WHERE " + SqlService.ANNOUNCEMENT_COURSE_ID + " = ? " +
+    private final String GET_LATEST_ANNOUNCEMENT_SQL = "SELECT * FROM announcement WHERE " + SqlService.ANNOUNCEMENT_COURSE_ID + " = ? " +
             " ORDER BY " + SqlService.ANNOUNCEMENT_DATE + " DESC";
 
     @Autowired
@@ -37,7 +37,7 @@ public class AnnouncementDAO {
      * @param content 公告内容
      * @throws DataAccessException 数据库访问出错
      */
-    public void uploadAnnouncement(int courseId, String title, String content) throws DataAccessException {
+    public void upload(int courseId, String title, String content) throws DataAccessException {
         Object[] args = new Object[] {title, content, new Date(), courseId};
         jdbcTemplate.update(UPLOAD_ANNOUNCEMENT_SQL, args);
     }
@@ -76,7 +76,7 @@ public class AnnouncementDAO {
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public ArrayList<Announcement> getAnnouncementList(final int courseId) throws SQLException, DataAccessException {
+    public ArrayList<Announcement> getAnnouncements(final int courseId) throws SQLException, DataAccessException {
         return jdbcTemplate.query(GET_LATEST_ANNOUNCEMENT_SQL, new Object[] {courseId}, new ResultSetExtractor<ArrayList<Announcement>>() {
             @Override
             public ArrayList<Announcement> extractData(ResultSet resultSet) throws SQLException, DataAccessException {

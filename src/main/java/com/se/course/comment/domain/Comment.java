@@ -1,4 +1,4 @@
-package com.se.comment.domain;
+package com.se.course.comment.domain;
 
 //import packages
 import java.util.Date;

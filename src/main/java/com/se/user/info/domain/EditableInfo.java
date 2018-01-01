@@ -2,7 +2,7 @@ package com.se.user.info.domain;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class EditableUserInfo {
+public class EditableInfo {
     private MultipartFile image;
     private String imageLocation;
     private String signature;

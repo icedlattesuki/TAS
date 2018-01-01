@@ -34,11 +34,11 @@ public class EmailController {
      * @return 响应成功返回邮件发送成功界面逻辑视图名，否则返回绑定邮箱界面逻辑视图名
      */
     @RequestMapping("/user/email/to-bind")
-    public String toBindEmail(HttpSession session, @RequestParam("email") String email, Model model) {
+    public String toBind(HttpSession session, @RequestParam("email") String email, Model model) {
         EmailContext emailContext = new EmailContext();
         emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/bind?id=" + emailContext.getUuid() + "\">点击该链接即可成功绑定邮箱！</a></body></html>");
 
-        if (emailService.sendEmail(session, email, emailContext)) {
+        if (emailService.send(session, email, emailContext)) {
             ModelService.setEmail(model, email);
             return "user/email/email_send_success";
         } else {
@@ -56,8 +56,8 @@ public class EmailController {
      * @return 邮箱绑定完成界面逻辑视图名
      */
     @RequestMapping("/user/email/bind")
-    public String bindEmail(HttpSession session, @RequestParam("id") String uuid, Model model) {
-        User user = emailService.bindEmail(uuid);
+    public String bind(HttpSession session, @RequestParam("id") String uuid, Model model) {
+        User user = emailService.bind(uuid);
 
         session.setAttribute("user", user);
 
@@ -78,7 +78,7 @@ public class EmailController {
      * @return 用户未设置邮箱则返回绑定邮箱界面逻辑视图名，发送解绑邮件失败则返回个人信息界面逻辑视图名，否则返回邮件发送成功逻辑视图名
      */
     @RequestMapping("/user/email/modify")
-    public String modifyEmail(HttpSession session, Model model) {
+    public String modify(HttpSession session, Model model) {
         User user = (User)session.getAttribute("user");
 
         if (user.getEmail().isEmpty()) {
@@ -88,7 +88,7 @@ public class EmailController {
         EmailContext emailContext = new EmailContext();
         emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/unbind?id=" + emailContext.getUuid() + "\">点击该链接即可成功绑定邮箱！</a></body></html>");
 
-        if (emailService.sendEmail(session, user.getEmail(), emailContext)) {
+        if (emailService.send(session, user.getEmail(), emailContext)) {
             ModelService.setEmail(model, user.getEmail());
             return "user/email/email_send_success";
         } else {
@@ -109,8 +109,8 @@ public class EmailController {
      * @return 解绑成功则返回绑定邮箱界面，否则返回解绑失败界面逻辑视图名
      */
     @RequestMapping("/user/email/unbind")
-    public String unbindEmail(HttpSession session, @RequestParam("id") String uuid) {
-        User user = emailService.unbindEmail(uuid);
+    public String unbind(HttpSession session, @RequestParam("id") String uuid) {
+        User user = emailService.unbind(uuid);
         SessionService.setUser(session, user);
 
         if (user != null) {
