@@ -107,5 +107,26 @@ public class SqlService {
     public static final String UPLOAD_HOMEWORK_COURSE_ID = "course_id";
     public static final String UPLOAD_HOMEWORK_FILE_ID = "upload_homework_file";
 
+    public static final String ONLINE_TEST_ID = "id";
+    public static final String ONLINE_TEST_COURSE_ID = "course_id";
+    public static final String ONLINE_TEST_DDL_DATE = "ddl_date";
+    public static final String ONLINE_TEST_SCORE = "score";
+    public static final String ONLINE_TEST_TITLE = "title";
+
+    public static final String CHOICE_QUESTION_ID = "id";
+    public static final String CHOICE_QUESTION_TEST_ID = "test_id";
+    public static final String CHOICE_QUESTION_SCORE = "score";
+    public static final String CHOICE_QUESTION_TITLE = "title";
+    public static final String CHOICE_QUESTION_A = "choice_a";
+    public static final String CHOICE_QUESTION_B = "choice_b";
+    public static final String CHOICE_QUESTION_C = "choice_c";
+    public static final String CHOICE_QUESTION_D = "choice_d";
+    public static final String CHOICE_QUESTION_ANSWER = "answer";
+
+    public static final String FILL_QUESTION_ID = "id";
+    public static final String FILL_QUESTION_TEST_ID = "test_id";
+    public static final String FILL_QUESTION_SCORE = "score";
+    public static final String FILL_QUESTION_TITLE = "title";
+    public static final String FILL_QUESTION_CONTENT = "content";
 }
 

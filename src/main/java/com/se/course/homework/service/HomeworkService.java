@@ -44,7 +44,7 @@ public class HomeworkService {
             String attachments = "";
             int homework_id = homeworkDAO.getNextHomeworkId();
             homeworkDAO.assignHomework(courseId, title, content, ddl, score, attachments);
-            if (!file.isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 attachmentService.upload(session, file, homework_id, courseId);
                 Attachment attachment = attachmentService.getHomeworkAttachment(homework_id);
                 attachments = String.valueOf(attachment.getFile_id());
