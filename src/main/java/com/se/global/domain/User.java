@@ -18,6 +18,7 @@ public class User {
     private int type;
     public static final int STUDENT_TYPE = 1;
     public static final int TEACHER_TYPE = 2;
+    public static final int ADMIN_TYPE = 3;
 
     public String getId() {
         return id;

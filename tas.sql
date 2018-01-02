@@ -10,7 +10,7 @@ create table student(
     signature varchar(30),
     profile varchar(100),
     major varchar(20),
-    grade int,
+    grade varchar(5),
     class_number varchar(10),
     phone_number varchar(15)
 );
@@ -25,6 +25,10 @@ create table teacher(
     profile varchar(100),
     title varchar(10),
     phone_number varchar(15)
+);
+create table admin(
+    id char(6) primary key,
+    password varchar(30)
 );
 create table course(
     id int primary key auto_increment,
@@ -110,6 +114,8 @@ insert into student values("3150101300", "123456", "吴佳豪", "计算机科学
 insert into teacher values("300400", "123456", "邢卫", "计算机科学与技术学院", "", "", "", "", "教授", "");
 insert into teacher values("300500", "123456", "刘玉生", "计算机科学与技术学院", "", "", "", "", "教授", "");
 insert into teacher values("300600", "123456", "林海", "计算机科学与技术学院", "", "", "", "", "教授", "");
+
+insert into admin values("admin1", "admin1");
 
 insert into course(code,name,credit,college,semester,time,place,introduction,like_number) values("Ex100", "数据结构与算法分析", "2.5", "计算机科学与技术学院", "春学期", "周一3、4", "紫金港-东1-104", "", "0");
 insert into course(code,name,credit,college,semester,time,place,introduction,like_number) values("Ex100", "数据结构与算法分析", "2.5", "计算机科学与技术学院", "春学期", "周一3、4", "紫金港-东1-204", "", "0");

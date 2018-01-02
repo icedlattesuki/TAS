@@ -22,8 +22,6 @@ import com.se.global.dao.FileDAO;
 @Service
 public class FileService {
     private FileDAO fileDAO;
-    public static final String ROOT_PATH = System.getProperty("user.dir") + File.separator +"src" + File.separator + "main" +
-            File.separator + "resources" + File.separator + "static";
     private final Logger logger = LoggerFactory.getLogger("FileService.class");
 
     @Autowired

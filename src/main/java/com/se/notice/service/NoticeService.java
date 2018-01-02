@@ -1,6 +1,7 @@
 package com.se.notice.service;
 
 //import packages
+import com.se.global.domain.Course;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class NoticeService {
     public static final int HOMEWORK_NOTICE_INDEX = 3;
     public static final int COMMENT_NOTICE_INDEX = 4;
     public static final String[] DETAIL_NOTICE_TYPE = new String[] {"资料","视频","公告","作业","留言"};
-    public static final String[] NOTICE_URLS = new String[] {"/material/to-download","/video/watch","/announcement/list","","/comment"};
+    public static final String[] NOTICE_URLS = new String[] {"/resource/material/to-download","/resource/video/watch","/announcement/list","","/comment"};
 
     @Autowired
     public void setNoticeDAO(NoticeDAO noticeDAO) { this.noticeDAO = noticeDAO; }
@@ -97,6 +98,26 @@ public class NoticeService {
         } catch (Exception exception) {
             logger.error("removeNotice fail! " + exception.getCause());
         }
+    }
+
+    public ArrayList<Integer> getCourseNoticeNum(HttpSession session) {
+        ArrayList<Notice> notices = SessionService.getNotices(session);
+        ArrayList<Course> courses = SessionService.getCourses(session);
+        ArrayList<Integer> nums = new ArrayList<Integer>();
+
+        for (Course course : courses) {
+            int count = 0;
+
+            for (Notice notice : notices) {
+                if (notice.getCourseId() == course.getId()) {
+                    count++;
+                }
+            }
+
+            nums.add(count);
+        }
+
+        return nums;
     }
 
     //student

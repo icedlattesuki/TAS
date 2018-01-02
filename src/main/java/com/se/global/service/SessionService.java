@@ -1,7 +1,7 @@
 package com.se.global.service;
 
 //import packages
-import com.se.course.comment.domain.Comment;
+import com.se.courses.comment.domain.Comment;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;

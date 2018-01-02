@@ -1,6 +1,7 @@
 package com.se.user.info.service;
 
 //import packages
+import com.se.global.service.EncryptService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +51,12 @@ public class InfoService {
     }
 
     private String storeImage(User user, MultipartFile image) {
-        String imageLocation = "/image/" + user.getId() + ".jpg";
-        String rootPath = System.getProperty("user.dir") + "/src/main/resources/static";
+        String imageLocation = "/image/" + user.getId() + "-" + EncryptService.getFileMD5(image) + ".jpg";
+        String rootPath = com.se.global.domain.File.ROOT_PATH;
         String realImageLocation = rootPath + imageLocation;
         File file = new File(realImageLocation);
 
-        if (image.isEmpty())
+        if (image == null || image.isEmpty())
             return user.getImageLocation();
 
         try {
@@ -65,5 +66,6 @@ public class InfoService {
             logger.error("storeImage fail! " + exception.getCause());
             return user.getImageLocation();
         }
+
     }
 }
