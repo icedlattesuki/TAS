@@ -83,6 +83,16 @@ public class HomeworkService {
         }
     }
 
+    public boolean deleteHomework(int homeworkId) {
+        try {
+            homeworkDAO.removeHomework(homeworkId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public ArrayList<Homework> getHomeworkList(HttpSession session, int courseId) {
 
         try {
@@ -102,4 +112,5 @@ public class HomeworkService {
             return null;
         }
     }
+
 }

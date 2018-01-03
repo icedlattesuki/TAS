@@ -15,6 +15,7 @@
 <c:forEach var="homework" items="${homeworkList}">
     <div>
         <a href="/course/${course_id}/homework/${homework.id}">${homework.title}</a>
+        <a href="/course/${course_id}/homework/${homework.id}/delete">删除</a>
     </div>
 </c:forEach>
 

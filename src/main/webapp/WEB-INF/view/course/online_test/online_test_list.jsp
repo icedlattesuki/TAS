@@ -17,6 +17,7 @@
         <a href="/course/${onlineTest.course_id}/onlineTest/${onlineTest.id}">${onlineTest.title}</a>
         <p>${onlineTest.ddl_date}</p>
         <p>${onlineTest.score}</p>
+        <a href="/course/${onlineTest.course_id}/onlineTest/${onlineTest.id}/delete">删除测试</a>
     </div>
 </c:forEach>
 </body>

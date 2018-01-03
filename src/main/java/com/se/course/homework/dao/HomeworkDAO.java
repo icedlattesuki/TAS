@@ -31,6 +31,7 @@ public class HomeworkDAO {
     private static final String GET_MAX_ID_SQL = "select max(" + SqlService.HOMEWORK_ID + ") from homework";
     private static final String UPDATE_ATTACHMENT_SQL = "update homework set " + SqlService.HOMEWORK_ATTACHMENT + " =? where " +
             SqlService.HOMEWORK_ID + " = ?";
+    private static final String REMOVE_HOMEWORK_SQL = "delete from homework where " + SqlService.HOMEWORK_ID  + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -70,6 +71,10 @@ public class HomeworkDAO {
         } else {
             return null;
         }
+    }
+
+    public void removeHomework(int homework_id) {
+        jdbcTemplate.update(REMOVE_HOMEWORK_SQL, homework_id);
     }
 
     public int getNextHomeworkId() {

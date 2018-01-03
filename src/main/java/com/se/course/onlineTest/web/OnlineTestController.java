@@ -66,4 +66,11 @@ public class OnlineTestController {
             return "error/404";
         }
     }
+
+    @RequestMapping("/course/{courseId}/onlineTest/${onlineTestId}")
+    public String deleteOnlineTest(HttpSession session, Model model, @PathVariable int courseId,
+                                   @PathVariable int onlineTestId) {
+        onlineTestService.deleteOnlineTest(onlineTestId);
+        return "redirect:/course/" + courseId + "/onlineTest/list";
+    }
 }

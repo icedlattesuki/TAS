@@ -26,6 +26,7 @@ public class OnlineTestDAO {
     private static final String GET_ONLINE_TEST_LIST_SQL = "select * from online_test where " + SqlService.ONLINE_TEST_COURSE_ID +
             " = ?";
     private static final String GET_TEST_SQL = "select * from online_test where " + SqlService.ONLINE_TEST_ID + " = ?";
+    private static final String REMOVE_ONLINE_TEST_SQL = "delete from online_test where " + SqlService.ONLINE_TEST_ID + " = ?";
 
 
     @Autowired
@@ -41,6 +42,10 @@ public class OnlineTestDAO {
     public int getOnlineTest(int course_id, String title) {
         Object[] args = new Object[] {course_id, title};
         return jdbcTemplate.queryForObject(GET_TEST_ID_SQL, args, Integer.class);
+    }
+
+    public void remove(int onlineTest_id) {
+        jdbcTemplate.update(REMOVE_ONLINE_TEST_SQL, onlineTest_id);
     }
 
     public ArrayList<OnlineTest> getCourseOnlineTest(int course_id) {
