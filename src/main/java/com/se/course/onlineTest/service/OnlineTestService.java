@@ -54,6 +54,16 @@ public class OnlineTestService {
         }
     }
 
+    public boolean deleteOnlineTest(int onlineTestId) {
+        try {
+            onlineTestDAO.remove(onlineTestId);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public ArrayList<OnlineTest> getCourseOnlineTest(int courseId) {
         try {
             return onlineTestDAO.getCourseOnlineTest(courseId);

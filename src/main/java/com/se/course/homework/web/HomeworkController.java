@@ -83,6 +83,12 @@ public class HomeworkController {
         }
     }
 
+    @RequestMapping("/course/{courseId}/homework/{id}/delete")
+    public String deleteHomework(HttpSession session, Model model, @PathVariable int courseId, @PathVariable int id) {
+        homeworkService.deleteHomework(id);
+        return "redirect:/course/" + courseId + "/homework/list";
+    }
+
     @RequestMapping("/course/{courseId}/homework/{id}/update")
     public String updateHomework(HttpSession session, Model model, @Valid HomeworkAssignCommand homeworkAssignCommand,
                                      BindingResult bindingResult, @PathVariable int id, @PathVariable int courseId) {
