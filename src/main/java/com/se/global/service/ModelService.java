@@ -4,6 +4,8 @@ package com.se.global.service;
 import com.se.courses.comment.domain.Comment;
 import com.se.courses.resource.material.domain.Material;
 import com.se.courses.resource.video.domain.Video;
+import com.se.global.domain.Student;
+import com.se.global.domain.Teacher;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import java.util.ArrayList;
@@ -54,6 +56,8 @@ public class ModelService {
         model.addAttribute("videos", videos);
     }
 
+    public static void setCourse(Model model, Course course) { model.addAttribute("course", course); }
+
     public static void setCourses(Model model, ArrayList<Course> courses) {
         model.addAttribute("courses", courses);
     }
@@ -80,4 +84,8 @@ public class ModelService {
     public static void setNoticeURLs(Model model, String[] url) { model.addAttribute("noticeURLs", url); }
 
     public static void setCourseId(Model model, int courseId) { model.addAttribute("courseId", courseId); }
+
+    public static void setStudents(Model model, ArrayList<Student> students) { model.addAttribute("students", students); }
+
+    public static void setTeachers(Model model, ArrayList<Teacher> teachers) { model.addAttribute("teachers", teachers); }
 }

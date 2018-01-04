@@ -1,7 +1,9 @@
 package com.se.courses.resource.material.web;
 
 //import packages
+import com.se.global.domain.User;
 import com.se.global.service.ModelService;
+import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,14 +34,27 @@ public class MaterialController {
     public void setNoticeService(NoticeService noticeService) { this.noticeService = noticeService; }
 
     /**
-     * 显示资源上传界面
+     * 显示资源界面
      *
+     * @param session 当前会话
+     * @param request 请求
      * @param courseId 课程id
-     * @return 资源上传界面逻辑视图名
+     * @param model Model对象
+     * @return 资源下载界面逻辑视图名
      */
-    @RequestMapping("/course/{courseId}/resource/material/to-upload")
-    public String uploadPage(@PathVariable int courseId) {
-        return "courses/resource/material/material_upload";
+    @RequestMapping("/course/{courseId}/resource/material")
+    public String downloadPage(HttpSession session, HttpServletRequest request, @PathVariable int courseId, Model model) {
+        noticeService.removeNotice(session, request);
+        ModelService.setMaterials(model, materialService.getMaterials(courseId));
+        ModelService.setNoticeTotalNum(model, session);
+
+        User user = SessionService.getUser(session);
+
+        if (user.getType() == User.STUDENT_TYPE) {
+            return "courses/resource/material/student_material";
+        } else {
+            return "courses/resource/material/teacher_material";
+        }
     }
 
     /**
@@ -57,24 +72,8 @@ public class MaterialController {
             ModelService.setError(model, "上传文件出错!");
             return "courses/resource/material/material_upload";
         } else {
-            return "redirect:/courses/" + courseId + "/resource/material/to-download";
+            return "redirect:/course/" + courseId + "/resource/material";
         }
-    }
-
-    /**
-     * 显示资源下载界面
-     *
-     * @param session 当前会话
-     * @param request 请求
-     * @param courseId 课程id
-     * @param model Model对象
-     * @return 资源下载界面逻辑视图名
-     */
-    @RequestMapping("/course/{courseId}/resource/material/to-download")
-    public String downloadPage(HttpSession session, HttpServletRequest request, @PathVariable int courseId, Model model) {
-        noticeService.removeNotice(session, request);
-        ModelService.setMaterials(model, materialService.getMaterials(courseId));
-        return "courses/resource/material/material_download";
     }
 
     /**
@@ -106,6 +105,6 @@ public class MaterialController {
             ModelService.setInfo(model, "删除失败!");
         }
 
-        return "redirect:/courses/"+ courseId + "/resource/material/to-download";
+        return "redirect:/course/"+ courseId + "/resource/material";
     }
 }

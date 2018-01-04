@@ -86,12 +86,8 @@ public class LoginController {
     public String indexPage(HttpSession session, Model model) {
         User user = SessionService.getUser(session);
 
-        if (user == null) {
-            return "user/index/passenger_index";
-        }
-
-        if (user.getType() == User.ADMIN_TYPE) {
-            return "admin/student/student_manage";
+        if (user != null && user.getType() == User.ADMIN_TYPE) {
+            return "redirect:/admin/student_manage";
         }
 
         user.setKeyword(null);
@@ -136,6 +132,10 @@ public class LoginController {
         ArrayList<Course> courses = courseService.getCourses(session);
         SessionService.setCourses(session, courses);
         ModelService.setCourses(model, courses);
+
+        if (user == null) {
+            return "user/index/passenger_index";
+        }
 
         ArrayList<Notice> notices = noticeService.getNotices(session);
         SessionService.setNotices(session, notices);

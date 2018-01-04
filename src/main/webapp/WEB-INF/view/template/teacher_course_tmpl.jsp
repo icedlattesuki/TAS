@@ -18,7 +18,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" >
+                        <a href="/course/${courseId}/introduction" >
                             <i class="material-icons left">
                                 format_list_bulleted
                             </i>
@@ -29,58 +29,14 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/course/${courseId}/resource/material/to-upload">
+                        <a href="/course/${courseId}/resource/material">
                             <i class="material-icons left">
                                 folder_open
                             </i>
                             <i class="material-icons right">
                                 chevron_right
                             </i>
-                            资料上传
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/course/${courseId}/resource/material/to-download">
-                            <i class="material-icons left">
-                                folder_open
-                            </i>
-                            <i class="material-icons right">
-                                chevron_right
-                            </i>
-                            资料下载
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="material-icons left">
-                                edit
-                            </i>
-                            <i class="material-icons right">
-                                chevron_right
-                            </i>
-                            在线测试
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="material-icons left">
-                                assignment
-                            </i>
-                            <i class="material-icons right">
-                                chevron_right
-                            </i>
-                            实验作业
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="material-icons left">
-                                group
-                            </i>
-                            <i class="material-icons right">
-                                chevron_right
-                            </i>
-                            团队认证审核
+                            资料管理
                         </a>
                     </li>
                     <li>
@@ -103,6 +59,28 @@
                                 chevron_right
                             </i>
                             视频观看
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="material-icons left">
+                                edit
+                            </i>
+                            <i class="material-icons right">
+                                chevron_right
+                            </i>
+                            在线测试
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="material-icons left">
+                                assignment
+                            </i>
+                            <i class="material-icons right">
+                                chevron_right
+                            </i>
+                            实验作业
                         </a>
                     </li>
                     <li>

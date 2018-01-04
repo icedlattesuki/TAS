@@ -43,8 +43,9 @@
         <div class="col s1 m1 l1"></div>
         <div class="col s10 m9 l9">
             <div class="section"></div>
-            <h4 align="left">修改密码</h4>
-            <h5 class="left">Modify Password</h5>
+            <p style="color: red">${error}</p>
+            <h4>修改密码</h4>
+            <h5>Modify Password</h5>
             <div class="divider row"></div>
             <form class="row" name="passwdform" method="post"
                   action="/user/password-modify/modify" onsubmit="return validateForm()">

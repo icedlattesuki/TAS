@@ -1,6 +1,7 @@
 package com.se.courses.comment.dao;
 
 //import packages
+import com.se.login.dao.LoginDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,14 +22,18 @@ import com.se.global.service.SqlService;
 @Repository
 public class CommentDAO {
     private JdbcTemplate jdbcTemplate;
-    private final String SUBMIT_COMMENT_SQL = "INSERT INTO comment(" + SqlService.COMMENT_USER_ID + "," + SqlService.COMMENT_USER_NAME + "," + SqlService.COMMENT_USER_IMAGE_POSITION +
+    private LoginDAO loginDAO;
+    private final String SUBMIT_COMMENT_SQL = "INSERT INTO comment(" + SqlService.COMMENT_USER_ID + "," + SqlService.COMMENT_USER_TYPE +
             "," + SqlService.COMMENT_COURSE_ID + "," + SqlService.COMMENT_CONTENT + "," + SqlService.COMMENT_DATE +
-            ") VALUES(?,?,?,?,?,?)";
+            ") VALUES(?,?,?,?,?)";
     private final String GET_COMMENT_LIST_SQL = "SELECT * FROM comment WHERE " + SqlService.COMMENT_COURSE_ID + " = ? " + " ORDER BY date ASC";
     private final String REMOVE_COMMENT_SQL = "DELETE FROM comment WHERE " + SqlService.COMMENT_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) { this.jdbcTemplate = jdbcTemplate; }
+
+    @Autowired
+    public void setLoginDAO(LoginDAO loginDAO) { this.loginDAO = loginDAO; }
 
     /**
      * 提交留言
@@ -39,7 +44,7 @@ public class CommentDAO {
      */
     public void submit(Comment comment, int courseId) throws DataAccessException {
         User user = comment.getUser();
-        Object[] args = new Object[] {user.getId(), user.getName(), user.getImageLocation(), courseId, comment.getContent(), comment.getDate()};
+        Object[] args = new Object[] {user.getId(), user.getType(), courseId, comment.getContent(), comment.getDate()};
         jdbcTemplate.update(SUBMIT_COMMENT_SQL, args);
     }
 
@@ -63,11 +68,9 @@ public class CommentDAO {
                     comment.setDate(resultSet.getDate(SqlService.COMMENT_DATE));
                     comment.setCourseId(courseId);
 
-                    User user = new User();
-                    user.setId(resultSet.getString(SqlService.COMMENT_USER_ID));
-                    user.setName(resultSet.getString(SqlService.COMMENT_USER_NAME));
-                    user.setImageLocation(resultSet.getString(SqlService.COMMENT_USER_IMAGE_POSITION));
-                    comment.setUser(user);
+                    String id = resultSet.getString(SqlService.COMMENT_USER_ID);
+                    int type = resultSet.getInt(SqlService.COMMENT_USER_TYPE);
+                    comment.setUser(loginDAO.getUser(id, type));
 
                     commentList.add(comment);
                 }

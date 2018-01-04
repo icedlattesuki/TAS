@@ -1,6 +1,10 @@
 package com.se.courses.course.dao;
 
+<<<<<<< HEAD
 import com.se.courses.course.service.CourseService;
+=======
+import com.se.global.domain.User;
+>>>>>>> origin-hys/master
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +28,8 @@ public class CourseDAO {
     final String GET_SEARCH_COURSE_SQL = "SELECT * FROM course WHERE " + SqlService.COURSE_ID + " = ?" + " and "
             + SqlService.COURSE_NAME + " like " + "?";
     private final String GET_ALL_COURSE_SQL = "SELECT * FROM course";
+    private final String IDENTIFY1_SQL = "SELECT * FROM take WHERE " + SqlService.TAKE_COURSE_ID + " = ? AND " + SqlService.TAKE_STUDENT_ID + " = ?";
+    private final String IDENTIFY2_SQL = "SELECT * FROM teach WHERE " + SqlService.TEACH_COURSE_ID + " = ? AND " + SqlService.TEACH_TEACHER_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -110,6 +116,24 @@ public class CourseDAO {
         });
     }
 
+    public boolean identifyCourseAndUser(int courseId, User user) {
+        if (user.getType() == User.STUDENT_TYPE) {
+            return jdbcTemplate.query(IDENTIFY1_SQL, new Object[]{courseId, user.getId()}, new ResultSetExtractor<Boolean>() {
+                @Override
+                public Boolean extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                    return resultSet.next();
+                }
+            });
+        } else {
+            return jdbcTemplate.query(IDENTIFY2_SQL, new Object[]{courseId, user.getId()}, new ResultSetExtractor<Boolean>() {
+                @Override
+                public Boolean extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                    return resultSet.next();
+                }
+            });
+        }
+    }
+
     private Course setCourse(ResultSet resultSet) throws SQLException {
         Course course = new Course();
 
@@ -121,7 +145,7 @@ public class CourseDAO {
         course.setSemester(resultSet.getString(SqlService.COURSE_SEMESTER));
         course.setTime(resultSet.getString(SqlService.COURSE_TIME));
         course.setPlace(resultSet.getString(SqlService.COURSE_PLACE));
-        course.setIntroduction(resultSet.getString(SqlService.COURSE_NTRODUCTION));
+        course.setIntroduction(resultSet.getString(SqlService.COURSE_INTRODUCTION));
         course.setLike(resultSet.getInt(SqlService.COURSE_LIKE_NUMBER));
 
         return course;

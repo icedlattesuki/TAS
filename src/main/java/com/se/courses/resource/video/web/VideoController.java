@@ -2,7 +2,9 @@ package com.se.courses.resource.video.web;
 
 //import packages
 import com.se.courses.resource.video.domain.Video;
+import com.se.global.domain.User;
 import com.se.global.service.ModelService;
+import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,11 +37,15 @@ public class VideoController {
 
     /**
      * 显示视频上传界面
+     *
+     * @param session 当前会话
+     * @param model Model对象
      * @param courseId 课程id
      * @return 视频上传界面逻辑视图名
      */
     @RequestMapping("/course/{courseId}/resource/video/to-upload")
-    public String uploadPage(@PathVariable int courseId) {
+    public String uploadPage(HttpSession session, Model model, @PathVariable int courseId) {
+        ModelService.setNoticeTotalNum(model, session);
         return "courses/resource/video/video_upload";
     }
 
@@ -57,7 +63,7 @@ public class VideoController {
     @RequestMapping("/course/{courseId}/resource/video/upload")
     public String upload(HttpSession session, @PathVariable int courseId, @RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("profile") String profile, Model model) {
         if (videoService.upload(session, file, courseId, title, profile)) {
-            return "redirect:/courses/" + courseId + "/resource/video/watch";
+            return "redirect:/course/" + courseId + "/resource/video/watch";
         } else {
             ModelService.setError(model, "上传视频失败!");
             return "courses/resource/video/video_upload";
@@ -78,7 +84,15 @@ public class VideoController {
         noticeService.removeNotice(session, request);
         ArrayList<Video> videos = videoService.getVideos(courseId);
         ModelService.setVideos(model, videos);
-        return "courses/resource/video/video_watch";
+        ModelService.setNoticeTotalNum(model, session);
+
+        User user = SessionService.getUser(session);
+
+        if (user.getType() == User.STUDENT_TYPE) {
+            return "courses/resource/video/student_video";
+        } else {
+            return "courses/resource/video/teacher_video";
+        }
     }
 
     /**
@@ -110,6 +124,6 @@ public class VideoController {
             model.addAttribute("info", "删除失败！");
         }
 
-        return "redirect:/courses/"+ courseId + "/resource/video/watch";
+        return "redirect:/course/"+ courseId + "/resource/video/watch";
     }
 }

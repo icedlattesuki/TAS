@@ -1,6 +1,8 @@
 package com.se.user.info.web;
 
 //import packages
+import com.se.notice.domain.Notice;
+import com.se.notice.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,7 @@ import com.se.global.service.SessionService;
 import com.se.user.info.domain.EditableInfo;
 import com.se.user.info.service.InfoService;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -25,9 +28,15 @@ import java.util.Random;
 @Controller
 public class InfoController {
     private InfoService infoService;
+    private NoticeService noticeService;
 
     @Autowired
     public void setInfoService(InfoService infoService) { this.infoService = infoService; }
+
+    @Autowired
+    public void setNoticeService(NoticeService noticeService) {
+        this.noticeService = noticeService;
+    }
 
     /**
      * 显示用户个人信息
@@ -40,6 +49,8 @@ public class InfoController {
     public String infoPage(HttpSession session, Model model) {
         User user = SessionService.getUser(session);
 
+        ArrayList<Notice> notices = noticeService.getNotices(session);
+        SessionService.setNotices(session, notices);
         ModelService.setNoticeTotalNum(model, session);
 
         if (user.getType() == User.STUDENT_TYPE) {
