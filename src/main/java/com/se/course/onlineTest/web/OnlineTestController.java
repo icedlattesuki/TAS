@@ -67,7 +67,7 @@ public class OnlineTestController {
         }
     }
 
-    @RequestMapping("/course/{courseId}/onlineTest/${onlineTestId}")
+    @RequestMapping("/course/{courseId}/onlineTest/{onlineTestId}/delete")
     public String deleteOnlineTest(HttpSession session, Model model, @PathVariable int courseId,
                                    @PathVariable int onlineTestId) {
         onlineTestService.deleteOnlineTest(onlineTestId);
