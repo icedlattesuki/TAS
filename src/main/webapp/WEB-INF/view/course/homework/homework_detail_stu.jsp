@@ -19,6 +19,12 @@
                         <div><p>作业内容：${homework.content}</p>
                             <p>截止日期：${homework.ddl_date}</p>
                             <p>满分：${homework.score}</p>
+                            <c:if test="${uploadHomework.get_score == -1}">
+                                <p>当前分数：未打分</p>
+                            </c:if>
+                            <c:if test="${uploadHomework.get_score != -1}">
+                                <p>当前分数：${uploadHomework.get_score}</p>
+                            </c:if>
                             <div>
                                 作业要求:
                                 <a href="/course/homework/download?file_id=${attachment.file_id}">
@@ -28,23 +34,6 @@
                             <br>
                         </div>
                         <div class="card-action">
-                            <c:if test="${userType == 2}">
-                                <a href="/course/${homework.course_id}/homework/${homework.id}/upload_list/" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan box-shadow">
-                                    <i class="material-icons right">
-                                        format_list_numbered
-                                    </i>
-                                    提交列表
-                                </a>
-                                <br>
-                                <br>
-                                <a href="/course/${homework.course_id}/homework/${homework.id}/to-update/" class="waves-effect waves-light btn gradient-45deg-light-blue-cyan box-shadow">
-                                    <i class="material-icons right">
-                                        edit
-                                    </i>
-                                    编辑作业
-                                </a>
-                            </c:if>
-                            <c:if test="${userType == 1}">
                             <div class="row">
                                 <form id="uploadForm" class="col s12" action="/course/${homework.course_id}/homework/${homework.id}/upload"
                                       method="post" enctype="multipart/form-data">
@@ -73,7 +62,7 @@
                                     ${uploadHomework.name}
                             </a>
                         </div>
-                        </c:if>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -33,5 +33,5 @@
         <div class="col s0 m2 l2"></div>
     </div>
     </div>
-</tmpl:overwrite>..
+</tmpl:overwrite>
 <jsp:include page="../../template/teacher_course_tmpl.jsp"/>

@@ -130,4 +130,12 @@ public class UploadHomeworkService extends FileService {
         }
         return uploadHomeworkLists;
     }
+
+    public void markScore(int score, int id) {
+        try {
+            uploadHomeworkDAO.updateScore(score, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
