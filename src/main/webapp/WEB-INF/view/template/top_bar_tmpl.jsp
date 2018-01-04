@@ -10,8 +10,10 @@
                 <div class="nav-wrapper">
                     <a href="/index" class="brand-logo">TAS</a>
                     <div class="header-search-wrapper hide-on-med-and-down sideNav-lock">
-                        <i class="material-icons">search</i>
-                        <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore">
+                        <form class="search-form" method="post" action="/index/s">
+                            <i class="material-icons">search</i>
+                            <input type="text" name="Keyword" class="header-search-input z-depth-2" placeholder="Explore">
+                        </form>
                     </div>
                     <ul class="right hide-on-med-and-down">
                         <li>

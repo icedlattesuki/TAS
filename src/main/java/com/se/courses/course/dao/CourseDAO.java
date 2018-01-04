@@ -1,5 +1,6 @@
 package com.se.courses.course.dao;
 
+import com.se.courses.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +21,8 @@ import com.se.global.service.SqlService;
 public class CourseDAO {
     private JdbcTemplate jdbcTemplate;
     private final String GET_COURSE_LIST_SQL = "SELECT * FROM course WHERE " + SqlService.COURSE_ID + " = ?";
+    final String GET_SEARCH_COURSE_SQL = "SELECT * FROM course WHERE " + SqlService.COURSE_ID + " = ?" + " and "
+            + SqlService.COURSE_NAME + " like " + "?";
     private final String GET_ALL_COURSE_SQL = "SELECT * FROM course";
 
     @Autowired
@@ -48,6 +51,37 @@ public class CourseDAO {
             });
 
             courses.add(course);
+        }
+
+        return courses;
+    }
+
+    /**
+     * 获取搜索的课程列表
+     *
+     * @param courseIds 课程id列表
+     * @param keyword 搜索关键字
+     * @return 课程的列表
+     * @throws SQLException SQL查询出错
+     * @throws DataAccessException 数据库访问出错
+     */
+    public ArrayList<Course> getSearchCourses(ArrayList<Integer> courseIds, String keyword) throws SQLException, DataAccessException {
+        ArrayList<Course> courses = new ArrayList<Course>();
+
+        for (int courseId : courseIds) {
+            Course course = jdbcTemplate.query(GET_SEARCH_COURSE_SQL, new Object[] {courseId, "%" + keyword + "%"}, new ResultSetExtractor<Course>() {
+                @Override
+                public Course extractData(ResultSet resultSet) throws  DataAccessException {
+                    try {
+                        resultSet.next();
+                        return setCourse(resultSet);
+                    } catch (SQLException e) {
+                        return null;
+                    }
+                }
+            });
+            if(course != null)
+                courses.add(course);
         }
 
         return courses;

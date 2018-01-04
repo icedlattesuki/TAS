@@ -35,17 +35,22 @@ public class CourseService {
      */
     public ArrayList<Course> getCourses(HttpSession session) {
         User user = SessionService.getUser(session);
-
         try {
             if (user == null) {
                 return courseDAO.getAllCourse();
             }
             else if (user.getType() == 1) {
                 Student student = (Student)user;
-                return courseDAO.getCourses(student.getTakes());
+                if(user.getKeyword() == null || user.getKeyword().equals(""))
+                    return courseDAO.getCourses(student.getTakes());
+                else
+                    return courseDAO.getSearchCourses(student.getTakes(), user.getKeyword());
             } else {
                 Teacher teacher = (Teacher)user;
-                return courseDAO.getCourses(teacher.getTeaches());
+                if(user.getKeyword() == null || user.getKeyword().equals(""))
+                    return courseDAO.getCourses(teacher.getTeaches());
+                else
+                    return courseDAO.getSearchCourses(teacher.getTeaches(), user.getKeyword());
             }
         } catch (Exception exception) {
             logger.error("getCourseList fail! " + exception.getCause());
