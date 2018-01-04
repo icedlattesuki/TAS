@@ -1,17 +1,25 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: yusen
-  Date: 2017/11/29
-  Time: 上午10:49
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>浙江大学教学辅助系统</title>
-</head>
-<body>
-<h4>更新密码成功！</h4>
-<a href="/login">重新登录</a>
-</body>
-</html>
+<%@ taglib prefix="tmpl" uri="/WEB-INF/mytag.tld"%>
+<tmpl:overwrite name="body">
+    <div class="row">
+        <div class="col s0 m4 l4"></div>
+        <div class="col s0 m4 l4">
+            <div class="section"></div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="card teal lighten-2">
+                        <div class="card-content white-text">
+                            <span class="card-title" align="center">修改密码成功！</span>
+                        </div>
+                        <div class="card-action">
+                            <a href="/login" class="white-text lighten-3" align="center">
+                                重新登录<i class="material-icons right">arrow_forward</i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col s0 m4 l4"></div>
+    </div>
+</tmpl:overwrite>
+<jsp:include page="../../template/base.jsp" />

@@ -60,13 +60,11 @@ public class PasswordService {
     /**
      * 更新密码
      *
-     * @param session 当前会话
+     * @param user 当前用户
      * @param password 新密码
      * @return true表示更新成功，false表示更新失败
      */
-    public boolean update(HttpSession session, String password) {
-        User user = SessionService.getUser(session);
-
+    public boolean update(User user, String password) {
         try {
             passwordDAO.update(user, password);
             return true;

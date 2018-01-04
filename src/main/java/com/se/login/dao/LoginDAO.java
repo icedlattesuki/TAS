@@ -20,12 +20,14 @@ import java.util.ArrayList;
 @Repository
 public class LoginDAO {
     private JdbcTemplate jdbcTemplate;
-    private static final String IS_STUDENT_EXIST_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ? and " + SqlService.STUDENT_PASSWORD + " = ?";
-    private static final String IS_TEACHER_EXIST_SQL = "SELECT * FROM teacher where " + SqlService.TEACHER_ID + " = ? and " + SqlService.TEACHER_PASSWORD + " = ?";
-    private static final String GET_STUDENT_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ?";
-    private static final String GET_TEACHER_SQL = "SELECT * FROM teacher WHERE " + SqlService.TEACHER_ID + " = ?";
-    private static final String GET_STUDENT_COURSE_KEY_SQL = "SELECT * FROM take WHERE " + SqlService.TAKE_STUDENT_ID + " = ?";
-    private static final String GET_TEACHER_COURSE_KEY_SQL = "SELECT * FROM teach WHERE " + SqlService.TEACH_TEACHER_ID + " = ?";
+    private final String IS_STUDENT_EXIST_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ? and " + SqlService.STUDENT_PASSWORD + " = ?";
+    private final String IS_TEACHER_EXIST_SQL = "SELECT * FROM teacher where " + SqlService.TEACHER_ID + " = ? and " + SqlService.TEACHER_PASSWORD + " = ?";
+    private final String IS_ADMIN_EXIST_SQL = "SELECT * FROM admin WHERE " + SqlService.ADMIN_ID + " = ? and " + SqlService.ADMIN_PASSWORD + " = ?";
+    private final String GET_STUDENT_SQL = "SELECT * FROM student WHERE " + SqlService.STUDENT_ID + " = ?";
+    private final String GET_TEACHER_SQL = "SELECT * FROM teacher WHERE " + SqlService.TEACHER_ID + " = ?";
+    private final String GET_ADMIN_SQL = "SELECT * FROM admin WHERE " + SqlService.ADMIN_ID + " = ?";
+    private final String GET_STUDENT_COURSE_KEY_SQL = "SELECT * FROM take WHERE " + SqlService.TAKE_STUDENT_ID + " = ?";
+    private final String GET_TEACHER_COURSE_KEY_SQL = "SELECT * FROM teach WHERE " + SqlService.TEACH_TEACHER_ID + " = ?";
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -47,8 +49,9 @@ public class LoginDAO {
             }
         });
 
-        if (flag > 0)
+        if (flag > 0) {
             return flag;
+        }
 
         flag = jdbcTemplate.query(IS_TEACHER_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<java.lang.Integer>() {
             @Override
@@ -57,7 +60,16 @@ public class LoginDAO {
             }
         });
 
-        return flag;
+        if (flag > 0) {
+            return flag;
+        }
+
+        return jdbcTemplate.query(IS_ADMIN_EXIST_SQL, new Object[]{id, password}, new ResultSetExtractor<Integer>() {
+            @Override
+            public Integer extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                return resultSet.next() ? User.ADMIN_TYPE : 0;
+            }
+        });
     }
 
     /**
@@ -80,14 +92,14 @@ public class LoginDAO {
                     student.setType(User.STUDENT_TYPE);
                     setUser(student, resultSet);
                     student.setMajor(resultSet.getString(SqlService.STUDENT_MAJOR));
-                    student.setGrade(resultSet.getInt(SqlService.STUDENT_GRADE));
+                    student.setGrade(resultSet.getString(SqlService.STUDENT_GRADE));
                     student.setClassNumber(resultSet.getString(SqlService.STUDENT_CLASS_NUMBER));
                     student.setTakes(getStudentCourses(student.getId()));
 
                     return student;
                 }
             });
-        } else {
+        } else if (type == User.TEACHER_TYPE) {
             return jdbcTemplate.query(GET_TEACHER_SQL, new Object[]{id}, new ResultSetExtractor<User>() {
                 @Override
                 public User extractData(ResultSet resultSet) throws SQLException, DataAccessException {
@@ -100,6 +112,19 @@ public class LoginDAO {
                     teacher.setTeaches(getTeacherCourses(teacher.getId()));
 
                     return teacher;
+                }
+            });
+        } else {
+            return jdbcTemplate.query(GET_ADMIN_SQL, new Object[]{id}, new ResultSetExtractor<User>() {
+                @Override
+                public User extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                    resultSet.next();
+
+                    Admin admin = new Admin();
+                    admin.setId(resultSet.getString(SqlService.ADMIN_ID));
+                    admin.setType(User.ADMIN_TYPE);
+
+                    return admin;
                 }
             });
         }

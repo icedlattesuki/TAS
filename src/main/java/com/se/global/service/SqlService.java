@@ -35,6 +35,9 @@ public class SqlService {
     public static final String TEACHER_PHONE_NUMBER = "phone_number";
     public static final String TEACHER_TITLE = "title";
 
+    public static final String ADMIN_ID = "id";
+    public static final String ADMIN_PASSWORD = "password";
+
     public static final String COURSE_ID = "id";
     public static final String COURSE_CODE = "code";
     public static final String COURSE_NAME = "name";

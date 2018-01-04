@@ -26,6 +26,7 @@ import com.se.user.email.domain.EmailContext;
 public class EmailService {
     private final Logger logger = LoggerFactory.getLogger("EmailService.class");
     private Map<String, User> uuidMap = new HashMap<String, User>();
+    private Map<User, String> emailMap = new HashMap<User, String>();
     private final String host = "898592099@qq.com";
     private JavaMailSender sender;
     private EmailDAO emailDAO;
@@ -46,8 +47,8 @@ public class EmailService {
      */
     public boolean send(HttpSession session, String email, EmailContext emailContext) {
         User user = SessionService.getUser(session);
-        user.setEmail(email);
         uuidMap.put(emailContext.getUuid(), user);
+        emailMap.put(user, email);
 
         MimeMessage message = sender.createMimeMessage();
 
@@ -76,9 +77,11 @@ public class EmailService {
      */
     public User bind(String uuid) {
         User user = uuidMap.get(uuid);
+        String email = emailMap.get(user);
 
         try {
-            emailDAO.update(user, user.getEmail());
+            emailDAO.update(user, email);
+            user.setEmail(email);
             return user;
         } catch (DataAccessException exception) {
             logger.error("bind fail! " + exception.getCause());

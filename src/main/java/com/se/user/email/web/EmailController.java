@@ -26,6 +26,19 @@ public class EmailController {
     public void setEmailService(EmailService emailService) { this.emailService = emailService; }
 
     /**
+     * 显示绑定邮箱界面
+     *
+     * @param session 当前会话
+     * @param model Model对象
+     * @return 绑定邮箱逻辑视图名
+     */
+    @RequestMapping("/user/email")
+    public String bindPage(HttpSession session, Model model) {
+        ModelService.setNoticeTotalNum(model, session);
+        return "user/email/email_bind";
+    }
+
+    /**
      * 响应绑定邮箱请求
      *
      * @param session 当前会话
@@ -71,13 +84,13 @@ public class EmailController {
     }
 
     /**
-     * 响应修改邮箱请求
+     * 响应解绑邮箱请求
      *
      * @param session 当前会话
      * @param model Model对象
      * @return 用户未设置邮箱则返回绑定邮箱界面逻辑视图名，发送解绑邮件失败则返回个人信息界面逻辑视图名，否则返回邮件发送成功逻辑视图名
      */
-    @RequestMapping("/user/email/modify")
+    @RequestMapping("/user/email/to-unbind")
     public String modify(HttpSession session, Model model) {
         User user = (User)session.getAttribute("user");
 
@@ -86,7 +99,7 @@ public class EmailController {
         }
 
         EmailContext emailContext = new EmailContext();
-        emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/unbind?id=" + emailContext.getUuid() + "\">点击该链接即可成功绑定邮箱！</a></body></html>");
+        emailContext.setText("<html><body><a href=\"http://localhost:8080/user/email/unbind?id=" + emailContext.getUuid() + "\">点击该链接即可成功解绑邮箱！</a></body></html>");
 
         if (emailService.send(session, user.getEmail(), emailContext)) {
             ModelService.setEmail(model, user.getEmail());
