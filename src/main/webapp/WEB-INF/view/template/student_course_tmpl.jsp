@@ -18,7 +18,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" >
+                        <a href="/course/${courseId}/introduction" >
                             <i class="material-icons left">
                                 format_list_bulleted
                             </i>
@@ -29,7 +29,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/course/${courseId}/resource/material/to-download">
+                        <a href="/course/${courseId}/resource/material">
                             <i class="material-icons left">
                                 folder_open
                             </i>
@@ -37,6 +37,17 @@
                                 chevron_right
                             </i>
                             资料下载
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/course/${courseId}/resource/video/watch">
+                            <i class="material-icons left">
+                                video_library
+                            </i>
+                            <i class="material-icons right">
+                                chevron_right
+                            </i>
+                            视频观看
                         </a>
                     </li>
                     <li>
@@ -59,28 +70,6 @@
                                 chevron_right
                             </i>
                             实验作业
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="material-icons left">
-                                group
-                            </i>
-                            <i class="material-icons right">
-                                chevron_right
-                            </i>
-                            团队信息
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/course/${courseId}/resource/video/watch">
-                            <i class="material-icons left">
-                                video_library
-                            </i>
-                            <i class="material-icons right">
-                                chevron_right
-                            </i>
-                            视频观看
                         </a>
                     </li>
                     <li>

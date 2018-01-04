@@ -6,10 +6,7 @@
   Time: 下午11:51
   To change this template use File | Settings | File Templates.
 --%>
-<%--@elvariable id="user" type="com.se.global.domain.User"--%>
-<%--@elvariable id="comment" type="com.se.courses.comment.domain.Comment"--%>
-<%--@elvariable id="comments" type="java.util.ArrayList<Comment>"--%>
-<%--@elvariable id="courseId" type="int"--%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

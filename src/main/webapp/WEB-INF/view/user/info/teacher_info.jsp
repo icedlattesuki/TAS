@@ -25,19 +25,19 @@
                                             <div class="collapsible-body"><span>${user.name}</span></div>
                                         </li>
                                         <li>
-                                            <div class="collapsible-header"><i class="material-icons">filter_2</i>工号 | ID</div>
+                                            <div class="collapsible-header active"><i class="material-icons">filter_2</i>工号 | ID</div>
                                             <div class="collapsible-body"><span>${user.id}</span></div>
                                         </li>
                                         <li>
-                                            <div class="collapsible-header"><i class="material-icons">filter_3</i>学院 | Dept</div>
+                                            <div class="collapsible-header active"><i class="material-icons">filter_3</i>学院 | Dept</div>
                                             <div class="collapsible-body"><span>${user.college}</span></div>
                                         </li>
                                         <li>
-                                            <div class="collapsible-header"><i class="material-icons">filter_4</i>职称 | Position</div>
+                                            <div class="collapsible-header active"><i class="material-icons">filter_4</i>职称 | Position</div>
                                             <div class="collapsible-body"><span>${user.title}</span></div>
                                         </li>
                                         <li>
-                                            <div class="collapsible-header"><i class="material-icons">filter_5</i>邮箱 | Email</div>
+                                            <div class="collapsible-header active"><i class="material-icons">filter_5</i>邮箱 | Email</div>
                                             <div class="collapsible-body"><span>${user.email}</span></div>
                                         </li>
                                     </ul>

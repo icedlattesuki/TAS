@@ -50,16 +50,21 @@ public class NoticeDAO {
      * 获取教师ID
      *
      * @param courseId 课程id
-     * @return 教师ID
+     * @return 教师ID列表
      * @throws SQLException SQL查询出错
      * @throws DataAccessException 数据库访问出错
      */
-    public String getTeacherID(int courseId) throws SQLException, DataAccessException {
-        return jdbcTemplate.query(GET_TEACHER_ID_SQL, new Object[] {courseId}, new ResultSetExtractor<String>() {
+    public ArrayList<String> getTeacherIDs(int courseId) throws SQLException, DataAccessException {
+        return jdbcTemplate.query(GET_TEACHER_ID_SQL, new Object[]{courseId}, new ResultSetExtractor<ArrayList<String>>() {
             @Override
-            public String extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                resultSet.next();
-                return resultSet.getString(SqlService.TEACH_TEACHER_ID);
+            public ArrayList<String> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+                ArrayList<String> teacherIdList = new ArrayList<String>();
+
+                while (resultSet.next()) {
+                    teacherIdList.add(resultSet.getString(SqlService.TEACH_TEACHER_ID));
+                }
+
+                return teacherIdList;
             }
         });
     }

@@ -43,7 +43,7 @@ public class SqlService {
     public static final String COURSE_NAME = "name";
     public static final String COURSE_CREDIT = "credit";
     public static final String COURSE_COLLEGE = "college";
-    public static final String COURSE_NTRODUCTION = "introduction";
+    public static final String COURSE_INTRODUCTION = "introduction";
     public static final String COURSE_LIKE_NUMBER = "like_number";
     public static final String COURSE_SEMESTER = "semester";
     public static final String COURSE_TIME = "time";
@@ -83,8 +83,7 @@ public class SqlService {
 
     public static final String COMMENT_ID = "id";
     public static final String COMMENT_USER_ID = "user_id";
-    public static final String COMMENT_USER_NAME = "user_name";
-    public static final String COMMENT_USER_IMAGE_POSITION = "user_image_position";
+    public static final String COMMENT_USER_TYPE = "user_type";
     public static final String COMMENT_COURSE_ID = "course_id";
     public static final String COMMENT_DATE = "date";
     public static final String COMMENT_CONTENT = "content";

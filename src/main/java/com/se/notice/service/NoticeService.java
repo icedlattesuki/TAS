@@ -31,7 +31,7 @@ public class NoticeService {
     public static final int HOMEWORK_NOTICE_INDEX = 3;
     public static final int COMMENT_NOTICE_INDEX = 4;
     public static final String[] DETAIL_NOTICE_TYPE = new String[] {"资料","视频","公告","作业","留言"};
-    public static final String[] NOTICE_URLS = new String[] {"/resource/material/to-download","/resource/video/watch","/announcement/list","","/comment"};
+    public static final String[] NOTICE_URLS = new String[] {"/resource/material","/resource/video/watch","/announcement/list","","/comment"};
 
     @Autowired
     public void setNoticeDAO(NoticeDAO noticeDAO) { this.noticeDAO = noticeDAO; }
@@ -123,8 +123,11 @@ public class NoticeService {
     //student
     private void addNotice1(int courseId, String message, int type) {
         try {
-            String id = noticeDAO.getTeacherID(courseId);
-            noticeDAO.add(id, courseId, message, type);
+            ArrayList<String> ids = noticeDAO.getTeacherIDs(courseId);
+
+            for (String id : ids) {
+                noticeDAO.add(id, courseId, message, type);
+            }
         } catch (Exception exception) {
             logger.error("addNotice1 fail! " + exception.getCause());
         }

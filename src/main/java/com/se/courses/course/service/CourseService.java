@@ -52,4 +52,8 @@ public class CourseService {
             return new ArrayList<Course>();
         }
     }
+
+    public boolean identifyCourseAndUser(int courseId, User user) {
+        return courseDAO.identifyCourseAndUser(courseId, user);
+    }
 }

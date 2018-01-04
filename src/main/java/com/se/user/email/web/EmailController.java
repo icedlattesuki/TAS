@@ -128,7 +128,7 @@ public class EmailController {
 
         if (user != null) {
             user.setEmail("");
-            return "user/email/email_bind";
+            return "redirect:/user/info";
         } else {
             return "user/email/email_unbind_fail";
         }

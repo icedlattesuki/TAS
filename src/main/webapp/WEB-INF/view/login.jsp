@@ -41,8 +41,7 @@
     <div class="col s0 m4 l4">
         <div class="section"></div>
         <h3 align="center">Welcome to TAS</h3>
-        <!--
-        <p align="center" style="color: red">${error}</p>-->
+        <p align="center" style="color: red">${error}</p>
         <form class="col s12" name="loginform" method="post" action="/login/check" onsubmit="return validateLoginForm()">
             <div class="row">
                 <div class="input-field col s12">

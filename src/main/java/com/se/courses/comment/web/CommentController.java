@@ -1,6 +1,7 @@
 package com.se.courses.comment.web;
 
 //import packages
+import com.se.global.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,7 +49,15 @@ public class CommentController {
         ArrayList<Comment> comments = commentService.getComments(courseId);
         SessionService.setComments(session, comments);
         ModelService.setComments(model, comments);
-        return "/courses/comment/comment_index";
+        ModelService.setNoticeTotalNum(model, session);
+
+        User user = SessionService.getUser(session);
+
+        if (user.getType() == User.STUDENT_TYPE) {
+            return "/courses/comment/student_comment";
+        } else {
+            return "/courses/comment/teacher_comment";
+        }
     }
 
     /**
@@ -66,7 +75,7 @@ public class CommentController {
             ModelService.setError(model, "留言失败!");
         }
 
-        return "redirect:/courses/" + courseId +"/comment";
+        return "redirect:/course/" + courseId +"/comment";
     }
 
     /**
@@ -74,16 +83,16 @@ public class CommentController {
      *
      * @param session 当前会话
      * @param courseId 课程id
-     * @param commentIndex 留言对应的索引
+     * @param commentId 留言id
      * @param model Model对象
      * @return 重定向至留言板界面
      */
     @RequestMapping("/course/{courseId}/comment/remove")
-    public String remove(HttpSession session, @PathVariable int courseId, @RequestParam("comment_index") int commentIndex, Model model) {
-        if (!commentService.remove(session, commentIndex)) {
+    public String remove(HttpSession session, @PathVariable int courseId, @RequestParam("comment_id") int commentId, Model model) {
+        if (!commentService.remove(session, commentId)) {
             ModelService.setError(model, "删除留言失败!");
         }
 
-        return "redirect:/courses/" + courseId + "/comment";
+        return "redirect:/course/" + courseId + "/comment";
     }
 }
