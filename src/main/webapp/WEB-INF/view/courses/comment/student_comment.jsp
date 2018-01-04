@@ -58,4 +58,4 @@
         </div>
     </div>
 </tmpl:overwrite>
-<jsp:include page="../../template/teacher_course_tmpl.jsp"/>
+<jsp:include page="../../template/student_course_tmpl.jsp"/>
