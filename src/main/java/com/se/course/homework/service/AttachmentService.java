@@ -29,7 +29,7 @@ public class AttachmentService extends FileService{
 
 
         if (isFileExist(getDirPath() + file.getOriginalFilename())) {
-            int fileId = attachmentDAO.getFileId(getDirPath().substring(FileService.ROOT_PATH.length()) + file.getOriginalFilename());
+            int fileId = attachmentDAO.getFileId(getDirPath().substring(com.se.global.domain.File.ROOT_PATH.length()) + file.getOriginalFilename());
             remove(session, fileId);
         }
 
@@ -37,7 +37,7 @@ public class AttachmentService extends FileService{
             Attachment attachment = new Attachment();
             attachment.setHomework_id(homework_id);
             attachment.setName(file.getOriginalFilename());
-            attachment.setLocation(getDirPath().substring(FileService.ROOT_PATH.length()));
+            attachment.setLocation(getDirPath().substring(com.se.global.domain.File.ROOT_PATH.length()));
             attachment.setSize(file.getSize());
             attachment.setDate(new Date());
             attachment.setCourseId(course_id);
@@ -55,12 +55,20 @@ public class AttachmentService extends FileService{
     }
 
     private String getDirPath() {
-        return FileService.ROOT_PATH + File.separator + "homework" + File.separator;
+        return com.se.global.domain.File.ROOT_PATH + File.separator + "homework" + File.separator;
     }
 
     public boolean remove(HttpSession session, int fileId) {
         User user = SessionService.getUser(session);
         return remove(fileId, user.getId(), getDirPath(), attachmentDAO);
+    }
+
+    public void removeByHomework(int homework_id) {
+        try {
+            attachmentDAO.removeByHomework(homework_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Attachment getHomeworkAttachment(int homework_id) {

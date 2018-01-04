@@ -1,27 +1,54 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: linsp
-  Date: 2017/12/16
-  Time: 22:24
-  To change this template use File | Settings | File Templates.
---%>
+<%--@elvariable id="announcement" type="com.se.courses.announcement.domain.Announcement"--%>
+<%--@elvariable id="courseId" type="int"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>作业列表</title>
-</head>
-<body>
-<c:forEach var="homework" items="${homeworkList}">
-    <div>
-        <a href="/course/${course_id}/homework/${homework.id}">${homework.title}</a>
-        <a href="/course/${course_id}/homework/${homework.id}/delete">删除</a>
+<%@ taglib prefix="tmpl" uri="/WEB-INF/mytag.tld" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<tmpl:overwrite name="content">
+    <div class="container">
+        <div class="row">
+            <div class="col s0 m1 l1"></div>
+            <div class="col s12 m10 l8">
+                <div class="section"></div>
+                <div class="row">
+                    <div class="col s0"></div>
+                    <div class="col s12">
+                        <a href="./to-assign.html" class="btn waves-effect waves-light">
+                            <i class="material-icons right">
+                                send
+                            </i>
+                            布置作业
+                        </a>
+                    </div>
+                    <div class="col s0"></div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <ul class="collection with-header">
+                            <li class="collection-header">
+                                <h4>作业列表</h4>
+                                <h5>Homework List</h5>
+                            </li>
+                            <c:forEach var="homework" items="${homeworkList}">
+                                <li class="collection-item">
+                                    <div>
+                                        <a href="/course/${course_id}/homework/${homework.id}">${homework.title}</a>
+                                        <c:if test="${userType == 2}">
+                                            <a href="/course/${course_id}/homework/${homework.id}/delete"
+                                               class="secondary-content materialize-red-text">
+                                                <i class="material-icons">
+                                                    delete_forever
+                                                </i>
+                                            </a>
+                                        </c:if>
+                                    </div>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col s0 m1 l1"></div>
+        </div>
     </div>
-</c:forEach>
-
-<c:if test="${userType == 2}">
-    <a href="/course/${course_id}/homework/to-assign">上传作业</a>
-</c:if>
-
-</body>
-</html>
+</tmpl:overwrite>
+<jsp:include page="../../template/student_course_tmpl.jsp"/>

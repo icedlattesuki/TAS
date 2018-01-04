@@ -18,7 +18,8 @@ public class AttachmentDAO extends FileDAO{
     private final String GET_HOMEWORK_ATTACHMENT_SQL = "select * from attachment, file where "
             + SqlService.ATTACHMENT_HOMEWORK_ID + " = ? and " + SqlService.ATTACHMENT_FILE_ID + " = " + SqlService.FILE_ID;
     private final String REMOVE_FILE_SQL = "delete from attachment where " + SqlService.ATTACHMENT_FILE_ID + " = ?";
-
+    private final String REMOVE_ATTACHMENT_FILE_SQL = "DELETE t1, t2 FROM attachment AS t1 LEFT JOIN file AS t2 ON t1.file_id = t2.id" +
+            " WHERE t1." + SqlService.ATTACHMENT_HOMEWORK_ID + " = ?";
 
     public void remove(int fileId, String userId) {
         if (isFileExist(fileId, userId)) {
@@ -48,4 +49,9 @@ public class AttachmentDAO extends FileDAO{
             return attachment;
         else return null;
     }
+
+    public void removeByHomework(int homework_id) {
+        jdbcTemplate.update(REMOVE_ATTACHMENT_FILE_SQL, homework_id);
+    }
 }
+

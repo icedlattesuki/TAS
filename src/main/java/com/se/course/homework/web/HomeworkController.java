@@ -142,7 +142,7 @@ public class HomeworkController {
         if (!uploadHomeworkService.uploadHomework(file, homework_id, course_id, userId)) {
             redirectAttributes.addFlashAttribute("error", "上传失败");
         }
-        return "redirect:/course/" + course_id + "/homework/" + homework_id + "/homework_detail";
+        return "redirect:/course/" + course_id + "/homework/" + homework_id;
     }
 
     @RequestMapping("/course/{course_id}/homework/{homework_id}/upload_list")

@@ -21,7 +21,13 @@ public class HomeworkService {
     private HomeworkDAO homeworkDAO;
     private NoticeService noticeService;
     private AttachmentService attachmentService;
+    private UploadHomeworkService uploadHomeworkService;
     private static final Logger logger = LoggerFactory.getLogger("HomeworkService.class");
+
+    @Autowired
+    public void setUploadHomeworkService(UploadHomeworkService uploadHomeworkService) {
+        this.uploadHomeworkService = uploadHomeworkService;
+    }
 
     @Autowired
     public void setHomeworkDAO(HomeworkDAO homeworkDAO) {
@@ -85,6 +91,8 @@ public class HomeworkService {
 
     public boolean deleteHomework(int homeworkId) {
         try {
+            attachmentService.removeByHomework(homeworkId);
+            uploadHomeworkService.removeByHomework(homeworkId);
             homeworkDAO.removeHomework(homeworkId);
             return true;
         } catch (Exception e) {
