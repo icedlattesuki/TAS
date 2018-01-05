@@ -15,6 +15,7 @@ public class User {
     private String signature;
     private String profile;
     private String email;
+    private String keyword;
     private int type;
     public static final int STUDENT_TYPE = 1;
     public static final int TEACHER_TYPE = 2;
@@ -74,6 +75,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public int getType() {
