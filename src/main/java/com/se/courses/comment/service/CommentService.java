@@ -78,15 +78,12 @@ public class CommentService {
      * 删除留言
      *
      * @param session 当前会话
-     * @param commentIndex 留言对应的索引
+     * @param commentId 留言对应的索引
      * @return true表示删除成功，false表示删除失败
      */
-    public boolean remove(HttpSession session, int commentIndex) {
-        ArrayList<Comment> comments = SessionService.getComments(session);
-        Comment comment = comments.get(commentIndex);
-
+    public boolean remove(HttpSession session, int commentId) {
         try {
-            commentDAO.remove(comment.getCommentId());
+            commentDAO.remove(commentId);
             return true;
         } catch (Exception exception) {
             logger.error("removeComment fail! " + exception.getCause());

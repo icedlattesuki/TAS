@@ -114,7 +114,7 @@ public class LoginDAO {
                     return teacher;
                 }
             });
-        } else {
+        } else if (type == User.ADMIN_TYPE){
             return jdbcTemplate.query(GET_ADMIN_SQL, new Object[]{id}, new ResultSetExtractor<User>() {
                 @Override
                 public User extractData(ResultSet resultSet) throws SQLException, DataAccessException {
@@ -127,6 +127,11 @@ public class LoginDAO {
                     return admin;
                 }
             });
+        } else {
+            User user = new User();
+            user.setName("Passenger");
+            user.setImageLocation("/image/default.jpg");
+            return user;
         }
     }
 
@@ -135,9 +140,12 @@ public class LoginDAO {
         user.setName(resultSet.getString(SqlService.STUDENT_NAME));
         user.setCollege(resultSet.getString(SqlService.STUDENT_COLLEGE));
         user.setEmail(resultSet.getString(SqlService.STUDENT_EMAIL));
-        user.setImageLocation(resultSet.getString(SqlService.STUDENT_IMAGE_LOCATION));
         user.setSignature(resultSet.getString(SqlService.STUDENT_SIGNATURE));
         user.setProfile(resultSet.getString(SqlService.STUDENT_PROFILE));
+        user.setImageLocation(resultSet.getString(SqlService.STUDENT_IMAGE_LOCATION));
+        if (user.getImageLocation() == null || user.getImageLocation().isEmpty()) {
+            user.setImageLocation("/image/default.jpg");
+        }
     }
 
     private ArrayList<Integer> getStudentCourses(String id) throws SQLException, DataAccessException {
