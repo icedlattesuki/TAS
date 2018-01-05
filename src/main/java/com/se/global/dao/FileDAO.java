@@ -126,6 +126,20 @@ public class FileDAO {
         }
     }
 
+    protected void setFile(ResultSet resultSet, File file) {
+        try {
+            file.setId(resultSet.getInt(SqlService.FILE_ID));
+            file.setName(resultSet.getString(SqlService.FILE_NAME));
+            file.setLocation(resultSet.getString(SqlService.FILE_LOCATION));
+            file.setSize(resultSet.getInt(SqlService.FILE_SIZE));
+            file.setSize1(convertSize(file.getSize()));
+            file.setDate(resultSet.getDate(SqlService.FILE_DATE));
+            file.setUserId(resultSet.getString(SqlService.FILE_USER_ID));
+        } catch (Exception exception) {
+            logger.error("setFile fail! " + exception.getCause());
+        }
+    }
+
     /**
      * 存储File对象
      *

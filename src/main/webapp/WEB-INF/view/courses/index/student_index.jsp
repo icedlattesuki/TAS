@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <tmpl:overwrite name="content">
     <div class="container">
-<div class="row">
+    <div class="row">
     <div class="col s0 m1 l1"></div>
     <div class="col s12 m9 l9">
         <div class="card section">
