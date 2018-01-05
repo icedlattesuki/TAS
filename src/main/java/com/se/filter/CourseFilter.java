@@ -56,6 +56,10 @@ public class CourseFilter implements Filter {
         }
 
         String[] s = url.split("/");
+        if (s[2].equals("homework")) {
+            chain.doFilter(request, response);
+            return;
+        }
         int courseId = Integer.parseInt(s[2]);
 
         if (!courseService.identifyCourseAndUser(courseId, user)) {

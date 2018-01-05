@@ -112,6 +112,10 @@
                                                                 <textarea id="Sign" name="signature" class="materialize-textarea" data-length="140"></textarea>
                                                                 <label for="Sign">个性签名 | Sign</label>
                                                             </div>
+                                                            <div class="input-field col s12">
+                                                                <textarea id="Sign1" name="profile" class="materialize-textarea" data-length="140"></textarea>
+                                                                <label for="Sign1">个人简介 | Profile</label>
+                                                            </div>
                                                             <div class="col m8">
                                                                 <button class="waves-effect btn waves-light" type="submit">确认修改</button>
                                                             </div>

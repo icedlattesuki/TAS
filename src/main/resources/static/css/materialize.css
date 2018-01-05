@@ -2159,13 +2159,11 @@ html {
  */
 body {
   margin: 0;
-  /*
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  */
 }
 
+#main {
+  flex: 1 0 auto;
+}
 /* HTML5 display definitions
    ========================================================================== */
 /**
@@ -2189,12 +2187,6 @@ section,
 summary {
   display: block;
 }
-/*
-main
-{
-  flex: 1 0 auto;
-}
-*/
 
 /**
  * 1. Correct `inline-block` display not defined in IE 8/9.
@@ -2895,7 +2887,30 @@ ul.staggered-list li {
   background-color: #4dd0e1;
 }
 
+.page-footer-no-sidenav {
+  padding-left: 0px;
+  padding-top: 20px;
+  color: #fff;
+  background-color: #4dd0e1;
+}
+
 .page-footer .footer-copyright {
+  overflow: hidden;
+  min-height: 50px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px 0px;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #26c6da;
+}
+
+.page-footer-no-sidenav .footer-copyright {
   overflow: hidden;
   min-height: 50px;
   display: -webkit-box;
