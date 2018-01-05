@@ -51,7 +51,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/course/${courseId}/onlineTest/list">
                             <i class="material-icons left">
                                 edit
                             </i>
@@ -62,7 +62,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="/course/${courseId}/homework/list">
                             <i class="material-icons left">
                                 assignment
                             </i>

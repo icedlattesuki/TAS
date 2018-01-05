@@ -32,20 +32,12 @@
                 Materialize.toast('作业名称过长', 4000)
                 return false;
             }
-            else if( hwtitle.length < 8 ){
-                Materialize.toast('作业名称过短', 4000)
-                return false;
-            }
             else if( hwscore < 1 || hwscore > 100 ){
                 Materialize.toast('作业分数应在0-100分之间', 4000)
                 return false;
             }
             else if( hwcontent.length > 140 ){
                 Materialize.toast('作业内容过长', 4000)
-                return false;
-            }
-            else if( hwcontent.length < 10 ){
-                Materialize.toast('作业内容过短', 4000)
                 return false;
             }
             else

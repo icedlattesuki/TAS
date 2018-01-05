@@ -5,6 +5,7 @@ import com.se.course.onlineTest.domain.FillQuestion;
 import com.se.course.onlineTest.domain.OnlineTest;
 import com.se.course.onlineTest.service.OnlineTestService;
 import com.se.global.domain.User;
+import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +37,7 @@ public class OnlineTestController {
     public String onlineTestListPage(HttpSession session, Model model, @PathVariable int courseId) {
         ArrayList<OnlineTest> onlineTests = onlineTestService.getCourseOnlineTest(courseId);
         model.addAttribute("onlineTests", onlineTests);
+        ModelService.setNoticeTotalNum(model, session);
         User user = SessionService.getUser(session);
         if (user.getType() == 2)
             return "course/online_test/online_test_list_tea";

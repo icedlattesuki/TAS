@@ -36,5 +36,5 @@
             </div>
         </div>
     </div>
-</tmpl:overwrite>..
+</tmpl:overwrite>
 <jsp:include page="../../template/teacher_course_tmpl.jsp"/>

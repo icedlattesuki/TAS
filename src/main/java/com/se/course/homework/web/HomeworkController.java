@@ -74,6 +74,7 @@ public class HomeworkController {
     @RequestMapping("/course/{courseId}/homework/{id}/to-update")
     public String homeworkUpdatePage(HttpSession session, Model model, @PathVariable int id, @PathVariable int courseId) {
         Homework homework = homeworkService.getHomework(session, id, courseId);
+        ModelService.setNoticeTotalNum(model, session);
         User user = SessionService.getUser(session);
         if (homework != null && user.getType() == 2) {
             model.addAttribute("homework", homework);
@@ -108,6 +109,7 @@ public class HomeworkController {
         ArrayList<Homework> homeworkArrayList = homeworkService.getHomeworkList(session, courseId);
         model.addAttribute("homeworkList", homeworkArrayList);
         model.addAttribute("course_id", courseId);
+        ModelService.setNoticeTotalNum(model, session);
         User user = SessionService.getUser(session);
         model.addAttribute("userType", user.getType());
         if (user.getType() == 2)
@@ -122,6 +124,7 @@ public class HomeworkController {
         Attachment attachment = attachmentService.getHomeworkAttachment(id);
         User user = SessionService.getUser(session);
         UploadHomework uploadHomework = uploadHomeworkService.getUploadHomework(user.getId(), id);
+        ModelService.setNoticeTotalNum(model, session);
         if (homework != null) {
             model.addAttribute("homework", homework);
             model.addAttribute("attachment", attachment);
@@ -141,38 +144,39 @@ public class HomeworkController {
         attachmentService.download(session, file_id, response);
     }
 
-    @RequestMapping("/course/{course_id}/homework/{homework_id}/upload")
-    public String uploadHomework(HttpSession session, @PathVariable int course_id, @PathVariable int homework_id,
+    @RequestMapping("/course/{courseId}/homework/{homework_id}/upload")
+    public String uploadHomework(HttpSession session, @PathVariable int courseId, @PathVariable int homework_id,
                                  @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         String userId = SessionService.getUser(session).getId();
         //必须有file
-        if (!uploadHomeworkService.uploadHomework(file, homework_id, course_id, userId)) {
+        if (!uploadHomeworkService.uploadHomework(file, homework_id, courseId, userId)) {
             redirectAttributes.addFlashAttribute("error", "上传失败");
         }
-        return "redirect:/course/" + course_id + "/homework/" + homework_id;
+        return "redirect:/course/" + courseId + "/homework/" + homework_id;
     }
 
-    @RequestMapping("/course/{course_id}/homework/{homework_id}/upload_list")
-    public String uploadHomeworkListPage(HttpSession session, @PathVariable int course_id, @PathVariable int homework_id,
+    @RequestMapping("/course/{courseId}/homework/{homework_id}/upload_list")
+    public String uploadHomeworkListPage(HttpSession session, @PathVariable int courseId, @PathVariable int homework_id,
                                          Model model) {
-        ArrayList<UploadHomeworkList> uploadHomeworkLists = uploadHomeworkService.getUploadHomeworkList(course_id, homework_id);
+        ArrayList<UploadHomeworkList> uploadHomeworkLists = uploadHomeworkService.getUploadHomeworkList(courseId, homework_id);
         model.addAttribute("uploadHomeworkList", uploadHomeworkLists);
         User user = SessionService.getUser(session);
-        model.addAttribute("course_id", course_id);
+        model.addAttribute("course_id", courseId);
         model.addAttribute("homework_id", homework_id);
+        ModelService.setNoticeTotalNum(model, session);
         if (user.getType() == 2)
             return "/course/homework/upload_list";
         else
             return "error/404";
     }
 
-    @RequestMapping("/course/{course_id}/homework/{homework_id}/mark")
-    public String markUploadHomework(HttpSession session, @PathVariable int course_id, @PathVariable int homework_id,
+    @RequestMapping("/course/{courseId}/homework/{homework_id}/mark")
+    public String markUploadHomework(HttpSession session, @PathVariable int courseId, @PathVariable int homework_id,
                                      Model model, @RequestParam("upload_id") int upload_id, @RequestParam("score") int score) {
         User user = SessionService.getUser(session);
         if (user.getType() == 2) {
             uploadHomeworkService.markScore(upload_id, score);
-            return "redirect:/course/" + course_id + "/homework/" + homework_id + "/upload_list";
+            return "redirect:/course/" + courseId + "/homework/" + homework_id + "/upload_list";
         } else
             return "error/404";
     }
