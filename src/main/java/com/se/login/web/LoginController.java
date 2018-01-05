@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import com.se.global.domain.User;
@@ -90,45 +88,6 @@ public class LoginController {
             return "redirect:/admin/student_manage";
         }
 
-        user.setKeyword(null);
-        SessionService.setUser(session, user);
-
-        ArrayList<Course> courses = courseService.getCourses(session);
-        SessionService.setCourses(session, courses);
-        ModelService.setCourses(model, courses);
-
-        ArrayList<Notice> notices = noticeService.getNotices(session);
-        SessionService.setNotices(session, notices);
-        ModelService.setNoticeTotalNum(model, session);
-
-        if (user.getType() == User.STUDENT_TYPE) {
-            return "user/index/student_index";
-        }
-        else {
-            return "user/index/teacher_index";
-        }
-    }
-
-    /**
-     * 显示用户首页搜索结果
-     *
-     * @param session 当前会话
-     * @param model Model对象
-     * @return 对应的用户首页逻辑视图名
-     */
-    @RequestMapping("/index/s")
-    public String indexSearchPage(HttpSession session, Model model, HttpServletRequest request) {
-        User user = SessionService.getUser(session);
-
-        if (user == null) {
-            return "user/index/passenger_index";
-        }
-
-        if (user.getType() == User.ADMIN_TYPE) {
-            return "admin/student/student_manage";
-        }
-        user.setKeyword(request.getParameter("Keyword"));
-        SessionService.setUser(session, user);
         ArrayList<Course> courses = courseService.getCourses(session);
         SessionService.setCourses(session, courses);
         ModelService.setCourses(model, courses);
