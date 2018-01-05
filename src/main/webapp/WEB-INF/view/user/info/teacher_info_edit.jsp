@@ -22,7 +22,6 @@
                 Materialize.toast('签名修改成功！',10000)
                 return true;
             }
-
         }
 
         function validateEmail()
@@ -122,6 +121,12 @@
                                             </div>
                                             <div class="col s4">
                                                 <div class="row">
+                                                    <div class="card z-depth-2">
+                                                        <div class="card-image">
+                                                            <img src="${user.imageLocation}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
                                                     <div class="col s2"></div>
                                                     <div class="file-field input-field">
                                                         <div class="btn">
@@ -133,6 +138,7 @@
                                                                     <%--<input class="file-path validate" type="text" placeholder="">--%>
                                                             </div>
                                                         </div>
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>

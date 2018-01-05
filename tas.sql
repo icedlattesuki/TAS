@@ -96,8 +96,7 @@ create table notice(
 create table comment(
     id int primary key auto_increment,
     user_id varchar(10),
-    user_name varchar(15),
-    user_image_position varchar(60),
+    user_type int,
     course_id int,
     content varchar(300),
     date datetime,
