@@ -1045,6 +1045,7 @@
 
 .teal-text.text-darken-3 {
   color: #00695c !important;
+  font-size: 22px;
 }
 
 .teal.darken-4 {
@@ -6308,7 +6309,7 @@ h1 span.logo-text {
 }
 
 header .brand-logo {
-  margin: 1px 0px;
+  margin: 8px 50px;
   padding: 22px 20px;
   line-height: 0;
 }

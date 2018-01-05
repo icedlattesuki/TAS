@@ -1,6 +1,7 @@
 package com.se.login.web;
 
 //import packages
+import com.se.courses.course.service.CourseService;
 import com.se.global.service.ModelService;
 import com.se.global.service.SessionService;
 import com.se.notice.domain.Notice;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import com.se.global.domain.User;
 import com.se.global.domain.Course;
 import com.se.login.service.LoginService;
-import com.se.login.service.LoginSuccessService;
 
 /**
  * @author Yusen
@@ -25,7 +25,7 @@ import com.se.login.service.LoginSuccessService;
 @Controller
 public class LoginController {
     private LoginService loginService;
-    private LoginSuccessService loginSuccessService;
+    private CourseService courseService;
     private NoticeService noticeService;
 
     @Autowired
@@ -34,7 +34,7 @@ public class LoginController {
     }
 
     @Autowired
-    public void setLoginSuccessService(LoginSuccessService loginSuccessService) { this.loginSuccessService = loginSuccessService; }
+    public void setCourseService(CourseService courseService) { this.courseService = courseService; }
 
     @Autowired
     public void setNoticeService(NoticeService noticeService) { this.noticeService = noticeService; }
@@ -83,17 +83,22 @@ public class LoginController {
     @RequestMapping("/index")
     public String indexPage(HttpSession session, Model model) {
         User user = SessionService.getUser(session);
-        ArrayList<Course> courses = loginSuccessService.getCourseList(session);
-        SessionService.setCourses(session, courses);
-        ModelService.setCourses(model, courses);
 
         if (user == null) {
             return "user/index/passenger_index";
         }
 
+        if (user.getType() == User.ADMIN_TYPE) {
+            return "admin/student/student_manage";
+        }
+
+        ArrayList<Course> courses = courseService.getCourses(session);
+        SessionService.setCourses(session, courses);
+        ModelService.setCourses(model, courses);
+
         ArrayList<Notice> notices = noticeService.getNotices(session);
         SessionService.setNotices(session, notices);
-        ModelService.setNoticeTotalNum(model, notices.size());
+        ModelService.setNoticeTotalNum(model, session);
 
         if (user.getType() == User.STUDENT_TYPE) {
             return "user/index/student_index";

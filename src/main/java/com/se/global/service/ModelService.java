@@ -1,17 +1,19 @@
 package com.se.global.service;
 
 //import packages
-import com.se.course.comment.domain.Comment;
-import com.se.course.resource.material.domain.Material;
-import com.se.course.resource.video.domain.Video;
+import com.se.courses.comment.domain.Comment;
+import com.se.courses.resource.material.domain.Material;
+import com.se.courses.resource.video.domain.Video;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import java.util.ArrayList;
 
-import com.se.course.announcement.domain.Announcement;
+import com.se.courses.announcement.domain.Announcement;
 import com.se.global.domain.User;
 import com.se.global.domain.Course;
 import com.se.notice.domain.Notice;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Yusen
@@ -36,6 +38,10 @@ public class ModelService {
         model.addAttribute("email", email);
     }
 
+    public static void setAnnouncement(Model model, Announcement announcement) {
+        model.addAttribute("announcement", announcement);
+    }
+
     public static void setAnnouncements(Model model, ArrayList<Announcement> announcements) {
         model.addAttribute("announcements", announcements);
     }
@@ -56,15 +62,22 @@ public class ModelService {
 
     public static void setNotices(Model model, ArrayList<Notice> notices) { model.addAttribute("notices", notices); }
 
-    public static void setNoticeTotalNum(Model model, int num) { model.addAttribute("noticeTotalNum", num); }
+    public static void setClassifiedNotices(Model model, ArrayList<ArrayList<Notice>> classifiedNotices) {
+        model.addAttribute("classifiedNotices", classifiedNotices);
+    }
+
+    public static void setNoticeTotalNum(Model model, HttpSession session) {
+        ArrayList<Notice> notices = SessionService.getNotices(session);
+        model.addAttribute("noticeTotalNum", notices.size());
+    }
 
     public static void setNoticeCourseNum(Model model, ArrayList<Integer> nums) { model.addAttribute("noticeCourseNum", nums); }
 
     public static void setNoticeDetailNum(Model model, ArrayList<Integer> nums) { model.addAttribute("noticeDetailNum", nums); }
 
-    public static void setNoticeType(Model model, String[] noticeType) { model.addAttribute("noticeType", noticeType); }
+    public static void setNoticeType(Model model, String[] noticeType) { model.addAttribute("noticeTypes", noticeType); }
 
-    public static void setNoticeURL(Model model, String url) { model.addAttribute("noticeURL", url); }
+    public static void setNoticeURLs(Model model, String[] url) { model.addAttribute("noticeURLs", url); }
 
     public static void setCourseId(Model model, int courseId) { model.addAttribute("courseId", courseId); }
 }

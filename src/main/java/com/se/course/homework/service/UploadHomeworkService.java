@@ -4,6 +4,7 @@ import com.se.course.homework.dao.UploadHomeworkDAO;
 import com.se.course.homework.domain.UploadHomework;
 import com.se.course.homework.web.UploadHomeworkList;
 import com.se.global.dao.UserDAO;
+import com.se.global.domain.File;
 import com.se.global.service.FileService;
 import com.se.notice.dao.NoticeDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @Service
 public class UploadHomeworkService extends FileService {
@@ -42,7 +42,7 @@ public class UploadHomeworkService extends FileService {
 
     public boolean uploadHomework(MultipartFile file, int homeworkId, int courseId, String userId) {
         if (isFileExist(getDirPath(courseId) + file.getOriginalFilename())) {
-            int fileId = uploadHomeworkDAO.getFileId(getDirPath(courseId).substring(FileService.ROOT_PATH.length()) + file.getOriginalFilename());
+            int fileId = uploadHomeworkDAO.getFileId(getDirPath(courseId).substring(File.ROOT_PATH.length()) + file.getOriginalFilename());
             remove(userId, fileId, courseId);
         }
 
@@ -55,7 +55,7 @@ public class UploadHomeworkService extends FileService {
             UploadHomework uploadHomework = new UploadHomework();
             uploadHomework.setHomework_id(homeworkId);
             uploadHomework.setName(file.getOriginalFilename());
-            uploadHomework.setLocation(getDirPath(courseId).substring(FileService.ROOT_PATH.length()));
+            uploadHomework.setLocation(getDirPath(courseId).substring(File.ROOT_PATH.length()));
             uploadHomework.setSize(file.getSize());
             uploadHomework.setDate(new Date());
             uploadHomework.setCourseId(courseId);
@@ -76,8 +76,16 @@ public class UploadHomeworkService extends FileService {
         return remove(fileId, userId, getDirPath(courseId), uploadHomeworkDAO);
     }
 
+    public void removeByHomework(int homeworkId) {
+        try {
+            uploadHomeworkDAO.removeByHomework(homeworkId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private String getDirPath(int course_id) {
-        return FileService.ROOT_PATH + File.separator + "upload_homework" + File.separator + course_id + File.separator;
+        return File.ROOT_PATH + java.io.File.separator + "upload_homework" + java.io.File.separator + course_id + java.io.File.separator;
     }
 
     public void download(HttpSession session, int fileId, HttpServletResponse response, int courseId) {
@@ -98,6 +106,7 @@ public class UploadHomeworkService extends FileService {
         ArrayList<UploadHomeworkList> uploadHomeworkLists = new ArrayList<UploadHomeworkList>();
         for (UploadHomework uploadHomework: uploadHomeworks) {
             UploadHomeworkList uploadHomeworkList = new UploadHomeworkList();
+            uploadHomeworkList.setUploadFileId(uploadHomework.getId());
             uploadHomeworkList.setStudentId(uploadHomework.getStudent_id());
             haveAddedStudentId.add(uploadHomework.getStudent_id());
             uploadHomeworkList.setStudentName(userDAO.getUserName(uploadHomework.getStudent_id()));
@@ -121,5 +130,13 @@ public class UploadHomeworkService extends FileService {
             e.printStackTrace();
         }
         return uploadHomeworkLists;
+    }
+
+    public void markScore(int score, int id) {
+        try {
+            uploadHomeworkDAO.updateScore(score, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Student extends User {
     private String major;
     private String classNumber;
-    private int grade;
+    private String grade;
     private ArrayList<Integer> takes;
 
     public String getMajor() {
@@ -31,11 +31,11 @@ public class Student extends User {
         this.classNumber = classNumber;
     }
 
-    public int getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 

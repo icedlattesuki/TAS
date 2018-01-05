@@ -28,6 +28,10 @@ public class UploadHomeworkDAO extends FileDAO {
     private final String GET_UPLOAD_HOMEWORK_LIST_SQL = "select * from upload_homework, file where upload_homework." + SqlService.UPLOAD_HOMEWORK_COURSE_ID +
             " = ? and upload_homework." + SqlService.UPLOAD_HOMEWORK_HOMEWORK_ID + " = ? AND upload_homework." + SqlService.UPLOAD_HOMEWORK_FILE_ID + " = file." +
             SqlService.FILE_ID;
+    private final String REMOVE_UPLOAD_FILE_SQL = "DELETE t1, t2 FROM upload_homework AS t1 LEFT JOIN file AS t2 ON " +
+            "t1.upload_homework_file = t2.id WHERE t1." + SqlService.UPLOAD_HOMEWORK_HOMEWORK_ID + " = ?";
+    private final String UPDATE_SCORE_SQL = "update upload_homework set " + SqlService.UPLOAD_HOMEWORK_GET_SCORE + " = ? " +
+            "where " + SqlService.UPLOAD_HOMEWORK_ID + " = ?";
 
     public void remove(int fileId, String userId) {
         if (isFileExist(fileId, userId)) {
@@ -80,6 +84,10 @@ public class UploadHomeworkDAO extends FileDAO {
             return uploadHomework;
     }
 
+    public void removeByHomework(int homework_id) {
+        jdbcTemplate.update(REMOVE_UPLOAD_FILE_SQL, homework_id);
+    }
+
     public ArrayList<UploadHomework> getUploadHomeworkList(int courseId, int homeworkId) {
         Object[] args = new Object[] {courseId, homeworkId};
         return jdbcTemplate.query(GET_UPLOAD_HOMEWORK_LIST_SQL, args, new ResultSetExtractor<ArrayList<UploadHomework>>() {
@@ -102,5 +110,10 @@ public class UploadHomeworkDAO extends FileDAO {
                 return uploadHomeworks;
             }
         });
+    }
+
+    public void updateScore(int score, int id) {
+        Object[] args = new Object[] {score, id};
+        jdbcTemplate.update(UPDATE_SCORE_SQL,args);
     }
 }

@@ -1,25 +1,91 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--@elvariable id="user" type="com.se.global.domain.Student"--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
-<h4>${info}</h4>
-<ul>
-    <li>学号：${user.id}</li>
-    <li>姓名：${user.name}</li>
-    <li>学院：${user.college}</li>
-    <li>专业：${user.major}</li>
-    <li>年级：${user.grade}</li>
-    <li>班级：${user.classNumber}</li>
-    <li>邮箱：${user.email} <a href="/user/email/modify">修改</a> </li>
-    <li>个性签名：${user.signature}</li>
-    <li>个人简介：${user.profile}</li>
-</ul>
-<a href="/user/info/edit">编辑个人资料</a>
-<a href="/user/password-modify">修改密码</a>
-<a href="/index">返回</a>
-</body>
-</html>
+<%@ taglib prefix="tmpl" uri="/WEB-INF/mytag.tld" %>
+<tmpl:overwrite name="content">
+    <div class="container">
+    <div class="row">
+            <div class="col s0 m1 l1"></div>
+            <div class="col s12 m10 l10">
+                <div>
+                    <div class="container page-container">
+                        <div>
+                            <div>
+                                <div id="tab-infomation" class="col s12">
+                                    <div class="row">
+                                        <div class="col s12 m6 l6">
+                                            <div class="row">
+                                                <br>
+                                                <h4>个人信息</h4>
+                                                <h5>Profile</h5>
+                                                <div class="divider"></div>
+                                            </div>
+                                            <ul class="collapsible" data-collapsible="expandable">
+                                                <li>
+                                                    <div class="collapsible-header active"><i class="material-icons">filter_1</i>姓名 | Name</div>
+                                                    <div class="collapsible-body"><span>${user.name}</span></div>
+                                                </li>
+                                                <li>
+                                                    <div class="collapsible-header active"><i class="material-icons">filter_2</i>学号 | ID</div>
+                                                    <div class="collapsible-body"><span>${user.id}</span></div>
+                                                </li>
+                                                <li>
+                                                    <div class="collapsible-header active"><i class="material-icons">filter_3</i>学院 | Dept</div>
+                                                    <div class="collapsible-body"><span>${user.college}</span></div>
+                                                </li>
+                                                <li>
+                                                    <div class="collapsible-header active"><i class="material-icons">filter_4</i>专业 | Major</div>
+                                                    <div class="collapsible-body"><span>${user.major}</span></div>
+                                                </li>
+                                                <li>
+                                                    <div class="collapsible-header active"><i class="material-icons">filter_5</i>班级 | Class</div>
+                                                    <div class="collapsible-body"><span>${user.classNumber}</span></div>
+                                                </li>
+                                                <li>
+                                                    <div class="collapsible-header active"><i class="material-icons">filter_6</i>邮箱 | Email</div>
+                                                    <div class="collapsible-body"><span>${user.email}</span></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col s12 m6 l6 avatars">
+                                            <div class="row">
+                                                <br>
+                                                <h4>个性化设置</h4>
+                                                <h5>Avatar</h5>
+                                                <div class="divider"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s8">
+                                                    <ul class="collapsible" data-collapsible="accordion">
+                                                        <li>
+                                                            <div class="collapsible-header active"><i class="material-icons">filter_drama</i>个性签名 | Sign</div>
+                                                            <div class="collapsible-body"><span>${user.signature}</span></div>
+                                                        </li>
+                                                    </ul>
+                                                    <a href="/user/info/edit">
+                                                        <div class="col s12">
+                                                            <button class="waves-effect btn waves-light" type="submit">编辑资料</button>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="col s4">
+                                                    <div class="row">
+                                                        <div class="card z-depth-2">
+                                                            <div class="card-image">
+                                                                <img src="${user.imageLocation}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s0 m1 l1"></div>
+    </div>
+    </div>
+</tmpl:overwrite>
+<jsp:include page="../../template/info_center_tmpl.jsp" />

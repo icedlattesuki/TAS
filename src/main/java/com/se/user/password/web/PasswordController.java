@@ -33,12 +33,15 @@ public class PasswordController {
      * 显示密码修改界面
      *
      * @param session 当前会话
+     * @param model Model对象
      * @return 若用户未设置邮箱则返回邮箱设置界面逻辑视图名，否则返回密码修改界面逻辑视图名
      */
     @RequestMapping("/user/password-modify")
-    public String modifyPage(HttpSession session) {
+    public String modifyPage(HttpSession session, Model model) {
         User user = SessionService.getUser(session);
         String email = user.getEmail();
+
+        ModelService.setNoticeTotalNum(model, session);
 
         if (email == null || email.isEmpty()) {
             return "user/email/email_bind";
@@ -65,7 +68,7 @@ public class PasswordController {
             return "user/password/password_modify";
         }
 
-        if (!passwordService.update(session, newPassword)) {
+        if (!passwordService.update(user, newPassword)) {
             ModelService.setError(model, "更新密码出错!");
             return "user/password/password_modify";
         }
@@ -117,10 +120,10 @@ public class PasswordController {
      * @return 密码重置完成界面逻辑视图名
      */
     @RequestMapping("/user/password-reset/reset")
-    public String reset(HttpSession session, @RequestParam("id") String uuid, Model model) {
+    public String reset(@RequestParam("id") String uuid, Model model) {
         User user = passwordService.getUser(uuid);
 
-        if (user != null && passwordService.update(session, DEFAULT_PASSWORD)) {
+        if (user != null && passwordService.update(user, DEFAULT_PASSWORD)) {
             ModelService.setInfo(model, "密码重置成功!");
         } else {
             ModelService.setInfo(model, "密码重置失败!");

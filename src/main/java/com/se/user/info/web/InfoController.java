@@ -15,6 +15,8 @@ import com.se.global.service.SessionService;
 import com.se.user.info.domain.EditableInfo;
 import com.se.user.info.service.InfoService;
 
+import java.util.Random;
+
 /**
  * @author Yusen
  * @version 1.0
@@ -31,11 +33,14 @@ public class InfoController {
      * 显示用户个人信息
      *
      * @param session 当前会话
+     * @param model Mode对象
      * @return 个人信息界面逻辑视图名
      */
     @RequestMapping("/user/info")
-    public String infoPage(HttpSession session) {
+    public String infoPage(HttpSession session, Model model) {
         User user = SessionService.getUser(session);
+
+        ModelService.setNoticeTotalNum(model, session);
 
         if (user.getType() == User.STUDENT_TYPE) {
             return "user/info/student_info";
@@ -47,11 +52,21 @@ public class InfoController {
     /**
      * 显示用户个人信息编辑界面
      *
+     * @param session 当前会话
+     * @param model Model对象
      * @return 个人信息编辑界面逻辑视图名
      */
     @RequestMapping("/user/info/edit")
-    public String editInfoPage() {
-        return "user/info/user_info_edit";
+    public String editInfoPage(HttpSession session, Model model) {
+        User user = SessionService.getUser(session);
+
+        ModelService.setNoticeTotalNum(model, session);
+
+        if (user.getType() == User.STUDENT_TYPE) {
+            return "user/info/student_info_edit";
+        } else {
+            return "user/info/teacher_info_edit";
+        }
     }
 
     /**
@@ -64,7 +79,7 @@ public class InfoController {
      * @return 带着操作结果重定向个人信息界面逻辑视图名
      */
     @RequestMapping("/user/info/update")
-    public String update(HttpServletRequest request, @RequestParam("image") MultipartFile image,  HttpSession session, Model model) {
+    public String update(HttpServletRequest request, @RequestParam(value = "image", required = false) MultipartFile image,  HttpSession session, Model model) {
         User user = SessionService.getUser(session);
         EditableInfo editableInfo = new EditableInfo();
         editableInfo.setSignature(request.getParameter("signature"));
