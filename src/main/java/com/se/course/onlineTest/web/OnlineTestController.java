@@ -4,6 +4,8 @@ import com.se.course.onlineTest.domain.ChoiceQuestion;
 import com.se.course.onlineTest.domain.FillQuestion;
 import com.se.course.onlineTest.domain.OnlineTest;
 import com.se.course.onlineTest.service.OnlineTestService;
+import com.se.global.domain.User;
+import com.se.global.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +36,11 @@ public class OnlineTestController {
     public String onlineTestListPage(HttpSession session, Model model, @PathVariable int courseId) {
         ArrayList<OnlineTest> onlineTests = onlineTestService.getCourseOnlineTest(courseId);
         model.addAttribute("onlineTests", onlineTests);
-        return "/course/online_test/online_test_list";
+        User user = SessionService.getUser(session);
+        if (user.getType() == 2)
+            return "course/online_test/online_test_list_tea";
+        else
+            return "course/online_test/online_test_list_stu";
     }
 
     @RequestMapping("/course/{courseId}/onlineTest/create")
@@ -61,7 +67,11 @@ public class OnlineTestController {
             model.addAttribute("onlineTest", onlineTest);
             model.addAttribute("choiceQuestions", choiceQuestions);
             model.addAttribute("fillQuestions", fillQuestions);
-            return "/course/online_test/online_test_detail";
+            User user = SessionService.getUser(session);
+            if (user.getType() == 2)
+                return "course/online_test/online_test_detail_tea";
+            else
+                return "course/online_test/online_test_detail_stu";
         } else {
             return "error/404";
         }
@@ -72,5 +82,10 @@ public class OnlineTestController {
                                    @PathVariable int onlineTestId) {
         onlineTestService.deleteOnlineTest(onlineTestId);
         return "redirect:/course/" + courseId + "/onlineTest/list";
+    }
+
+    @RequestMapping("/course/{courseId}/onlineTest/{onlineTestId}/rate")
+    public String rateOnlineTestPage(HttpSession session, Model model) {
+        return "/course/online_test/rate";
     }
 }

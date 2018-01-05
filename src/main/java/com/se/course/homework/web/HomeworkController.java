@@ -158,6 +158,8 @@ public class HomeworkController {
         ArrayList<UploadHomeworkList> uploadHomeworkLists = uploadHomeworkService.getUploadHomeworkList(course_id, homework_id);
         model.addAttribute("uploadHomeworkList", uploadHomeworkLists);
         User user = SessionService.getUser(session);
+        model.addAttribute("course_id", course_id);
+        model.addAttribute("homework_id", homework_id);
         if (user.getType() == 2)
             return "/course/homework/upload_list";
         else
@@ -170,7 +172,7 @@ public class HomeworkController {
         User user = SessionService.getUser(session);
         if (user.getType() == 2) {
             uploadHomeworkService.markScore(upload_id, score);
-            return "/course/" + course_id + "/homework/" + homework_id + "/upload_list";
+            return "redirect:/course/" + course_id + "/homework/" + homework_id + "/upload_list";
         } else
             return "error/404";
     }

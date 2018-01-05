@@ -18,16 +18,49 @@
                             </li>
                             <c:forEach var="uploadHomework" items="${uploadHomeworkList}">
                                 <li class="collection-item">
-                                    <div>
-                                            ${uploadHomework.studentId},${uploadHomework.studentName}
-                                        <c:if test="${uploadHomework.uploadFileId != -1}">
-                                            <a href="/course/homework/download?file_id=${uploadHomework.uploadFileId}" class="secondary-content">${uploadHomework.uploadFileName}</a>
-                                        </c:if>
-                                        <c:if test="${uploadHomework.uploadFileId == -1}">
-                                            <div class="secondary-content">
-                                                <span class="red-text text-read">还未提交</span>
+                                    <div class="section">
+                                        <div class="row">
+                                            <div class="col s2">
+                                                    ${uploadHomework.studentId},${uploadHomework.studentName}
                                             </div>
-                                        </c:if>
+                                            <c:if test="${uploadHomework.uploadFileId != -1}">
+
+                                                <div class="col s8">
+                                                    <form  id="homeworkForm" name="homeworkform" method="post"
+                                                           action="/course/${course_id}/homework/${homework_id}/mark" onsubmit="return validateHomework()">
+
+
+                                                        <div>
+                                                            <input type="hidden" value=${uploadHomework.uploadId} id="disabled" name="upload_id" type="number" >
+                                                        </div>
+
+                                                        <div class="input-field col s4">
+                                                            <i class="material-icons prefix">grade</i>
+                                                            <input id="hw_score" name="score" type="number" class="validate">
+                                                            <label for="hw_score">作业分数</label>
+                                                        </div>
+                                                        <div class="col s4">
+                                                            <button class="waves-effect waves-light btn gradient-45deg-light-blue-cyan box-shadow " type="submit">
+                                                                <i class="material-icons right">send</i>
+                                                                提交
+                                                            </button>
+                                                        </div>
+
+
+
+                                                    </form>
+                                                </div>
+                                                <div class="col s2">
+                                                    <a href="/course/homework/download?file_id=${uploadHomework.uploadFileId}" class="secondary-content">${uploadHomework.uploadFileName}</a>
+                                                </div>
+                                            </c:if>
+
+                                            <c:if test="${uploadHomework.uploadFileId == -1}">
+                                                <div class="secondary-content">
+                                                    <span class="red-text text-read">还未提交</span>
+                                                </div>
+                                            </c:if>
+                                        </div>
                                     </div>
                                 </li>
                             </c:forEach>

@@ -106,6 +106,7 @@ public class UploadHomeworkService extends FileService {
         ArrayList<UploadHomeworkList> uploadHomeworkLists = new ArrayList<UploadHomeworkList>();
         for (UploadHomework uploadHomework: uploadHomeworks) {
             UploadHomeworkList uploadHomeworkList = new UploadHomeworkList();
+            uploadHomeworkList.setUploadFileId(uploadHomework.getId());
             uploadHomeworkList.setStudentId(uploadHomework.getStudent_id());
             haveAddedStudentId.add(uploadHomework.getStudent_id());
             uploadHomeworkList.setStudentName(userDAO.getUserName(uploadHomework.getStudent_id()));
