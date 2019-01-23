@@ -111,7 +111,6 @@ CREATE TABLE homework
   ddl_date    DATE         NULL,
   score       INT          NULL,
   attachment  VARCHAR(10)  NULL,
-  course_id   VARCHAR(10)  NULL,
   semester    VARCHAR(15)  NULL,
   time        VARCHAR(15)  NULL,
   place       VARCHAR(20)  NULL,
