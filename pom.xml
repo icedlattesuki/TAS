@@ -70,4 +70,25 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- 在maven setting.xml 中加入
+    <mirrors>
+      <mirror>
+        <id>alimaven</id>
+        <name>aliyun maven</name>
+        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        <mirrorOf>central</mirrorOf>
+      </mirror>
+    </mirrors>
+  以启用aliyun镜像，解决境内网络问题。-->
+  <pluginRepositories>
+    <pluginRepository>
+      <id>ali-plugin</id>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
 </project>
